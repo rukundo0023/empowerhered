@@ -1,392 +1,350 @@
-import { useState, useEffect } from "react"
-import { NavLink, Link, useNavigate } from "react-router-dom"
-import assets from "../assets/assets"
-import { useAuth } from "../context/AuthContext"
-import Search from "./Search"
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
+import assets from "../assets/assets";
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const navigate = useNavigate()
-  const { isAuthenticated, user, logout } = useAuth()
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Array<{ title: string; path: string }>>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isLoggedIn] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+  const programsMenu = [
+    { name: "Mentorship", path: "/programs/mentorship" },
+    { name: "Leadership", path: "/programs/leadership" },
+    { name: "Tech Skills", path: "/programs/tech-skills" },
+    { name: "Workshops", path: "/programs/workshops" },
+  ];
 
-  const toggleProfile = () => {
-    setIsProfileOpen(!isProfileOpen)
-  }
+  const resourcesMenu = [
+    { name: "Blog", path: "/blog" },
+    { name: "Community", path: "/resources/community" },
+    { name: "Learning Resources", path: "/resources/learning" },
+  ];
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen)
-  }
+  const searchableContent = [
+    { title: "Home", path: "/" },
+    { title: "About Us", path: "/about" },
+    { title: "Success Stories", path: "/success-stories" },
+    { title: "Contact", path: "/contact" },
+    { title: "Mentorship Program", path: "/programs/mentorship" },
+    { title: "Leadership Training", path: "/programs/leadership" },
+    { title: "Tech Skills", path: "/programs/tech-skills" },
+    { title: "Workshops", path: "/programs/workshops" },
+    { title: "Blog", path: "/blog" },
+    { title: "Community", path: "/resources/community" },
+    { title: "Learning Resources", path: "/resources/learning" },
+    { title: "Login", path: "/login" },
+    { title: "Sign Up", path: "/signup" }
+  ];
 
-  const handleLogout = () => {
-    logout()
-    setIsProfileOpen(false)
-    navigate('/')
-  }
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
 
-  // Close dropdowns when clicking outside
+    if (query.trim()) {
+      const results = searchableContent.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchResults.length > 0) {
+      window.location.href = searchResults[0].path;
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setSearchResults([]);
+    setIsSearchFocused(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      if (!target.closest('.profile-dropdown') && !target.closest('.profile-button')) {
-        setIsProfileOpen(false)
+      const searchContainer = document.getElementById("search-container");
+      if (searchContainer && !searchContainer.contains(event.target as Node)) {
+        setIsSearchFocused(false);
       }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/">
-              <img
-                className="h-8 w-auto"
-                src={assets.empoweherlogo3}
-                alt="EmpowerHerEd"
-              />
-            </Link>
-          </div>
+          <Link to="/" className="flex items-center">
+            <img src={assets.empoweherlogo3} alt="Logo" className="h-8 w-auto" />
+          </Link>
 
-          {/* Center Navigation */}
-          <div className="hidden sm:flex sm:flex-1 sm:justify-center">
-            <div className="flex space-x-8">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
-                }
-              >
-                Home
-              </NavLink>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
-                }
-              >
-                About
-              </NavLink>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex space-x-6 items-center">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
+              }
+            >
+              HOME
+            </NavLink>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
+              }
+            >
+              ABOUT
+            </NavLink>
+
+            {/* Programs with Hover Menu */}
+            <div className="relative group">
               <NavLink
                 to="/programs"
                 className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
+                  isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
                 }
               >
-                Programs
+                PROGRAMS
               </NavLink>
-              <NavLink
-                to="/success-stories"
-                className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
-                }
-              >
-                Stories
-              </NavLink>
+              <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                {programsMenu.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `block px-4 py-2 text-sm ${
+                        isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+
+            {/* Resources with Hover Menu */}
+            <div className="relative group">
               <NavLink
                 to="/resources"
                 className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
+                  isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
                 }
               >
-                Resources
+                RESOURCES
               </NavLink>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive ? "text-purple-600" : "text-gray-700 hover:text-purple-600"
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
+              <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                {resourcesMenu.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `block px-4 py-2 text-sm ${
+                        isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
             </div>
+
+            <NavLink
+              to="/success-stories"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
+              }
+            >
+              STORIES
+            </NavLink>
+
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
+              }
+            >
+              CONTACT
+            </NavLink>
           </div>
 
-          {/* Right side items */}
-          <div className="flex items-center">
-            <button
-              onClick={toggleSearch}
-              className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+          {/* Search & Auth Desktop */}
+          <div className="hidden md:flex items-center space-x-4">
+            <form id="search-container" onSubmit={handleSearchSubmit} className="relative">
+              <div
+                className={`relative transition-all duration-200 ${
+                  isSearchFocused ? "w-64" : "w-40"
+                }`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onFocus={() => setIsSearchFocused(true)}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16"
                 />
-              </svg>
-            </button>
-
-            {isAuthenticated ? (
-              <div className="relative ml-3">
-                <button
-                  onClick={toggleProfile}
-                  className="flex items-center space-x-2 text-base font-medium text-gray-700 hover:text-purple-600 transition-colors duration-200"
-                >
-                  <img
-                    src={assets.profilelogo}
-                    alt="Profile"
-                    className="h-8 w-8 rounded-full hover:opacity-80 transition-opacity duration-200"
-                  />
-                </button>
-
-                {isProfileOpen && (
-                  <div className="profile-dropdown absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                      <p className="text-xs text-gray-500">{user?.email}</p>
-                    </div>
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-200"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      My Profile
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-200"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      Settings
-                    </Link>
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                  {searchQuery && (
                     <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+                      type="button"
+                      onClick={handleClearSearch}
+                      className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
                     >
-                      Logout
+                      <img src={assets.crossicon} className="w-4 h-4" alt="Clear search" />
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                  >
+                    <img src={assets.searchIcon} className="w-4 h-4" alt="Search" />
+                  </button>
+                </div>
+              </div>
+              {/* Search Results Dropdown */}
+              {isSearchFocused && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-md shadow-lg z-50">
+                  {searchResults.map((result, index) => (
+                    <Link
+                      key={index}
+                      to={result.path}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                      onClick={() => {
+                        setSearchQuery("");
+                        setSearchResults([]);
+                        setIsSearchFocused(false);
+                      }}
+                    >
+                      {result.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </form>
+
+            {!isLoggedIn ? (
+              <Link to="/login" className="text-sm text-gray-600 hover:text-blue-600">
+                Login
+              </Link>
+            ) : (
+              <Link to="/signup" className="text-sm text-gray-600 hover:text-blue-600">
+                SignUp
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Nav Icon */}
+          <div className="md:hidden">
+            <div className="flex items-center space-x-2">
+              <form id="search-container-mobile" onSubmit={handleSearchSubmit} className="relative">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    onFocus={() => setIsSearchFocused(true)}
+                    className="w-32 px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16"
+                  />
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={handleClearSearch}
+                        className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                      >
+                        <img src={assets.crossicon} className="w-3 h-3" alt="Clear search" />
+                      </button>
+                    )}
+                    <button
+                      type="submit"
+                      className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                    >
+                      <img src={assets.searchIcon} className="w-3 h-3" alt="Search" />
                     </button>
                   </div>
+                </div>
+                {/* Search Results Dropdown for Mobile */}
+                {isSearchFocused && searchResults.length > 0 && (
+                  <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-md shadow-lg z-50">
+                    {searchResults.map((result, index) => (
+                      <Link
+                        key={index}
+                        to={result.path}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSearchResults([]);
+                          setIsSearchFocused(false);
+                        }}
+                      >
+                        {result.title}
+                      </Link>
+                    ))}
+                  </div>
                 )}
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4 ml-4">
-                <Link
-                  to="/login"
-                  className="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
-
-            {/* Mobile menu button */}
-            <div className="flex items-center sm:hidden ml-2">
-              <button
-                onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
-              >
-                <span className="sr-only">Open main menu</span>
-                {isMenuOpen ? (
-                  <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                )}
-              </button>
+              </form>
+              <img
+                src={assets.menuicon}
+                onClick={() => setVisible(true)}
+                className="h-6 w-6 cursor-pointer"
+                alt="Menu"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="sm:hidden">
-          <div className="pt-2 pb-3 space-y-1">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </NavLink>
-            <NavLink
-              to="/programs"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Programs
-            </NavLink>
-            <NavLink
-              to="/success-stories"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Stories
-            </NavLink>
-            <NavLink
-              to="/resources"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Resources
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                `block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                  isActive
-                    ? "bg-purple-50 border-purple-500 text-purple-700"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                }`
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact
-            </NavLink>
+      {/* Mobile Menu */}
+      {visible && (
+        <div className="md:hidden fixed top-0 left-0 w-full h-screen bg-white z-50 p-4 overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <Link to="/" onClick={() => setVisible(false)}>
+              <img src={assets.empoweherlogo3} className="h-8" alt="Logo" />
+            </Link>
+            <button onClick={() => setVisible(false)}>
+              <span className="text-xl">&times;</span>
+            </button>
           </div>
 
-          <div className="pt-4 pb-3 border-t border-gray-200">
-            {!isAuthenticated && (
-              <>
-                <Link
-                  to="/login"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-            {isAuthenticated && (
-              <>
-                <Link
-                  to="/profile"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  My Profile
-                </Link>
-                <Link
-                  to="/settings"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Settings
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout()
-                    setIsMenuOpen(false)
-                  }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
+          <nav className="flex flex-col space-y-4">
+            <NavLink to="/" onClick={() => setVisible(false)}>Home</NavLink>
+            <NavLink to="/about" onClick={() => setVisible(false)}>About</NavLink>
+            <div>
+              <p className="font-semibold">Programs</p>
+              {programsMenu.map((item) => (
+                <NavLink key={item.path} to={item.path} onClick={() => setVisible(false)} className="pl-4 block">
+                  {item.name}
+                </NavLink>
+              ))}
+            </div>
+            <div>
+              <p className="font-semibold">Resources</p>
+              {resourcesMenu.map((item) => (
+                <NavLink key={item.path} to={item.path} onClick={() => setVisible(false)} className="pl-4 block">
+                  {item.name}
+                </NavLink>
+              ))}
+            </div>
+            <NavLink to="/success-stories" onClick={() => setVisible(false)}>Stories</NavLink>
+            <NavLink to="/contact" onClick={() => setVisible(false)}>Contact</NavLink>
+            <NavLink to="/login" onClick={() => setVisible(false)}>Login</NavLink>
+            <NavLink to="/signup" onClick={() => setVisible(false)}>SignUp</NavLink>
+          </nav>
         </div>
       )}
-
-      {/* Search Modal */}
-      <Search isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

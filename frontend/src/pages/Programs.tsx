@@ -13,7 +13,8 @@ const Programs = () => {
         "Industry-standard tools",
         "Career guidance",
         "Portfolio development"
-      ]
+      ],
+      route: "/programs/tech-skills"
     },
     {
       id: 2,
@@ -25,11 +26,12 @@ const Programs = () => {
         "Communication skills",
         "Strategic thinking",
         "Project leadership"
-      ]
+      ],
+      route: "/programs/leadership"
     },
     {
       id: 3,
-      title: "Entrepreneurship",
+      title: "Workshops",
       description: "Learn how to start and grow your own tech business with practical guidance.",
       icon: "🚀",
       features: [
@@ -37,7 +39,8 @@ const Programs = () => {
         "Market research",
         "Funding strategies",
         "Pitch development"
-      ]
+      ],
+      route: "/programs/workshops"
     },
     {
       id: 4,
@@ -49,7 +52,8 @@ const Programs = () => {
         "Career advice",
         "Skill development",
         "Networking opportunities"
-      ]
+      ],
+      route: "/programs/mentorship"
     },
     {
       id: 5,
@@ -61,19 +65,20 @@ const Programs = () => {
         "Career fairs",
         "Workshop sessions",
         "Community building"
-      ]
+      ],
+      route: "/programs/workshops"
     }
   ]
 
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative pt-48 pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-secondary-600/20 backdrop-blur-sm" />
         <div className="absolute inset-0 bg-[url('/src/assets/pattern.png')] opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-800">
               Our Programs
             </h1>
             <p className="text-lg text-neutral-700 mb-8">
@@ -108,8 +113,8 @@ const Programs = () => {
                   ))}
                 </ul>
                 <Link
-                  to={`/programs/${program.title.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="inline-block w-full text-center bg-primary-600 text-white py-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                  to={program.route}
+                  className="inline-block w-full text-center bg-gray-700 text-white py-2 rounded-md hover:bg-gray-800 transition-colors duration-200"
                 >
                   Learn More
                 </Link>
@@ -129,14 +134,14 @@ const Programs = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/apply"
-                className="px-8 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200"
+                to="/signup"
+                className="px-8 py-3 bg-gray-700 text-white rounded-md hover:bg-gray-800 transition-colors duration-200"
               >
                 Apply Now
               </Link>
               <Link
                 to="/contact"
-                className="px-8 py-3 border border-primary-600 text-primary-600 rounded-md hover:bg-primary-50 transition-colors duration-200"
+                className="px-8 py-3 border border-gray-700 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-200"
               >
                 Contact Us
               </Link>

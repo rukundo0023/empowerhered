@@ -15,11 +15,17 @@ import Contact from "./pages/Contact";
 import SuccessStories from "./pages/SuccessStories";
 import Resources from "./pages/Resources";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import Mentorship from "./pages/programs/Mentorship";
 import Leadership from "./pages/programs/Leadership";
 import TechSkills from "./pages/programs/TechSkills";
 import Workshops from "./pages/programs/Workshops";
 import ForgotPassword from "./pages/ForgotPassword";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import Adminpanel from "./pages/Adminpanel";
+import Blog from "./pages/Blog";
+import Community from "./pages/Community";
+import LearningResources from "./pages/LearningResources";
 
 function App() {
   return (
@@ -42,6 +48,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/resources" element={<Resources />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
               <Route
                 path="/profile"
                 element={
@@ -58,6 +65,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <Adminpanel />
+                  </AdminRoute>
+                }
+              />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/resources/community" element={<Community />} />
+              <Route path="/resources/learning" element={<LearningResources />} />
             </Routes>
           </main>
           <Footer />

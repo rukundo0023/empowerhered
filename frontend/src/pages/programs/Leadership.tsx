@@ -1,5 +1,4 @@
 import { motion } from "framer-motion"
-import assets from "../../assets/assets"
 
 const Leadership = () => {
   const modules = [
@@ -61,10 +60,10 @@ const Leadership = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative bg-gray-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,7 +76,6 @@ const Leadership = () => {
             </p>
           </motion.div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-purple-50 to-transparent"></div>
       </div>
 
       {/* Program Overview */}
@@ -97,8 +95,8 @@ const Leadership = () => {
             </p>
             <div className="space-y-4">
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 text-xl">🎯</span>
+                <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center">
+                  <span className="text-gray-700 text-xl">🎯</span>
                 </div>
                 <div className="ml-4">
                   <h3 className="text-sm font-medium text-gray-900">Practical Skills</h3>
@@ -106,8 +104,8 @@ const Leadership = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 text-xl">👥</span>
+                <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center">
+                  <span className="text-gray-700 text-xl">👥</span>
                 </div>
                 <div className="ml-4">
                   <h3 className="text-sm font-medium text-gray-900">Team Projects</h3>
@@ -115,8 +113,8 @@ const Leadership = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 text-xl">🤝</span>
+                <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center">
+                  <span className="text-gray-700 text-xl">🤝</span>
                 </div>
                 <div className="ml-4">
                   <h3 className="text-sm font-medium text-gray-900">Mentorship</h3>
@@ -156,7 +154,7 @@ const Leadership = () => {
               </div>
             </div>
             <div className="mt-6">
-              <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg text-sm hover:bg-purple-700 transition-colors">
+              <button className="w-full bg-gray-700 text-white py-2 px-4 rounded-lg text-sm hover:bg-gray-800 transition-colors">
                 Apply Now
               </button>
             </div>
@@ -179,9 +177,9 @@ const Leadership = () => {
                 <p className="text-sm text-gray-600 mb-4">{module.description}</p>
                 <ul className="space-y-2">
                   {module.topics.map((topic, topicIndex) => (
-                    <li key={topicIndex} className="flex items-center text-sm text-gray-700">
+                    <li key={topicIndex} className="flex items-center text-gray-700">
                       <svg
-                        className="h-4 w-4 text-purple-600 mr-2"
+                        className="h-4 w-4 text-gray-700 mr-2"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -218,10 +216,10 @@ const Leadership = () => {
             skills, knowledge, and support you need to make a difference.
           </p>
           <div className="flex justify-center space-x-4">
-            <button className="bg-purple-600 text-white py-2 px-6 rounded-lg text-sm hover:bg-purple-700 transition-colors">
+            <button className="bg-gray-700 text-white py-2 px-6 rounded-lg text-sm hover:bg-gray-800 transition-colors">
               Apply Now
             </button>
-            <button className="bg-white text-purple-600 py-2 px-6 rounded-lg text-sm border border-purple-600 hover:bg-purple-50 transition-colors">
+            <button className="bg-white text-gray-700 py-2 px-6 rounded-lg text-sm border border-gray-700 hover:bg-gray-50 transition-colors">
               Contact Us
             </button>
           </div>

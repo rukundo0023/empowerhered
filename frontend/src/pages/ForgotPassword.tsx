@@ -24,7 +24,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,7 +57,7 @@ const ForgotPassword = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-700 focus:border-transparent transition-colors"
                 placeholder="Enter your email"
               />
             </div>
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors ${
+              className={`w-full bg-gray-700 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors ${
                 isLoading ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >
@@ -75,7 +75,7 @@ const ForgotPassword = () => {
             <div className="text-center">
               <Link
                 to="/login"
-                className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                className="text-sm text-gray-700 hover:text-gray-800 font-medium"
               >
                 Back to Login
               </Link>
@@ -87,7 +87,7 @@ const ForgotPassword = () => {
               Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-purple-600 hover:text-purple-700 font-medium"
+                className="text-gray-700 hover:text-gray-800 font-medium"
               >
                 Sign up
               </Link>

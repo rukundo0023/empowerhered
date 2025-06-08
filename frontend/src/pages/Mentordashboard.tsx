@@ -1,5 +1,4 @@
 import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
 
 const Mentordashboard = () => {
   const mentees = [
@@ -77,7 +76,7 @@ const Mentordashboard = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm text-gray-500">Progress</p>
-                        <p className="font-medium text-purple-600">{mentee.progress}%</p>
+                        <p className="font-medium text-gray-700">{mentee.progress}%</p>
                       </div>
                     </div>
                     <div className="flex justify-between text-sm text-gray-500">
@@ -85,10 +84,10 @@ const Mentordashboard = () => {
                       <p>Next Meeting: {mentee.nextMeeting}</p>
                     </div>
                     <div className="mt-4 flex space-x-4">
-                      <button className="text-sm text-purple-600 hover:text-purple-700">
+                      <button className="text-sm text-gray-700 hover:text-gray-800">
                         Schedule Meeting
                       </button>
-                      <button className="text-sm text-purple-600 hover:text-purple-700">
+                      <button className="text-sm text-gray-700 hover:text-gray-800">
                         View Progress
                       </button>
                     </div>
@@ -116,7 +115,7 @@ const Mentordashboard = () => {
                     <div className="mt-2 text-sm text-gray-500">
                       <p>{meeting.date} at {meeting.time}</p>
                     </div>
-                    <button className="mt-2 text-sm text-purple-600 hover:text-purple-700">
+                    <button className="mt-2 text-sm text-gray-700 hover:text-gray-800">
                       View Details
                     </button>
                   </motion.div>
@@ -128,13 +127,13 @@ const Mentordashboard = () => {
             <section className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
               <div className="space-y-4">
-                <button className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                <button className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
                   Schedule New Meeting
                 </button>
-                <button className="w-full bg-white text-purple-600 border border-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors">
+                <button className="w-full bg-white text-gray-700 border border-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                   Add New Mentee
                 </button>
-                <button className="w-full bg-white text-purple-600 border border-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors">
+                <button className="w-full bg-white text-gray-700 border border-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                   View Resources
                 </button>
               </div>

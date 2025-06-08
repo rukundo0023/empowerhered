@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import assets from "../assets/assets"
+import Newsletter from "./Newsletter"
 
 const Footer = () => {
   return (
@@ -83,6 +84,11 @@ const Footer = () => {
                   Resources
                 </Link>
               </li>
+              <li>
+                <Link to="/terms-and-conditions" className="text-sm text-gray-600 hover:text-purple-600">
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -113,21 +119,28 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Contact Us</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/contact" className="text-sm text-gray-600 hover:text-purple-600">
-                  Get in Touch
-                </Link>
-              </li>
-              <li>
-                <a href="mailto:info@empowerhered.org" className="text-sm text-gray-600 hover:text-purple-600">
-                  info@empowerhered.org
-                </a>
-              </li>
-            </ul>
+          {/* Contact & Newsletter */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">Contact Us</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/contact" className="text-sm text-gray-600 hover:text-purple-600">
+                    Get in Touch
+                  </Link>
+                </li>
+                <li>
+                  <a href="mailto:info@empowerhered.org" className="text-sm text-gray-600 hover:text-purple-600">
+                    info@empowerhered.org
+                  </a>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">Stay Updated</h3>
+              <Newsletter variant="compact" />
+            </div>
           </div>
         </div>
 

@@ -121,7 +121,7 @@ const Settings = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto"
+          className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8"
         >
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
 
@@ -132,7 +132,7 @@ const Settings = () => {
                 onClick={() => setActiveTab("account")}
                 className={`${
                   activeTab === "account"
-                    ? "border-purple-500 text-purple-600"
+                    ? "border-gray-500 text-gray-700"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
@@ -142,7 +142,7 @@ const Settings = () => {
                 onClick={() => setActiveTab("notifications")}
                 className={`${
                   activeTab === "notifications"
-                    ? "border-purple-500 text-purple-600"
+                    ? "border-gray-500 text-gray-700"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
@@ -152,7 +152,7 @@ const Settings = () => {
                 onClick={() => setActiveTab("preferences")}
                 className={`${
                   activeTab === "preferences"
-                    ? "border-purple-500 text-purple-600"
+                    ? "border-gray-500 text-gray-700"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
@@ -174,7 +174,7 @@ const Settings = () => {
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                 />
               </div>
 
@@ -188,11 +188,11 @@ const Settings = () => {
                   id="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                 />
               </div>
 
-              <div className="border-t border-gray-200 pt-6">
+              <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
                 <div className="space-y-4">
                   <div>
@@ -205,7 +205,7 @@ const Settings = () => {
                       id="currentPassword"
                       value={formData.currentPassword}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                     />
                   </div>
                   <div>
@@ -218,7 +218,7 @@ const Settings = () => {
                       id="newPassword"
                       value={formData.newPassword}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                     />
                   </div>
                   <div>
@@ -231,7 +231,7 @@ const Settings = () => {
                       id="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                     />
                   </div>
                 </div>
@@ -242,8 +242,8 @@ const Settings = () => {
                   type="submit"
                   disabled={isLoading}
                   className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                    isLoading ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+                    isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-700 hover:bg-gray-800"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
                 >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </button>
@@ -263,7 +263,7 @@ const Settings = () => {
                       type="checkbox"
                       checked={formData.notifications.email}
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+                      className="focus:ring-gray-500 h-4 w-4 text-gray-700 border-gray-300 rounded"
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -282,7 +282,7 @@ const Settings = () => {
                       type="checkbox"
                       checked={formData.notifications.programUpdates}
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+                      className="focus:ring-gray-500 h-4 w-4 text-gray-700 border-gray-300 rounded"
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -301,7 +301,7 @@ const Settings = () => {
                       type="checkbox"
                       checked={formData.notifications.communityUpdates}
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+                      className="focus:ring-gray-500 h-4 w-4 text-gray-700 border-gray-300 rounded"
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -320,7 +320,7 @@ const Settings = () => {
                       type="checkbox"
                       checked={formData.notifications.newsletter}
                       onChange={handleChange}
-                      className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+                      className="focus:ring-gray-500 h-4 w-4 text-gray-700 border-gray-300 rounded"
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -337,8 +337,8 @@ const Settings = () => {
                   type="submit"
                   disabled={isLoading}
                   className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                    isLoading ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+                    isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-700 hover:bg-gray-800"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
                 >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </button>
@@ -358,7 +358,7 @@ const Settings = () => {
                   name="language"
                   value={formData.language}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                 >
                   <option value="en">English</option>
                   <option value="fr">French</option>
@@ -375,7 +375,7 @@ const Settings = () => {
                   name="theme"
                   value={formData.theme}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                 >
                   <option value="light">Light</option>
                   <option value="dark">Dark</option>
@@ -388,8 +388,8 @@ const Settings = () => {
                   type="submit"
                   disabled={isLoading}
                   className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                    isLoading ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+                    isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-700 hover:bg-gray-800"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
                 >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </button>

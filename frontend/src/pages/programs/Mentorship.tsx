@@ -62,7 +62,7 @@ const Mentorship = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-purple-600 to-pink-600">
+      <section className="relative pt-24 md:pt-32 pb-20 bg-gradient-to-r from-gray-700 to-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,7 +178,7 @@ const Mentorship = () => {
                   {module.topics.map((topic) => (
                     <li key={topic} className="flex items-center text-gray-600">
                       <svg
-                        className="w-4 h-4 mr-2 text-purple-600"
+                        className="w-4 h-4 mr-2 text-gray-700"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -201,13 +201,13 @@ const Mentorship = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-purple-600">
+      <section className="py-16 bg-gray-700">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Mentor?</h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Join our mentorship program and take the next step in your professional journey
           </p>
-          <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
+          <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
             Apply Now
           </button>
         </div>

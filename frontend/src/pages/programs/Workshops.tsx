@@ -60,10 +60,10 @@ const Workshops = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-purple-600 to-pink-600">
-        <div className="container mx-auto px-4">
+      <div className="relative bg-gray-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const Workshops = () => {
             </p>
           </motion.div>
         </div>
-      </section>
+      </div>
 
       {/* Program Overview */}
       <section className="py-16">
@@ -178,7 +178,7 @@ const Workshops = () => {
                   {workshop.topics.map((topic) => (
                     <li key={topic} className="flex items-center text-gray-600">
                       <svg
-                        className="w-4 h-4 mr-2 text-purple-600"
+                        className="w-4 h-4 mr-2 text-gray-700"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -201,13 +201,13 @@ const Workshops = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-purple-600">
+      <section className="py-16 bg-gray-700">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Ready to Learn?</h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Join our workshops and develop the skills you need to succeed
           </p>
-          <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
+          <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
             Register Now
           </button>
         </div>
