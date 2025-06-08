@@ -39,4 +39,4 @@ empowerhered/
 
 ## License
 
-Academic Project 
+Academic Project
