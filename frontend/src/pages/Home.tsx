@@ -6,36 +6,39 @@ import assets from "../assets/assets"
 const Home = () => {
 
   const featuredCourses = [
-    {
-      title: "Web Development Bootcamp",
-      description: "Master modern web development with hands-on projects",
-      level: "Beginner",
-      duration: "12 weeks",
-      students: "1.2k",
-      route: "/programs/tech-skills"
-    },
-    {
-      title: "Data Science Fundamentals",
-      description: "Learn data analysis, visualization, and machine learning",
-      level: "Intermediate",
-      duration: "16 weeks",
-      students: "850",
-      route: "/programs/tech-skills"
-    },
-    {
-      title: "UX/UI Design Masterclass",
-      description: "Create beautiful and functional user interfaces",
-      level: "All Levels",
-      duration: "8 weeks",
-      students: "1.5k",
-      route: "/programs/tech-skills"
-    }
-  ]
+  {
+    title: "Computer Basics & Hardware",
+    description: "Learn the fundamentals of computer hardware and maintenance",
+    level: "Beginner",
+    duration: "6 weeks",
+    students: "1.2k",
+    route: "/resources/learning"
+  },
+  {
+    title: "Internet & Email Skills",
+    description: "Master essential internet navigation and email communication",
+    level: "Beginner",
+    duration: "4 weeks",
+    students: "1.1k",
+    route: "/resources/learning"
+  },
+  {
+    title: "Microsoft Word",
+    description: "Become proficient in Microsoft Word for professional documents",
+    level: "Beginner",
+    duration: "3 weeks",
+    students: "950",
+    route: "/resources/learning"
+  }
+]
+
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden pt-28">
+      <section className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden pt-28"
+      style={{ backgroundImage: `url(${assets.herobg})`, backgroundSize: "cover" }} >
+
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAzNGMwLTIuMjA5IDEuNzkxLTQgNC00czQgMS43OTEgNCA0LTEuNzkxIDQtNCA0LTQtMS43OTEtNC00eiIgZmlsbD0iI2U1ZTdlYiIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <motion.div
@@ -44,9 +47,9 @@ const Home = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="max-w-4xl mx-auto text-center"
             >
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-8 leading-tight tracking-tight">
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-8 leading-tight tracking-tight">
                 Empowering Women Through{" "}
-                <span className="text-gray-700">Digital Education</span>
+                <span className="text-blue-600">Digital Education</span>
               </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
@@ -109,8 +112,8 @@ const Home = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-gray-700 font-medium tracking-wide">Featured Programs</span>
-            <h2 className="text-3xl font-bold text-gray-900 mt-2 mb-4 tracking-tight">
+            <span className="text-black font-medium tracking-wide">Featured Programs</span>
+            <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-4 tracking-tight">
               Start Your Journey Today
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -151,8 +154,8 @@ const Home = () => {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-gray-700 font-medium tracking-wide">Why Choose Us</span>
-            <h2 className="text-3xl font-bold text-gray-900 mt-2 mb-4 tracking-tight">
+            <span className="text-black font-medium tracking-wide">Why Choose Us</span>
+            <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-4 tracking-tight">
               Your Path to Success
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -197,8 +200,8 @@ const Home = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-gray-700 font-medium tracking-wide">Success Stories</span>
-            <h2 className="text-3xl font-bold text-gray-900 mt-2 mb-4 tracking-tight">
+            <span className="text-black font-medium tracking-wide">Success Stories</span>
+            <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-4 tracking-tight">
               Hear From Our Community
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">

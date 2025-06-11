@@ -1,18 +1,8 @@
 import { motion } from "framer-motion"
+import assets from "../../assets/assets"
 
 const Workshops = () => {
   const workshops = [
-    {
-      title: "Tech Skills Workshop",
-      description: "Hands-on training in essential technical skills",
-      topics: [
-        "Web Development Basics",
-        "Data Analysis Fundamentals",
-        "Digital Marketing Tools",
-        "Project Management Software",
-        "Cloud Computing Basics"
-      ]
-    },
     {
       title: "Career Development Workshop",
       description: "Tools and strategies for career advancement",
@@ -62,7 +52,8 @@ const Workshops = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gray-700 text-white">
+      <div className="relative bg-gray-700 text-white"
+        style={{ backgroundImage: `url(${assets.workshopbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,10 +61,10 @@ const Workshops = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Interactive Workshops
+            <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+              Interactive <span className="text-blue-600">Workshops</span>
             </h1>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg text-white max-w-2xl mx-auto">
               Hands-on learning experiences designed to develop practical skills and knowledge
             </p>
           </motion.div>
@@ -216,4 +207,4 @@ const Workshops = () => {
   )
 }
 
-export default Workshops 
+export default Workshops

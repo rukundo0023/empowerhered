@@ -81,7 +81,8 @@ const SuccessStories = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28">
+      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28"
+        style={{ backgroundImage: `url(${assets.herobg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -89,8 +90,8 @@ const SuccessStories = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl font-bold text-neutral-900 sm:text-5xl md:text-6xl">
-              Success Stories
+            <h1 className="text-4xl font-bold text-blue-600 sm:text-5xl md:text-6xl">
+              <span className="text-black">Success</span> Stories
             </h1>
             <p className="mt-4 text-xl text-neutral-600 max-w-3xl mx-auto">
               Discover how EmpowerHerEd has transformed lives and created opportunities for women in Rwanda.

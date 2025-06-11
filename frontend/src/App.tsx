@@ -16,8 +16,8 @@ import SuccessStories from "./pages/SuccessStories";
 import Resources from "./pages/Resources";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import MentorRoute from "./components/MentorRoute";
 import Mentorship from "./pages/programs/Mentorship";
-import Leadership from "./pages/programs/Leadership";
 import TechSkills from "./pages/programs/TechSkills";
 import Workshops from "./pages/programs/Workshops";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -26,11 +26,16 @@ import Adminpanel from "./pages/Adminpanel";
 import Blog from "./pages/Blog";
 import Community from "./pages/Community";
 import LearningResources from "./pages/LearningResources";
+import Communication from "./pages/programs/Communication";
+import TestConnection from "./components/TestConnection.tsx";
+import Dashboard from "./pages/Dashboard";
+import Courses from "./pages/Courses";
+import MentorDashboard from "./components/MentorDashboard";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <div className="flex min-h-screen flex-col overflow-x-hidden">
           <Navbar />
           <main className="flex-1 w-full">
@@ -39,16 +44,20 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/programs" element={<Programs />} />
               <Route path="/programs/mentorship" element={<Mentorship />} />
-              <Route path="/programs/leadership" element={<Leadership />} />
+              <Route path="/programs/communication" element={<Communication />} />
               <Route path="/programs/tech-skills" element={<TechSkills />} />
               <Route path="/programs/workshops" element={<Workshops />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/resources/community" element={<Community />} />
+              <Route path="/resources/learning" element={<LearningResources />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+              <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/ForgotPassword" element={<ForgotPassword />} />
               <Route
                 path="/profile"
                 element={
@@ -66,6 +75,39 @@ function App() {
                 }
               />
               <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Mentor Routes */}
+              <Route
+                path="/mentorDashboard"
+                element={
+                  <MentorRoute>
+                    <MentorDashboard />
+                  </MentorRoute>
+                }
+              />
+              <Route
+                path="/mentor/mentee/:id"
+                element={
+                  <MentorRoute>
+                    <MentorDashboard />
+                  </MentorRoute>
+                }
+              />
+              <Route
+                path="/mentor/meeting/:id"
+                element={
+                  <MentorRoute>
+                    <MentorDashboard />
+                  </MentorRoute>
+                }
+              />
+              <Route
                 path="/admin"
                 element={
                   <AdminRoute>
@@ -73,16 +115,14 @@ function App() {
                   </AdminRoute>
                 }
               />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/resources/community" element={<Community />} />
-              <Route path="/resources/learning" element={<LearningResources />} />
+              <Route path="/test-connection" element={<TestConnection />} />
             </Routes>
           </main>
           <Footer />
+          <ToastContainer />
         </div>
-        <ToastContainer />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

@@ -6,7 +6,8 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28">
+      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28"
+        style={{ backgroundImage: `url(${assets.herobg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -14,8 +15,8 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              About <span className="text-gray-700">EmpowerHerEd</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+              About <span className="text-blue-600">EmpowerHerEd</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Empowering women through technology, education, and community support.
@@ -39,7 +40,7 @@ const About = () => {
                 EmpowerHerEd was born from a simple but powerful idea: when women are educated and empowered, entire communities prosper. Founded by a passionate team of educators, mentors, and advocates, EmpowerHerEd exists to bridge the gender gap in education and opportunity.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Our platform is a safe, inclusive space where women and girls can learn, connect, and grow — academically, professionally, and personally.
+                Our platform is a safe, inclusive space where women and girls can learn, connect, and grow  academically, professionally, and personally.
               </p>
             </motion.div>
             <motion.div 
@@ -116,7 +117,7 @@ const About = () => {
               Despite progress, millions of women around the world still face limited access to education and leadership roles. EmpowerHerEd is changing that by nurturing confidence, capability, and community.
             </p>
             <p className="text-xl font-semibold text-gray-700">
-              Together, we are shaping a future where education is a right — not a privilege — for every woman.
+              Together, we are shaping a future where education is a right and not a privilege for every woman.
             </p>
           </motion.div>
         </div>

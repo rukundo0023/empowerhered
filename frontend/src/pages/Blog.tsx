@@ -37,7 +37,8 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28">
+      <div className="relative pt-28"
+        style={{ backgroundImage: `url(${assets.blogbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,9 +47,9 @@ const Blog = () => {
             className="text-center"
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Our <span className="text-gray-700">Blog</span>
+              Our <span className="text-blue-600">Blog</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-black max-w-3xl mx-auto">
               Insights, stories, and updates from our community
             </p>
           </motion.div>

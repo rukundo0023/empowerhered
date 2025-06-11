@@ -1,96 +1,149 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../api/axios';
 
 interface User {
-  email: string;
+  _id: string;
   name: string;
-  role: string;
-  gender?: string;
-}
-
-interface SignupData {
-  fullName: string;
   email: string;
-  password: string;
-  gender: string;
   role: string;
+  gender: string;
+  token: string;
 }
 
 interface AuthContextType {
-  isAuthenticated: boolean;
   user: User | null;
-  login: (userData: User, token: string) => void;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  login: (userData: User) => void;
   logout: () => void;
-  signup: (data: SignupData) => Promise<void>;
+  loading: boolean;  // indicate loading auth status
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true); // initially loading true
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  // Initialize auth state synchronously from localStorage
   useEffect(() => {
-    // Check if user is already logged in
-    const storedAuth = localStorage.getItem('isAuthenticated');
     const storedUser = localStorage.getItem('user');
-    
-    if (storedAuth === 'true' && storedUser) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('token');
+
+    if (storedUser && token) {
+      try {
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        setIsAdmin(parsedUser.role === 'admin');
+      } catch (error) {
+        console.error('Failed to parse user from storage:', error);
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+      }
+    } else {
+      // No stored user/token: clear state
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsAdmin(false);
     }
+
+    setLoading(false); // done reading storage
   }, []);
 
-  const login = (userData: User, token: string) => {
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', token);
-    setIsAuthenticated(true);
+  // Validate token by calling /users/me, but only if user is set and not already validated
+  useEffect(() => {
+    const validateToken = async () => {
+      if (!user || !localStorage.getItem('token')) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await api.get('/users/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Only update if the data has changed
+        if (JSON.stringify(response.data) !== JSON.stringify(user)) {
+          setUser(response.data);
+          setIsAuthenticated(true);
+          setIsAdmin(response.data.role === 'admin');
+        }
+      } catch (error) {
+        console.error('Token validation failed:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+
+        // If user is on protected route, redirect to login
+        if (location.pathname !== '/login') {
+          navigate('/login', { replace: true });
+        }
+      }
+    };
+
+    validateToken();
+  }, [navigate, location.pathname]); // Remove user from dependencies
+
+  const login = (userData: User) => {
     setUser(userData);
+    setIsAuthenticated(true);
+    setIsAdmin(userData.role === 'admin');
+    localStorage.setItem('token', userData.token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    navigate('/dashboard'); // you can customize this based on role
+    toast.success('Logged in successfully!');
   };
 
   const logout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
     setUser(null);
+    setIsAuthenticated(false);
+    setIsAdmin(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    sessionStorage.clear();
+    window.location.href = '/login';
   };
 
-  const signup = async (data: SignupData) => {
-    try {
-      // Here you would typically make an API call to your backend
-      // For now, we'll simulate a successful signup
-      const userData: User = {
-        name: data.fullName,
-        email: data.email,
-        role: data.role, // Use the selected role
-        gender: data.gender,
-      };
-
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Store user data and log them in
-      const token = 'dummy-token'; // In a real app, this would come from your backend
-      login(userData, token);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      throw new Error('Failed to sign up. Please try again.');
-    }
-  };
+  if (loading) {
+    // Show loading spinner or empty fragment while loading auth state
+    return <div>Loading...</div>;
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, signup }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isAdmin,
+        login,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};
+
+export default AuthProvider;

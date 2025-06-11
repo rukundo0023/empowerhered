@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import assets from "../../assets/assets"
 
 const Mentorship = () => {
   const modules = [
@@ -60,9 +61,10 @@ const Mentorship = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen ">
       {/* Hero Section */}
-      <section className="relative pt-24 md:pt-32 pb-20 bg-gradient-to-r from-gray-700 to-gray-800">
+      <section className="relative pt-24 md:pt-32 pb-20"
+        style={{ backgroundImage: `url(${assets.mentorshipbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,10 +72,10 @@ const Mentorship = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Mentorship Program
+            <h1 className="text-4xl md:text-5xl font-bold text-black   mb-6">
+              Mentorship <span className="text-blue-600">Program</span>
             </h1>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg text-white max-w-2xl mx-auto">
               Connect with experienced mentors who will guide you through your professional journey
             </p>
           </motion.div>
@@ -208,7 +210,7 @@ const Mentorship = () => {
             Join our mentorship program and take the next step in your professional journey
           </p>
           <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
-            Apply Now
+            Book Now
           </button>
         </div>
       </section>

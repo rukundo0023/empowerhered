@@ -1,78 +1,80 @@
 import { motion } from "framer-motion"
-
+import assets from "../../assets/assets"
+import { NavLink } from "react-router-dom"
 
 const TechSkills = () => {
   const modules = [
     {
-      title: "Digital Literacy Fundamentals",
-      description: "Master essential digital skills for the modern workplace",
+      title: "Computer Basics & Hardware",
+      description: "Understand how computers work and how to use them efficiently.",
       topics: [
-        "Computer Basics",
-        "Internet Navigation",
-        "Digital Communication",
-        "Online Safety",
-        "Digital Tools & Software"
+        "Parts of a Computer",
+        "Operating Systems",
+        "File Management",
+        "Installing Software",
+        "Keyboard Shortcuts"
       ]
     },
     {
-      title: "Web Development",
-      description: "Learn to build modern, responsive websites",
+      title: "Internet & Email Skills",
+      description: "Learn how to navigate the web and use email for professional communication.",
       topics: [
-        "HTML5 & CSS3",
-        "JavaScript Fundamentals",
-        "Responsive Design",
-        "Frontend Frameworks",
-        "Web Accessibility"
+        "Web Browsers & Search Engines",
+        "Creating & Managing Email Accounts",
+        "Email Etiquette",
+        "Attachments & Folders",
+        "Safe Internet Use"
       ]
     },
     {
-      title: "Programming Fundamentals",
-      description: "Develop core programming skills",
+      title: "Microsoft Word",
+      description: "Master the basics of document creation and formatting.",
       topics: [
-        "Python Basics",
-        "Data Structures",
-        "Algorithms",
-        "Problem Solving",
-        "Version Control"
+        "Creating Documents",
+        "Formatting Text & Paragraphs",
+        "Inserting Tables & Images",
+        "Using Templates",
+        "Printing & Saving Documents"
       ]
     },
     {
-      title: "Data Analysis",
-      description: "Learn to analyze and visualize data",
+      title: "Microsoft Excel",
+      description: "Learn to organize data and perform basic calculations.",
       topics: [
-        "Data Collection",
-        "Data Cleaning",
-        "Statistical Analysis",
-        "Data Visualization",
-        "Excel & SQL"
+        "Spreadsheets & Cells",
+        "Basic Formulas & Functions",
+        "Charts & Graphs",
+        "Sorting & Filtering Data",
+        "Formatting Worksheets"
       ]
     },
     {
-      title: "Cybersecurity Basics",
-      description: "Understand essential security concepts",
+      title: "Microsoft PowerPoint",
+      description: "Create professional presentations with ease.",
       topics: [
-        "Security Fundamentals",
-        "Password Management",
-        "Online Privacy",
-        "Safe Browsing",
-        "Data Protection"
+        "Creating Slides",
+        "Design Themes",
+        "Adding Media (Images/Videos)",
+        "Animations & Transitions",
+        "Delivering a Presentation"
       ]
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="minh-screen">
       {/* Hero Section */}
-      <div className="relative bg-gray-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16">
+      <div className="relative  text-black "
+        style={{ backgroundImage: `url(${assets.skillsbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16 ">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-3xl font-bold mb-4">Tech Skills Development</h1>
-            <p className="text-lg max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold mb-4 text-blue-500"><span className="text-white mr-3">Tech Skills</span>Development</h1>
+            <p className="text-lg max-w-2xl mx-auto text-white">
               Empowering young women with essential technical skills for the digital age
             </p>
           </motion.div>
@@ -218,9 +220,11 @@ const TechSkills = () => {
             the digital world.
           </p>
           <div className="flex justify-center space-x-4">
+            <NavLink to="/resources/learning">
             <button className="bg-gray-700 text-white py-2 px-6 rounded-lg text-sm hover:bg-gray-800 transition-colors">
-              Apply Now
+              Start Learning
             </button>
+            </NavLink>
             <button className="bg-white text-gray-700 py-2 px-6 rounded-lg text-sm border border-gray-700 hover:bg-gray-50 transition-colors">
               Contact Us
             </button>
@@ -231,4 +235,4 @@ const TechSkills = () => {
   )
 }
 
-export default TechSkills 
+export default TechSkills

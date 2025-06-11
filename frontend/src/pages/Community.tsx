@@ -52,18 +52,19 @@ const Community = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-700/20 to-gray-800/20 pt-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+          style={{ backgroundImage: `url(${assets.communitybg2})`, backgroundSize: "cover", backgroundPosition: "center" }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Our <span className="text-gray-700">Community</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mt-16 mb-3">
+              Our <span className="text-blue-600">Community</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-black  max-w-3xl mx-auto">
               Join a supportive network of women in technology
             </p>
           </motion.div>
