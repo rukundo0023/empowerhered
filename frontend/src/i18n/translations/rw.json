@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Ahabanza",
-    "about": "Abo Turi",
+    "about": "Abo Turibo",
     "programs": "Porogaramu",
     "resources": "Ibikoresho",
     "blog": "Blog",
@@ -45,8 +45,8 @@
   "home": {
     "hero": {
       "title": "Gufasha Abagore Binyuze mu",
-      "titleHighlight": "Amashuri ya Digital",
-      "description1": "EmpowerHerEd si gusa ahantu ho kwiga - ni inzira yo gufasha, kwigisha, no gufasha abakobwa bato mu Rwanda. Intego yacu ni ugabanya ikibazo cy'uburinganire mu tekinoroji binyuze mu gutanga abagore ubumenyi, ibikoresho, n'umwete bakeneye kugirango bafate umwanya mu isi ya digital.",
+      "titleHighlight": "mashuri ya Digital",
+      "description1": "EmpowerHerEd si ahantu ho kwiga gusa, ni inzira yo gufasha, kwigisha, no gufasha abakobwa bato mu Rwanda. Intego yacu ni ukugabanya ikibazo cy'uburinganire mu tekinoroji binyuze mu guha abagore ubumenyi, ibikoresho, n'umwete bakeneye kugirango bafate umwanya mu isi ya digital.",
       "description2": "Jya mu muryango wa mbere wa amashuri ya digital mu Rwanda. Wige kuva ku bafite ubumenyi mu nganda, huzwa n'abayoboramikorere, no gutangiza umwuga wawe wa tekinoroji. Niba utangira gusa cyangwa ushaka kongera ubumenyi bwawe, turi hano kugirango dukuyobore.",
       "explorePrograms": "Shakisha Porogaramu",
       "contactUs": "Twandikire"

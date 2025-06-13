@@ -14,6 +14,7 @@ const Navbar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
@@ -319,52 +320,45 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 focus:outline-none"
                 >
                   <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                     {getUserInitials(user?.name || '')}
                   </div>
                 </button>
-                {isMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+
+                {/* Profile Dropdown - Desktop */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden md:block">
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => setIsProfileOpen(false)}
                     >
-                      Profile
+                      {t('nav.profile')}
                     </Link>
                     {user?.role === 'admin' && (
                       <Link
                         to="/admin"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={() => setIsProfileOpen(false)}
                       >
-                        Admin Dashboard
-                      </Link>
-                    )}
-                    {user?.role === 'mentor' && (
-                      <Link
-                        to="/mentorDashboard"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Mentor Dashboard
+                        {t('nav.adminDashboard')}
                       </Link>
                     )}
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => setIsProfileOpen(false)}
                     >
-                      Settings
+                      {t('nav.settings')}
                     </Link>
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Logout
+                      {t('nav.logout')}
                     </button>
                   </div>
                 )}
@@ -555,7 +549,6 @@ const Navbar = () => {
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                       {getUserInitials(user?.name || '')}
                     </div>
-                    <span className="text-gray-700">{user?.name}</span>
                   </div>
                   <Link
                     to="/profile"
