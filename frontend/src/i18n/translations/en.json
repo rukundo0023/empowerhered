@@ -44,7 +44,8 @@
       "titleHighlight": "Digital Education",
       "description1": "EmpowerHerEd is more than just a learning platform - it's a pathway to support, teach, and fund young women in Rwanda. Our mission is to bridge the gender gap in technology by providing women with the knowledge, resources, and confidence they need to thrive in the digital world.",
       "description2": "Join Rwanda's premier digital education platform. Learn from industry experts, connect with mentors, and launch your tech career. Whether you're just starting out or looking to enhance your skills, we're here to guide your journey.",
-      "explorePrograms": "Explore Programs"
+      "explorePrograms": "Explore Programs",
+      "contactUs": "Contact Us"
     },
     "stats": {
       "womenEmpowered": "Women Empowered",
@@ -229,10 +230,44 @@
       "readMore": "Read More",
       "viewAll": "View All"
     },
+    "successStories": {
+      "title": "Success Stories",
+      "subtitle": "Inspiring Journeys of Our Graduates",
+      "description": "Read about the amazing achievements of our community members",
+      "stories": [
+        {
+          "name": "Marie Uwase",
+          "role": "Software Developer",
+          "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech. The mentorship program was particularly valuable in helping me navigate the industry.",
+          "achievement": "Now working at a leading tech company in Rwanda"
+        },
+        {
+          "name": "Grace Mukamana",
+          "role": "Data Analyst",
+          "quote": "The comprehensive training and supportive community helped me transition from a different field into technology. I'm now using my skills to make a real impact.",
+          "achievement": "Successfully transitioned to tech career"
+        },
+        {
+          "name": "Sarah Mutoni",
+          "role": "UX Designer",
+          "quote": "The practical projects and real-world experience I gained through EmpowerHerEd were crucial in landing my first tech job. The community support was incredible.",
+          "achievement": "Leading design projects for major clients"
+        }
+      ],
+      "readMore": "Read More Stories",
+      "viewAll": "View All Success Stories"
+    },
     "cta": {
-      "title": "Want to Be a Woman in Tech?",
-      "description": "Sign up now to advance your career",
-      "button": "Get Started"
+      "title": "Ready to Start Your Journey?",
+      "description": "Join our community of women in tech and take the first step towards your future",
+      "primaryButton": "Get Started",
+      "secondaryButton": "Learn More",
+      "features": [
+        "Expert Mentorship",
+        "Supportive Community",
+        "Learning Resources",
+        "Career Support"
+      ]
     }
   },
   "about": {
@@ -300,6 +335,40 @@
           "role": "Head of Education"
         }
       }
+    },
+    "impact": {
+      "title": "Our Impact",
+      "description": "Empowering women in technology",
+      "stats": {
+        "womenEmpowered": "Women Empowered",
+        "jobPlacement": "Job Placement Rate",
+        "partnerCompanies": "Partner Companies",
+        "graduates": "Graduates"
+      }
+    },
+    "community": {
+      "title": "Our Community",
+      "description": "Building a supportive and inclusive community of women in tech",
+      "features": {
+        "safeSpace": {
+          "title": "Safe Space",
+          "description": "A secure environment where women can learn, grow, and connect without fear."
+        },
+        "peerSupport": {
+          "title": "Peer Support",
+          "description": "Connect with women who share your journey and understand your challenges."
+        },
+        "networking": {
+          "title": "Networking",
+          "description": "Build connections with industry professionals and potential employers."
+        }
+      }
+    },
+    "cta": {
+      "title": "Join Our Mission",
+      "description": "Be part of our community of women in tech and help create a better future.",
+      "primaryButton": "Get Started",
+      "secondaryButton": "Learn More"
     }
   },
   "programs": {
@@ -1221,7 +1290,50 @@
     "forum": "Forum",
     "groups": "Groups",
     "discussions": "Discussions",
-    "members": "Members"
+    "members": "Members",
+    "hero": {
+      "title": "Join Our Community",
+      "description": "Connect with fellow learners, share experiences, and grow together"
+    },
+    "features": {
+      "mentorship": {
+        "title": "Mentorship Program",
+        "description": "Connect with experienced professionals in the tech industry for guidance and support"
+      },
+      "studyGroups": {
+        "title": "Study Groups",
+        "description": "Join study groups to learn and practice coding together with peers"
+      },
+      "jobBoard": {
+        "title": "Job Board",
+        "description": "Access exclusive job opportunities from our partner companies"
+      },
+      "forums": {
+        "title": "Discussion Forums",
+        "description": "Engage in meaningful discussions with community members"
+      }
+    },
+    "events": {
+      "title": "Upcoming Events",
+      "description": "Join us for these exciting community events",
+      "monthlyMeetup": {
+        "title": "Monthly Meetup",
+        "description": "Join us for our monthly community meetup featuring guest speakers and networking opportunities"
+      },
+      "codingWorkshop": {
+        "title": "Coding Workshop",
+        "description": "Hands-on coding workshop focusing on web development fundamentals"
+      },
+      "careerFair": {
+        "title": "Career Fair",
+        "description": "Connect with tech companies and explore career opportunities"
+      }
+    },
+    "join": {
+      "title": "Join Our Community",
+      "description": "Be part of a supportive network of women in technology. Connect, learn, and grow together",
+      "button": "Sign Up Now"
+    }
   },
   "courses": {
     "title": "Courses",
@@ -1442,120 +1554,108 @@
   "successStories": {
     "hero": {
       "title": "Success Stories",
-      "description": "Discover how EmpowerHerEd has transformed lives and created opportunities for women in Rwanda."
+      "description": "Read inspiring stories from our community members who have transformed their lives through technology"
     },
     "stories": {
       "marie": {
-        "name": "Marie Uwimana",
+        "name": "Marie Uwase",
         "role": "Software Developer",
-        "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech. The mentorship and support were invaluable.",
-        "story": "After completing the coding bootcamp, I secured a position as a junior developer at a local tech company. The practical skills and real-world projects prepared me well for the industry."
+        "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech.",
+        "story": "Now working at a leading tech company in Rwanda"
       },
       "grace": {
         "name": "Grace Mukamana",
-        "role": "Business Owner",
-        "quote": "The business development program helped me turn my small idea into a thriving enterprise.",
-        "story": "With the knowledge gained from EmpowerHerEd's business program, I successfully launched my own fashion brand, creating employment opportunities for other women in my community."
+        "role": "Data Analyst",
+        "quote": "The comprehensive training and supportive community helped me transition into technology.",
+        "story": "Successfully transitioned to tech career"
       },
       "sarah": {
-        "name": "Sarah Niyonsenga",
-        "role": "Community Leader",
-        "quote": "The leadership training empowered me to make a real difference in my community.",
-        "story": "Through the community leadership program, I learned how to organize and mobilize resources effectively. Now I'm leading initiatives that support education and women's empowerment in my district."
-      },
-      "claire": {
-        "name": "Claire Uwase",
-        "role": "Data Scientist",
-        "quote": "The data analysis program opened up a whole new world of opportunities for me.",
-        "story": "After completing the data science track, I joined a research institute where I'm now working on projects that use data to improve healthcare delivery in rural communities."
-      },
-      "joyce": {
-        "name": "Joyce Mutoni",
-        "role": "Tech Entrepreneur",
-        "quote": "The combination of technical skills and business training was exactly what I needed.",
-        "story": "I developed a mobile app that connects farmers with markets, and with the support from EmpowerHerEd's entrepreneurship program, I've grown it into a successful startup."
-      },
-      "esther": {
-        "name": "Esther Mukamana",
-        "role": "Digital Marketing Specialist",
-        "quote": "The digital skills program helped me pivot my career during the pandemic.",
-        "story": "I transitioned from traditional marketing to digital marketing, and now I'm helping local businesses establish their online presence and reach new customers."
-      },
-      "alice": {
-        "name": "Alice Uwamahoro",
-        "role": "UX/UI Designer",
-        "quote": "The design program helped me combine my creativity with technical skills.",
-        "story": "I now lead the design team at a tech startup, creating user-friendly interfaces for mobile applications that serve local communities."
-      },
-      "beatrice": {
-        "name": "Beatrice Nyirahabimana",
-        "role": "Cybersecurity Analyst",
-        "quote": "The cybersecurity training opened doors to a field I never thought I could enter.",
-        "story": "After completing the program, I joined a financial institution's security team, where I help protect customer data and prevent cyber threats."
-      },
-      "diane": {
-        "name": "Diane Uwase",
-        "role": "AI Research Engineer",
-        "quote": "The advanced tech program helped me pursue my passion for artificial intelligence.",
-        "story": "I'm now working on AI projects that help improve agricultural yields and predict weather patterns, making a real impact on farmers' lives."
+        "name": "Sarah Mutoni",
+        "role": "UX Designer",
+        "quote": "The practical projects and real-world experience were crucial in landing my first tech job.",
+        "story": "Leading design projects for major clients"
       }
     },
     "cta": {
-      "title": "Be Part of Our Success Story",
-      "description": "Join our community of empowered women and start your journey to success.",
-      "button": "Explore Programs"
+      "title": "Ready to Start Your Journey?",
+      "description": "Join our community of women in tech and take the first step towards your future",
+      "button": "Get Started"
     }
   },
   "learningResources": {
     "hero": {
       "title": "Learning Resources",
-      "description": "Access our comprehensive learning materials"
+      "description": "Access comprehensive learning materials to advance your tech career"
     },
     "categories": {
       "beginner": {
-        "title": "Beginner",
-        "description": "Essential resources for learning basic concepts"
+        "title": "Beginner Level",
+        "description": "Start your journey with fundamental concepts and basic skills"
       },
       "intermediate": {
-        "title": "Intermediate",
-        "description": "Resources for building on your foundation"
+        "title": "Intermediate Level",
+        "description": "Build upon your foundation with more advanced topics"
       },
       "advanced": {
-        "title": "Advanced",
-        "description": "Resources for mastering complex topics"
+        "title": "Advanced Level",
+        "description": "Master complex concepts and specialized skills"
       }
     },
     "resources": {
       "videos": {
-        "title": "Tutorial Videos",
-        "description": "Step-by-step video guides for beginners"
+        "title": "Video Tutorials",
+        "description": "Step-by-step video guides for visual learning"
       },
       "documents": {
-        "title": "Documents",
-        "description": "Comprehensive written guides and tutorials"
+        "title": "Documentation",
+        "description": "Comprehensive written guides and references"
       },
       "exercises": {
-        "title": "Exercises",
-        "description": "Practice exercises to reinforce your learning"
+        "title": "Practice Exercises",
+        "description": "Hands-on exercises to reinforce your learning"
       },
       "quizzes": {
-        "title": "Quizzes",
-        "description": "Test your knowledge with interactive quizzes"
+        "title": "Interactive Quizzes",
+        "description": "Test your knowledge with interactive assessments"
       },
       "projects": {
-        "title": "Projects",
-        "description": "Hands-on projects to apply your skills"
+        "title": "Real-world Projects",
+        "description": "Apply your skills to practical projects"
       },
       "caseStudies": {
         "title": "Case Studies",
-        "description": "Real-world examples and success stories"
-      },
-      "viewMore": "View Details"
+        "description": "Learn from real-world examples and scenarios"
+      }
+    },
+    "courses": {
+      "title": "Featured Courses",
+      "description": "Structured learning paths designed to help you master essential computer skills",
+      "loading": "Loading courses...",
+      "noCourses": "No courses available at the moment.",
+      "duration": "Duration",
+      "category": "Category",
+      "enroll": "Enroll Now",
+      "viewResource": "View Resource"
+    },
+    "additionalResources": {
+      "title": "Additional Resources",
+      "description": "Explore more learning materials to enhance your skills",
+      "sections": {
+        "tools": {
+          "title": "Tools & Software",
+          "description": "Essential tools and software for your learning journey"
+        },
+        "career": {
+          "title": "Career Resources",
+          "description": "Resources to help you advance your career in tech"
+        }
+      }
     },
     "cta": {
-      "title": "Start Learning Today",
-      "description": "Begin your journey into web development",
-      "button": "Get Started"
+      "title": "Ready to Start Learning?",
+      "description": "Join our community and begin your journey in tech today",
+      "primaryButton": "Get Started",
+      "secondaryButton": "Learn More"
     }
   },
   "contactUs": "Contact Us"

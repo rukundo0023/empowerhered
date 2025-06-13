@@ -80,7 +80,7 @@ const Home = () => {
                   to="/contact"
                   className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-gray-200 text-center"
                 >
-                  {t('contactUs')}
+                  {t('home.hero.contactUs')}
                 </Link>
               </div>
 
@@ -202,66 +202,45 @@ const Home = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-black font-medium tracking-wide">Success Stories</span>
+            <span className="text-black font-medium tracking-wide">{t('home.successStories.title')}</span>
             <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-4 tracking-tight">
-              Hear From Our Community
+              {t('home.successStories.subtitle')}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover how our programs have transformed careers
+              {t('home.successStories.description')}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Marie Uwimana",
-                role: "Software Developer",
-                image: assets.profile,
-                quote: "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech."
-              },
-              {
-                name: "Grace Mukamana",
-                role: "UX Designer",
-                image: assets.profile,
-                quote: "The mentorship program helped me transition into tech and find my passion."
-              },
-              {
-                name: "Sarah Niyonsenga",
-                role: "Data Scientist",
-                image: assets.profile,
-                quote: "The support and guidance I received were invaluable to my success."
-              }
-            ].map((story, index) => (
-            <motion.div
+            {t('home.successStories.stories', { returnObjects: true }).map((story, index) => (
+              <motion.div
                 key={story.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-gray-50 rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300"
-            >
-              <div className="flex items-center mb-6">
+              >
+                <div className="flex items-center mb-6">
                   <img
-                    src={story.image}
+                    src={assets.profile}
                     alt={story.name}
                     className="w-16 h-16 rounded-full object-cover mr-4 ring-2 ring-gray-200"
                   />
-                <div>
+                  <div>
                     <h3 className="text-lg font-bold text-gray-900 tracking-tight">{story.name}</h3>
                     <p className="text-gray-600">{story.role}</p>
-              </div>
+                  </div>
                 </div>
-                <p className="text-gray-600 italic">"{story.quote}"</p>
-            </motion.div>
+                <p className="text-gray-600 mb-4">{story.quote}</p>
+                <p className="text-blue-600 font-medium">{story.achievement}</p>
+              </motion.div>
             ))}
           </div>
           <div className="text-center mt-12">
             <Link
-              to="/success-stories"
-              className="inline-flex items-center text-gray-700 hover:text-gray-800 font-medium transition-colors duration-300"
+              to="/stories"
+              className="inline-block px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
-              View All Success Stories
-              <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
+              {t('home.successStories.viewAll')}
             </Link>
           </div>
         </div>
@@ -275,29 +254,42 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-800">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-6 tracking-tight">
-              Ready to Start Your Journey?
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-blue-600 mb-4 tracking-tight">
+              {t('home.cta.title')}
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join our community of women in tech and take the first step towards your dream career.
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {t('home.cta.description')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/signup"
-                className="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-300 text-lg font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          </div>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+            <Link
+              to="/signup"
+              className="w-full sm:w-auto px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-center"
+            >
+              {t('home.cta.primaryButton')}
+            </Link>
+            <Link
+              to="/about"
+              className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-gray-200 text-center"
+            >
+              {t('home.cta.secondaryButton')}
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {t('home.cta.features', { returnObjects: true }).map((feature, index) => (
+              <motion.div
+                key={feature}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 text-center"
               >
-                Get Started
-              </Link>
-              <Link
-                to="/contact"
-                className="px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white/10 transition-all duration-300 text-lg font-medium"
-              >
-                Contact Us
-              </Link>
-            </div>
+                <div className="text-gray-600 font-medium">{feature}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

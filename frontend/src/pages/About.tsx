@@ -2,6 +2,19 @@ import { motion } from "framer-motion"
 import assets from "../assets/assets"
 import Newsletter from "../components/Newsletter"
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+// Define interfaces for our translation objects
+interface ImpactStat {
+  number: string;
+  label: string;
+}
+
+interface CommunityFeature {
+  title: string;
+  description: string;
+  icon: string;
+}
 
 const About = () => {
   const { t } = useTranslation();
@@ -230,35 +243,37 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Impact</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.impact.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Making a difference in the lives of women in tech
+              {t('about.impact.description')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: "1000+", label: "Women Empowered" },
-              { number: "95%", label: "Job Placement Rate" },
-              { number: "50+", label: "Partner Companies" },
-              { number: "1000+", label: "Graduates" }
-            ].map((stat, index) => (
+              { number: "1000+", label: t('about.impact.stats.womenEmpowered') },
+              { number: "95%", label: t('about.impact.stats.jobPlacement') },
+              { number: "50+", label: t('about.impact.stats.partnerCompanies') },
+              { number: "1000+", label: t('about.impact.stats.graduates') }
+            ].map((stat: ImpactStat, index: number) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-sm text-center"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 text-center"
               >
-                <div className="text-4xl font-bold text-gray-700 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-3xl font-bold text-gray-700 mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* For Our Community Section */}
+      {/* Community Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -267,40 +282,40 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">For Our Community</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.community.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Building a supportive and inclusive community for women in tech
+              {t('about.community.description')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Safe Space",
-                description: "A welcoming environment where women can learn, grow, and connect without judgment.",
+                title: t('about.community.features.safeSpace.title'),
+                description: t('about.community.features.safeSpace.description'),
                 icon: "🏠"
               },
               {
-                title: "Peer Support",
-                description: "Connect with like-minded women who understand your journey and challenges.",
+                title: t('about.community.features.peerSupport.title'),
+                description: t('about.community.features.peerSupport.description'),
                 icon: "👥"
               },
               {
-                title: "Networking",
-                description: "Build valuable connections with industry professionals and potential employers.",
+                title: t('about.community.features.networking.title'),
+                description: t('about.community.features.networking.description'),
                 icon: "🌐"
               }
-            ].map((item, index) => (
+            ].map((feature: CommunityFeature, index: number) => (
               <motion.div
-                key={item.title}
+                key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-gray-50 p-8 rounded-2xl shadow-lg text-center"
               >
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -315,27 +330,34 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-gray-700 rounded-2xl p-12 text-center"
+            className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">Join Our Mission</h2>
-            <p className="text-gray-100 mb-8 max-w-2xl mx-auto">
-              Be part of the movement to empower women in technology and create a more inclusive future.
+            <h2 className="text-3xl font-bold text-blue-600 mb-4">{t('about.cta.title')}</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {t('about.cta.description')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-                Get Started
-              </button>
-              <button className="bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors">
-                Learn More
-              </button>
-            </div>
           </motion.div>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <Link
+              to="/signup"
+              className="w-full sm:w-auto px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-center"
+            >
+              {t('about.cta.primaryButton')}
+            </Link>
+            <Link
+              to="/contact"
+              className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-gray-200 text-center"
+            >
+              {t('about.cta.secondaryButton')}
+            </Link>
+          </div>
         </div>
       </section>
     </div>

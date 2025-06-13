@@ -14,14 +14,26 @@ interface Course {
   level: string
   category: string
   imageUrl: string
-  resources?: string[]
+  resources?: Array<{
+    type: string
+    fileUrl?: string
+    url?: string
+  }>
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string
+    }
+  }
 }
 
 const LearningResources = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   useEffect(() => {
     fetchCourses()
@@ -32,9 +44,10 @@ const LearningResources = () => {
       const response = await api.get('/courses')
       setCourses(Array.isArray(response.data) ? response.data : [])
       setLoading(false)
-    } catch (error) {
-      console.error('Error fetching courses:', error)
-      toast.error('Failed to load courses')
+    } catch (error: unknown) {
+      const apiError = error as ApiError
+      console.error('Error fetching courses:', apiError)
+      toast.error(apiError.response?.data?.message || 'Failed to load courses')
       setCourses([])
       setLoading(false)
     }
@@ -61,10 +74,11 @@ const LearningResources = () => {
       try {
         await api.post(`/courses/${courseId}/enroll`)
         toast.success('Successfully enrolled in course!')
-      } catch (enrollError: any) {
+      } catch (enrollError: unknown) {
+        const error = enrollError as ApiError
         // If already enrolled, that's fine - we'll still try to open the resource
-        if (!enrollError.response?.data?.message?.includes('Already enrolled')) {
-          throw enrollError
+        if (!error.response?.data?.message?.includes('Already enrolled')) {
+          throw error
         }
         // Don't show a toast for already enrolled - just proceed to open resource
       }
@@ -87,11 +101,12 @@ const LearningResources = () => {
 
       // Refresh courses to update enrollment status
       fetchCourses()
-    } catch (error: any) {
-      console.error('Error:', error)
+    } catch (error: unknown) {
+      const apiError = error as ApiError
+      console.error('Error:', apiError)
       // Only show error if it's not the "already enrolled" case
-      if (!error.response?.data?.message?.includes('Already enrolled')) {
-        toast.error(error.response?.data?.message || 'Failed to process your request')
+      if (!apiError.response?.data?.message?.includes('Already enrolled')) {
+        toast.error(apiError.response?.data?.message || 'Failed to process your request')
       }
     }
   }
@@ -118,57 +133,6 @@ const LearningResources = () => {
     }
   }
 
-  const categories = [
-    {
-      title: t('learningResources.categories.beginner.title'),
-      description: t('learningResources.categories.beginner.description'),
-      resources: [
-        {
-          title: t('learningResources.resources.videos.title'),
-          description: t('learningResources.resources.videos.description'),
-          link: "#"
-        },
-        {
-          title: t('learningResources.resources.documents.title'),
-          description: t('learningResources.resources.documents.description'),
-          link: "#"
-        }
-      ]
-    },
-    {
-      title: t('learningResources.categories.intermediate.title'),
-      description: t('learningResources.categories.intermediate.description'),
-      resources: [
-        {
-          title: t('learningResources.resources.exercises.title'),
-          description: t('learningResources.resources.exercises.description'),
-          link: "#"
-        },
-        {
-          title: t('learningResources.resources.quizzes.title'),
-          description: t('learningResources.resources.quizzes.description'),
-          link: "#"
-        }
-      ]
-    },
-    {
-      title: t('learningResources.categories.advanced.title'),
-      description: t('learningResources.categories.advanced.description'),
-      resources: [
-        {
-          title: t('learningResources.resources.projects.title'),
-          description: t('learningResources.resources.projects.description'),
-          link: "#"
-        },
-        {
-          title: t('learningResources.resources.caseStudies.title'),
-          description: t('learningResources.resources.caseStudies.description'),
-          link: "#"
-        }
-      ]
-    }
-  ]
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -182,10 +146,10 @@ const LearningResources = () => {
             className="text-center"
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
-              Learning <span className="text-black">Resources</span>
+              {t('learningResources.hero.title')}
             </h1>
             <p className="text-xl text-black max-w-3xl mx-auto">
-              Access comprehensive learning materials to advance your tech career
+              {t('learningResources.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -200,19 +164,19 @@ const LearningResources = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Courses</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('learningResources.courses.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Structured learning paths designed to help you master essential computer skills
+              {t('learningResources.courses.description')}
             </p>
           </motion.div>
 
           {loading ? (
             <div className="text-center">
-              <p className="text-gray-600">Loading courses...</p>
+              <p className="text-gray-600">{t('learningResources.courses.loading')}</p>
             </div>
           ) : courses.length === 0 ? (
             <div className="text-center">
-              <p className="text-gray-600">No courses available at the moment.</p>
+              <p className="text-gray-600">{t('learningResources.courses.noCourses')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -240,17 +204,17 @@ const LearningResources = () => {
                   <p className="text-gray-600 mb-4">{course.description}</p>
                   <div className="mb-4">
                     <p className="text-gray-600">
-                      <span className="font-semibold">Duration:</span> {course.duration}
+                      <span className="font-semibold">{t('learningResources.courses.duration')}:</span> {course.duration}
                     </p>
                     <p className="text-gray-600">
-                      <span className="font-semibold">Category:</span> {course.category}
+                      <span className="font-semibold">{t('learningResources.courses.category')}:</span> {course.category}
                     </p>
                   </div>
                   <button
                     onClick={() => handleEnroll(course._id)}
-                    className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Enroll Now
+                    {t('learningResources.courses.enroll')}
                   </button>
                   {course.resources && course.resources.length > 0 && (
                     <div className="mt-4">
@@ -276,7 +240,7 @@ const LearningResources = () => {
       </section>
 
       {/* Additional Resources Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -284,59 +248,71 @@ const LearningResources = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Additional Resources</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('learningResources.additionalResources.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore our collection of learning materials and tools
+              {t('learningResources.additionalResources.description')}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-2xl shadow-lg"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">{category.title}</h2>
-                <p className="text-gray-600 mb-6">{category.description}</p>
-                <div className="space-y-4">
-                  {category.resources.map((resource) => (
-                    <div key={resource.title} className="border-t pt-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{resource.title}</h3>
-                      <p className="text-gray-600 mb-3">{resource.description}</p>
-                      <a
-                        href={resource.link}
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-                      >
-                        {t('learningResources.resources.viewMore')}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {/* Tools & Software */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-gray-50 rounded-lg p-6"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('learningResources.additionalResources.sections.tools.title')}</h3>
+              <p className="text-gray-600 mb-4">{t('learningResources.additionalResources.sections.tools.description')}</p>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li>• Operating System (Windows/Linux)</li>
+                <li>• File Explorer</li>
+                <li>• Device Manager</li>
+                <li>• Task Manager</li>
+              </ul>
+            </motion.div>
+
+            {/* Career Resources */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-gray-50 rounded-lg p-6"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('learningResources.additionalResources.sections.career.title')}</h3>
+              <p className="text-gray-600 mb-4">{t('learningResources.additionalResources.sections.career.description')}</p>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li>• Resume Writing Guides</li>
+                <li>• Interview Preparation</li>
+                <li>• Career Development</li>
+                <li>• Networking Tips</li>
+              </ul>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-gray-700 rounded-2xl p-12 text-center"
+            className="text-center"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">Start Learning Today</h2>
-            <p className="text-gray-100 mb-8 max-w-2xl mx-auto">
-              Take the first step towards your tech career with our comprehensive learning resources.
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('learningResources.cta.title')}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+              {t('learningResources.cta.description')}
             </p>
-            <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              Get Started
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                {t('learningResources.cta.primaryButton')}
+              </button>
+              <button className="bg-white text-blue-600 px-8 py-3 rounded-lg border border-blue-600 hover:bg-blue-50 transition-colors">
+                {t('learningResources.cta.secondaryButton')}
+              </button>
+            </div>
           </motion.div>
         </div>
       </section>
