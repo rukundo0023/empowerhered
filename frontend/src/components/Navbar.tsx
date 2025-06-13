@@ -1,34 +1,41 @@
-import { useState, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import assets from "../assets/assets";
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import VoiceSearchButton from "./voiceSearchButton";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
+
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<{ title: string; path: string }>>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useTranslation();
+  const searchTimeoutRef = useRef<NodeJS.Timeout>();
 
   const programsMenu = [
-    { name: "Mentorship", path: "/programs/mentorship" },
-    { name: "Communication", path: "/programs/Communication" },
-    { name: "Tech Skills", path: "/programs/tech-skills" },
-    { name: "Workshops", path: "/programs/workshops" },
+    { name: t('nav.programsDropdown.mentorship'), path: "/programs/mentorship" },
+    { name: t('nav.programsDropdown.communication'), path: "/programs/communication" },
+    { name: t('nav.programsDropdown.techSkills'), path: "/programs/tech-skills" },
+    { name: t('nav.programsDropdown.workshops'), path: "/programs/workshops" },
   ];
 
   const resourcesMenu = [
-    { name: "Blog", path: "/blog" },
-    { name: "Community", path: "/resources/community" },
-    { name: "Learning Resources", path: "/resources/learning" },
+    { name: t('nav.blog'), path: "/blog" },
+    { name: t('nav.community'), path: "/resources/community" },
+    { name: t('nav.learning'), path: "/resources/learning" },
   ];
 
   const searchableContent = [
     { title: "Home", path: "/" },
     { title: "About Us", path: "/about" },
-    { title: "Success Stories", path: "/success-stories" },
+    { title: "Stories", path: "/SuccessStories" },
     { title: "Contact", path: "/contact" },
     { title: "Mentorship Program", path: "/programs/mentorship" },
     { title: "Leadership Training", path: "/programs/Communication" },
@@ -41,6 +48,17 @@ const Navbar = () => {
     { title: "Sign Up", path: "/signup" }
   ];
 
+  // Function to handle search results timeout
+  const handleSearchResultsTimeout = () => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      setSearchResults([]);
+      setIsSearchFocused(false);
+    }, 2000); // 2 seconds
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -50,8 +68,11 @@ const Navbar = () => {
         item.title.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(results);
+      setIsSearchFocused(true);
+      handleSearchResultsTimeout();
     } else {
       setSearchResults([]);
+      setIsSearchFocused(false);
     }
   };
 
@@ -93,12 +114,28 @@ const Navbar = () => {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
+  // Clear timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Add effect to handle search focus timeout
+  useEffect(() => {
+    if (isSearchFocused && searchResults.length > 0) {
+      handleSearchResultsTimeout();
+    }
+  }, [isSearchFocused, searchResults]);
+
   return (
     <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
+          {/* Logo - Now shared between mobile and desktop */}
+          <Link to="/" className="flex-shrink-0">
             <img src={assets.empoweherlogo3} alt="Logo" className="h-8 w-auto" />
           </Link>
 
@@ -106,30 +143,36 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6 items-center">
             <NavLink
               to="/"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-              }
+              className={`${
+                location.pathname === '/'
+                  ? 'border-primary text-gray-900'
+                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
             >
-              Home
+              {t('nav.home')}
             </NavLink>
             <NavLink
               to="/about"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-              }
+              className={`${
+                location.pathname === '/about'
+                  ? 'border-primary text-gray-900'
+                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
             >
-              About
+              {t('nav.about')}
             </NavLink>
 
             {/* Programs with Hover Menu */}
             <div className="relative group">
               <NavLink
                 to="/programs"
-                className={({ isActive }) =>
-                  isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-                }
+                className={`${
+                  location.pathname === '/programs'
+                    ? 'border-primary text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
-                Programs
+                {t('nav.programs')}
               </NavLink>
               <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 {programsMenu.map((item) => (
@@ -152,11 +195,13 @@ const Navbar = () => {
             <div className="relative group">
               <NavLink
                 to="/resources"
-                className={({ isActive }) =>
-                  isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-                }
+                className={`${
+                  location.pathname === '/resources'
+                    ? 'border-primary text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
-                Resources
+                {t('nav.resources')}
               </NavLink>
               <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 {resourcesMenu.map((item) => (
@@ -189,20 +234,24 @@ const Navbar = () => {
 
             <NavLink
               to="/success-stories"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-              }
+              className={`${
+                location.pathname === '/success-stories'
+                  ? 'border-primary text-gray-900'
+                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
             >
-              Stories
+              {t('nav.stories')}
             </NavLink>
 
             <NavLink
               to="/contact"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-              }
+              className={`${
+                location.pathname === '/contact'
+                  ? 'border-primary text-gray-900'
+                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
             >
-              Contact
+              {t('nav.contact')}
             </NavLink>
           </div>
 
@@ -264,6 +313,8 @@ const Navbar = () => {
                 </div>
               )}
             </form>
+
+            <LanguageSwitcher />
 
             {isAuthenticated ? (
               <div className="relative">
@@ -338,62 +389,74 @@ const Navbar = () => {
 
           {/* Mobile Nav Icon */}
           <div className="md:hidden">
-            <div className="flex items-center space-x-2">
-              <form id="search-container-mobile" onSubmit={handleSearchSubmit} className="relative">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    onFocus={() => setIsSearchFocused(true)}
-                    className="w-32 px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16"
-                  />
-                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-                    {searchQuery && (
-                      <button
-                        type="button"
-                        onClick={handleClearSearch}
-                        className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                      >
-                        <img src={assets.crossicon} className="w-3 h-3" alt="Clear search" />
-                      </button>
-                    )}
-                    <VoiceSearchButton onResult={(text) => setSearchQuery(text)} />
-                    <button
-                      type="submit"
-                      className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                    >
-                      <img src={assets.searchIcon} className="w-3 h-3" alt="Search" />
-                    </button>
-                  </div>
-                </div>
-                {/* Search Results Dropdown for Mobile */}
-                {isSearchFocused && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-md shadow-lg z-50">
-                    {searchResults.map((result, index) => (
-                      <Link
-                        key={index}
-                        to={result.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                        onClick={() => {
-                          setSearchQuery("");
-                          setSearchResults([]);
-                          setIsSearchFocused(false);
-                        }}
-                      >
-                        {result.title}
-                      </Link>
-                    ))}
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                  aria-label="Toggle search"
+                >
+                  <img src={assets.searchIcon} className="w-5 h-5" alt="Search" />
+                </button>
+                
+                {/* Collapsible Search Bar */}
+                {isSearchOpen && (
+                  <div className="fixed inset-x-0 top-16 bg-white shadow-lg p-2 z-50">
+                    <div className="max-w-7xl mx-auto px-4">
+                      <form onSubmit={handleSearchSubmit} className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          onFocus={() => setIsSearchFocused(true)}
+                          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-20"
+                        />
+                        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                          {searchQuery && (
+                            <button
+                              type="button"
+                              onClick={handleClearSearch}
+                              className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                            >
+                              <img src={assets.crossicon} className="w-4 h-4" alt="Clear search" />
+                            </button>
+                          )}
+                          <VoiceSearchButton onResult={(text) => setSearchQuery(text)} />
+                        </div>
+                      </form>
+                      {/* Search Results Dropdown */}
+                      {isSearchFocused && searchResults.length > 0 && (
+                        <div className="absolute left-0 right-0 mt-1 bg-white rounded-md shadow-lg z-50">
+                          {searchResults.map((result, index) => (
+                            <Link
+                              key={index}
+                              to={result.path}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                              onClick={() => {
+                                setSearchQuery("");
+                                setSearchResults([]);
+                                setIsSearchFocused(false);
+                                setIsSearchOpen(false);
+                              }}
+                            >
+                              {result.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
-              </form>
-              <img
-                src={assets.menuicon}
+              </div>
+              <LanguageSwitcher />
+              <button
                 onClick={() => setIsMenuOpen(true)}
-                className="h-6 w-6 cursor-pointer"
-                alt="Menu"
-              />
+                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                aria-label="Open menu"
+              >
+                <img src={assets.menuicon} className="h-6 w-6" alt="Menu" />
+              </button>
             </div>
           </div>
         </div>
@@ -401,112 +464,162 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <NavLink className ="block w-full " to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
-            <NavLink className= "block w-full" to="/about" onClick={() => setIsMenuOpen(false)}>About</NavLink>
-            <div>
-              <p className="font-semibold">Programs</p>
-              {programsMenu.map((item) => (
-                <NavLink key={item.path} to={item.path} onClick={() => setIsMenuOpen(false)} className="pl-4 block">
-                  {item.name}
-                </NavLink>
-              ))}
+        <>
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setIsMenuOpen(false)}
+          />
+          {/* Menu Content */}
+          <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-lg font-semibold">{t('nav.menu')}</h2>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+                aria-label="Close menu"
+              >
+                <img src={assets.crossicon} className="w-5 h-5" alt="Close" />
+              </button>
             </div>
-            <div>
-              <p className="font-semibold">Resources</p>
-              {resourcesMenu.map((item) => (
-                <NavLink key={item.path} to={item.path} onClick={() => setIsMenuOpen(false)} className="pl-4 block">
-                  {item.name}
-                </NavLink>
-              ))}
-            </div>
-            <NavLink className= "block w-full" to="/success-stories" onClick={() => setIsMenuOpen(false)}>Stories</NavLink>
-            <NavLink className= "block w-full" to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
-            
-            {/* Add Mentor Dashboard link for mentor users in mobile menu */}
-            {isAuthenticated && user?.role === 'mentor' && (
-              <NavLink
-                to="/mentor/dashboard"
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md text-base font-medium ${
-                    isActive ? "text-blue-600 bg-gray-50" : "text-gray-600 hover:text-blue-600"
-                  }`
-                }
+            <div className="px-4 py-2 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">
+              <NavLink 
+                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
+                to="/" 
                 onClick={() => setIsMenuOpen(false)}
               >
-                Mentor Dashboard
+                {t('nav.home')}
               </NavLink>
-            )}
+              <NavLink 
+                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
+                to="/about" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.about')}
+              </NavLink>
+              <div>
+                <p className="font-semibold py-2 px-3">{t('nav.programs')}</p>
+                {programsMenu.map((item) => (
+                  <NavLink 
+                    key={item.path} 
+                    to={item.path} 
+                    onClick={() => setIsMenuOpen(false)} 
+                    className="block py-2 px-6 rounded-md hover:bg-gray-50"
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
+              <div>
+                <p className="font-semibold py-2 px-3">{t('nav.resources')}</p>
+                {resourcesMenu.map((item) => (
+                  <NavLink 
+                    key={item.path} 
+                    to={item.path} 
+                    onClick={() => setIsMenuOpen(false)} 
+                    className="block py-2 px-6 rounded-md hover:bg-gray-50"
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
+              <NavLink 
+                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
+                to="/success-stories" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.stories')}
+              </NavLink>
+              <NavLink 
+                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
+                to="/contact" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.contact')}
+              </NavLink>
+              
+              {/* Add Mentor Dashboard link for mentor users in mobile menu */}
+              {isAuthenticated && user?.role === 'mentor' && (
+                <NavLink
+                  to="/mentor/dashboard"
+                  className="block w-full py-2 px-3 rounded-md hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t('nav.mentorDashboard')}
+                </NavLink>
+              )}
 
-            {isAuthenticated ? (
-              <div className="px-4 py-2">
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
-                    {getUserInitials(user?.name || '')}
+              {isAuthenticated ? (
+                <div className="border-t mt-4 pt-4">
+                  <div className="flex items-center space-x-2 mb-4 px-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                      {getUserInitials(user?.name || '')}
+                    </div>
+                    <span className="text-gray-700">{user?.name}</span>
                   </div>
-                  <span className="text-gray-700">{user?.name}</span>
+                  <Link
+                    to="/profile"
+                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('nav.profile')}
+                  </Link>
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="block py-2 px-3 rounded-md hover:bg-gray-50"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t('nav.adminDashboard')}
+                    </Link>
+                  )}
+                  {user?.role === 'mentor' && (
+                    <Link
+                      to="/mentorDashboard"
+                      className="block py-2 px-3 rounded-md hover:bg-gray-50"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t('nav.mentorDashboard')}
+                    </Link>
+                  )}
+                  <Link
+                    to="/settings"
+                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('nav.settings')}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-50"
+                  >
+                    {t('nav.logout')}
+                  </button>
                 </div>
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Profile
-                </Link>
-                {user?.role === 'admin' && (
+              ) : (
+                <div className="border-t mt-4 pt-4">
                   <Link
-                    to="/admin"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                    to="/login"
+                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Admin Dashboard
+                    {t('nav.login')}
                   </Link>
-                )}
-                {user?.role === 'mentor' && (
                   <Link
-                    to="/mentorDashboard"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                    to="/signup"
+                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Mentor Dashboard
+                    {t('nav.signup')}
                   </Link>
-
-                )}
-                <Link
-                  to="/settings"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Settings
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="px-4 py-2 space-y-2">
-                <Link
-                  to="/login"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </nav>
   );

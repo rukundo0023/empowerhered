@@ -1,0 +1,1102 @@
+{
+  "nav": {
+    "home": "Ahabanza",
+    "about": "Ibyerekeye",
+    "programs": "Porogaramu",
+    "resources": "Ibikoresho",
+    "blog": "Blog",
+    "contact": "Twandikire",
+    "login": "Injira",
+    "signup": "Iyandikishe",
+    "profile": "Umwirondoro",
+    "settings": "Igenamiterere",
+    "logout": "Sohoka",
+    "adminDashboard": "Umutungo wa Admin",
+    "mentorDashboard": "Umutungo wa Mentor",
+    "stories": "Inkuru",
+    "mentorship": "Ubujyanama",
+    "communication": "Itumanaho",
+    "techSkills": "Ubumenyi bwa Tech",
+    "workshops": "Amahugurwa",
+    "community": "Umuryango",
+    "learning": "Ibikoresho by'Inyigisho",
+    "successStories": "Inkuru",
+    "faq": "FAQ",
+    "privacy": "Politiki y'Ubwishingizi",
+    "terms": "Amabwiriza",
+    "menu": "Ibikubiyemo",
+    "programsDropdown": {
+      "mentorship": "Porogaramu ya Mentorship",
+      "communication": "Ubumenyi bwo Kuvugana",
+      "techSkills": "Ubumenyi bwa Tekinoroji",
+      "workshops": "Amahugurwa"
+    },
+    "resourcesDropdown": {
+      "workshops": "Amahugurwa & Amasomo",
+      "community": "Gufasha Umuryango",
+      "learning": "Ibikoresho by'Inyigisho",
+      "faq": "Ibibazo Byibanze"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Gufasha Abagore Binyuze mu",
+      "titleHighlight": "Uburezi bwa Digital",
+      "description1": "EmpowerHerEd si gusa ikoranabuhanga ryo kwiga — ni umuyoboro wo gufasha, kwigisha, no gutera inkunga abakobwa bato mu Rwanda. Intego yacu ni ugufunga icyuho cy'uburinganire mu nganda za tekinoroji binyuze mu gufasha abakobwa n'abagore ubumenyi, inkunga, n'umwete bakeneye kugira ngo bongere imbaraga mu isi ya digital.",
+      "description2": "Wiyunge n'ikoranabuhanga rya mbere ryo kwigisha tekinoroji mu Rwanda. Wige kuva ku bafite ubumenyi mu nganda, huzwa n'abayoboramikorere, kandi utangize umwuga wawe wa tekinoroji. Niba utangira gusa cyangwa witeguye kongera ubumenyi bwawe, turi hano kugirango dukuyobore mu rugendo rwawe.",
+      "explorePrograms": "Shakisha Porogaramu",
+      "contactUs": "Tuvugishe"
+    },
+    "stats": {
+      "womenEmpowered": "Abagore Bafite Ubushobozi",
+      "successRate": "Ingano y'Impinduka",
+      "expertMentors": "Abayoboramikorere Bafite Ubumenyi",
+      "partnerCompanies": "Kampani Z'Abafatanyabikorwa"
+    },
+    "featuredCourses": {
+      "title": "Amasomo Y'ingenzi",
+      "subtitle": "Tangiza Urugendo Rwawe Uyu Munsi",
+      "description": "Hitamo mu masomo yacu yateguwe neza kugirango wihuse umwuga wawe wa tekinoroji",
+      "learnMore": "Menya Byinshi",
+      "courses": {
+        "computerBasics": {
+          "title": "Ubumenyi bw'ibanze bwa Computer & Hardware",
+          "description": "Menya ubumenyi bw'ibanze bwa computer hardware n'ubukorikori",
+          "level": "Utangira",
+          "duration": "Ibihe 6",
+          "students": "Abanyeshuri 80"
+        },
+        "internetSkills": {
+          "title": "Ubumenyi bwa Interineti & Email",
+          "description": "Menya uko ugendera kuri interineti no kuvugana na email",
+          "level": "Utangira",
+          "duration": "Ibihe 4",
+          "students": "Abanyeshuri 100"
+        },
+        "microsoftWord": {
+          "title": "Microsoft Word",
+          "description": "Menya uko ukoresha Microsoft Word mu madokumenti ya professional",
+          "level": "Utangira",
+          "duration": "Ibihe 3",
+          "students": "Abanyeshuri 50"
+        }
+      }
+    },
+    "whyChooseUs": {
+      "title": "Kuki Dukoresha?",
+      "subtitle": "Inzira Yawe yo Gutsinda",
+      "description": "Duhabwa ibintu byose ukeneye kugirango utsinde mu nganda za tekinoroji",
+      "features": {
+        "expertLearning": {
+          "title": "Kwiga kuva ku Bafite Ubumenyi",
+          "description": "Wige kuva ku bafite ubumenyi mu nganda bafite amezi menshi y'ubumenyi"
+        },
+        "mentorship": {
+          "title": "Mentorship",
+          "description": "Fata inama kuva ku bayoboramikorere bafite ubumenyi"
+        },
+        "careerSupport": {
+          "title": "Inkunga ya Karire",
+          "description": "Fata amahirwe y'akazi n'ibikoresho byo gutera imbere mu karire"
+        }
+      }
+    },
+    "features": {
+      "title": "Ibintu Duhabwa",
+      "mentorship": {
+        "title": "Mentorship",
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi kugirango bakubere inama mu rugendo rwawe rwa karire"
+      },
+      "training": {
+        "title": "Amahugurwa",
+        "description": "Fata ubumenyi bw'ingenzi mu buyobozi no kuvugana"
+      },
+      "community": {
+        "title": "Umuryango",
+        "description": "Wiyunge n'umuryango wacu w'inkunga w'abagore mu tekinoroji"
+      }
+    },
+    "programs": {
+      "title": "Porogaramu Zacu",
+      "viewAll": "Reba Zose",
+      "mentorship": {
+        "title": "Porogaramu ya Mentorship",
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi kugirango bakubere inama mu rugendo rwawe rwa karire"
+      },
+      "leadership": {
+        "title": "Ubuyobozi & Kuvugana",
+        "description": "Fata ubumenyi bw'ingenzi mu buyobozi no kuvugana"
+      },
+      "tech": {
+        "title": "Ubumenyi bwa Tekinoroji",
+        "description": "Menya ubumenyi bw'ingenzi bwa tekinoroji bakenewe mu kinyejana cya digital"
+      }
+    },
+    "testimonials": {
+      "title": "Inkuru Z'impinduka",
+      "readMore": "Soma Byinshi",
+      "viewAll": "Reba Zose"
+    },
+    "cta": {
+      "title": "Urashaka Kuba Umugore mu Tekinoroji?",
+      "description": "Iyandikishe ubu kugirango uterambe imbere mu karire kawe",
+      "button": "Tangiza"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Ibyerekeye",
+      "titleHighlight": "EmpowerHerEd",
+      "description": "Gufasha abagore binyuze mu ikoranabuhanga, amashuri, no gufasha umuryango."
+    },
+    "story": {
+      "title": "Inkuru Yacu",
+      "description1": "EmpowerHerEd yavutse mu mutwe mugufi ariko ufite imbaraga: iyo abagore bafite amashuri kandi bafite imbaraga, umuryango wose urakura. Yashinzwe n'itsinda ry'abarezi, abayoborabugenewe, n'abafasha, EmpowerHerEd ikora kugirango irusheho kugabanya ikibazo cy'uburinganire mu mashuri no mu mahirwe.",
+      "description2": "Urupapuro rwacu ni ahantu hizewe, huzuye abantu bose aho abagore n'abakobwa bashobora kwiga, guhuza, no gukura mu mashuri, mu kazi, no mu buzima bwabo."
+    },
+    "whatWeDo": {
+      "title": "Ibyo Dukora",
+      "description": "Dutanga ibirimo by'amashuri, gahunda z'ubuyobozi, amasomo, no gufasha umwuga kugirango dufasha abagore kuri buri kazi. Kuva ku banyeshuri ba sekondari kugeza ku bakozi, turi hano kugirango dukore, dutange, no gufasha.",
+      "services": {
+        "education": "Ibikoresho By'Amashuri",
+        "mentorship": "Ubuyobozi",
+        "workshops": "Amasomo",
+        "career": "Gufasha Umwuga"
+      }
+    },
+    "mission": {
+      "title": "Intego Yacu",
+      "description": "Kugabanya ikibazo cy'uburinganire mu ikoranabuhanga binyuze mu gutanga abagore ubumenyi, ibikoresho, no gufasha bakeneye kugirango bafate umwanya mu kazi."
+    },
+    "vision": {
+      "title": "Icyerekezo Cyacu",
+      "description": "Isi aho abagore bafite umwanya ungana mu ikoranabuhanga kandi bafite amahirwe yo gukora imikino myiza."
+    },
+    "whyItMatters": {
+      "title": "Kuki Bikenewe",
+      "description": "Nubwo hari iterambere, miliyoni z'abagore mu isi ziharira amahirwe yo kwiga no kuyobora. EmpowerHerEd irimo guhindura ibyo binyuze mu gufasha kwizera, ubushobozi, no umuryango.",
+      "highlight": "Hamwe, dukora ejo hazaza aho amashuri ari uburenganzira kandi si ubwishingizi ku bagore bose."
+    },
+    "values": {
+      "title": "Indangamuco Zacu",
+      "subtitle": "Aya maherezo yacu atuyobora mu byose dukora kuri EmpowerHerEd",
+      "items": {
+        "empowerment": {
+          "title": "Gufasha",
+          "description": "Dizera ko gufasha abagore binyuze mu mashuri no mu bumenyi."
+        },
+        "community": {
+          "title": "Umuryango",
+          "description": "Gukora urusobe rw'abagore mu ikoranabuhanga bafasha abandi."
+        },
+        "innovation": {
+          "title": "Gukora Imikino Myiza",
+          "description": "Gufasha ubwenge no gukora imikino myiza mu ikoranabuhanga binyuze mu nzira zitandukanye."
+        }
+      }
+    },
+    "team": {
+      "title": "Itsinda Racu",
+      "subtitle": "Menya abantu bafite umwete batuyobora",
+      "members": {
+        "founder": {
+          "name": "Rukundo Nshimiyimana",
+          "role": "Umwishingizi & CEO"
+        },
+        "education": {
+          "name": "Maria Garcia",
+          "role": "Ushinzwe Amashuri"
+        }
+      }
+    }
+  },
+  "programs": {
+    "title": "Porogaramu zacu",
+    "description": "Porogaramu zacu zifasha abagore kuba abakora mu tekinoloji",
+    "hero": {
+      "title": "Porogaramu Zacu",
+      "description": "Amahugurwa yuzuye n'iterambere byateguwe gufasha abakobwa bato mu Rwanda"
+    },
+    "programs": {
+      "digitalLiteracy": {
+        "title": "Ubumenyi bwa Digital & Ibikoresho bya Office",
+        "description": "Menya ubumenyi bw'ingenzi bw'ikoranabuhanga n'ikoranabuhanga mu kazi ka digital",
+        "features": [
+          "Microsoft Office Suite",
+          "Google Workspace",
+          "Ubumenyi bw'ingenzi bw'ikoranabuhanga",
+          "Kugendera kuri Interineti",
+          "Kuvugana na Email"
+        ]
+      },
+      "communication": {
+        "title": "Kuvugana & Gukorana kuri Interineti",
+        "description": "Menya uko uvugana neza kandi ukora hamwe kuri interineti ukoresheje ibikoresho bya kigezweho",
+        "features": [
+          "Video Conferencing",
+          "Gukorana mu itsinda",
+          "Imico ya Digital",
+          "Kwerekana kuri Interineti",
+          "Ubumenyi bwo gukora kure"
+        ]
+      },
+      "jobReadiness": {
+        "title": "Gutegura Akazi & Networking",
+        "description": "Witegure isoko ry'akazi ukoresheje ubumenyi bw'ingenzi n'ubufatanye",
+        "features": [
+          "Gutonda CV",
+          "Gutegura Interview",
+          "Networking ya Professional",
+          "Gutegura Umwuga",
+          "Uburyo bwo Gushaka Akazi"
+        ]
+      },
+      "mentorship": {
+        "title": "Porogaramu ya Mentorship",
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi kugirango bakubere inama n'inkunga",
+        "features": [
+          "Mentorship ya One-on-One",
+          "Inama za Karire",
+          "Iterambere ry'Ubumenyi",
+          "Iterambere rya Professional",
+          "Ubumenyi bw'Inganda"
+        ]
+      },
+      "networking": {
+        "title": "Ibikorwa bya Networking",
+        "description": "Korera urusobe rwawe rwa professional binyuze mu bikorwa by'umuryango n'amahugurwa",
+        "features": [
+          "Ibikorwa by'Inganda",
+          "Ibikorwa by'Akazi",
+          "Amahugurwa ya Professional",
+          "Ibikorwa by'Umuryango",
+          "Networking ya Peer"
+        ]
+      },
+      "techSkills": {
+        "hero": {
+          "title": "Gukora Ubumenyi bwa Tekinoroji",
+          "description": "Gufasha abakobwa bato kugira ubumenyi bw'ingenzi bwa tekinoroji mu gihe cya digital"
+        },
+        "overview": {
+          "title": "Icyerekezo cya Porogaramu",
+          "description": "Porogaramu yacu ya mentorship ikuvanga n'abanyamwuga bafite ubumenyi batanga inama, ubufasha, n'ubumenyi kugufasha kugera ku ntego zawe za kazi. Binyuze mu nama za mentorship z'umuntu ku giti cye na za gatsiko, uzakora ubumenyi bw'ingenzi no gukora umuryango wa professional.",
+          "features": {
+            "guidance": {
+              "title": "Inama Zihariye",
+              "description": "Fata inama n'ubufasha bwoherejwe ku ntego na zawe n'ibibazo"
+            },
+            "expertise": {
+              "title": "Ubumenyi bw'Umwuga",
+              "description": "Menya kuva ku bayobozi bafite ubumenyi bwinshi mu mwuga wawe"
+            },
+            "network": {
+              "title": "Gukora Umuryango",
+              "description": "Vugana n'abanyamwuga no kwagura umuryango wawe wa professional"
+            }
+          }
+        },
+        "details": {
+          "title": "Ibisobanuro bya Porogaramu",
+          "duration": "Igihe",
+          "schedule": "Igihe cy'akazi",
+          "location": "Aho",
+          "prerequisites": "Ibikenewe",
+          "certification": "Impamyabumenyi",
+          "applyButton": "Iyandikishe Ubu"
+        },
+        "curriculum": {
+          "title": "Amasomo",
+          "modules": {
+            "oneOnOne": {
+              "title": "Mentorship y'Umuntu ku Giti Cye",
+              "description": "Inama n'ubufasha bwoherejwe ku giti cye biva ku banyamwuga bafite ubumenyi",
+              "topics": [
+                "Gutegura umurongo wa kazi",
+                "Gukora ubumenyi",
+                "Gukora umuryango wa professional",
+                "Gutondeka kazi n'ubuzima",
+                "Gukura mu giti cye"
+              ]
+            },
+            "group": {
+              "title": "Mentorship ya Gatsiko",
+              "description": "Kwiga hamwe n'ubufasha bwa bagenzi mu gatsiko",
+              "topics": [
+                "Ibiganiro bya gatsiko",
+                "Kwiga hamwe na bagenzi",
+                "Ibikorwa bya gatsiko",
+                "Gahunda zihariye",
+                "Gusobanukirwa ibibazo hamwe"
+              ]
+            },
+            "industry": {
+              "title": "Ubumenyi bw'Umwuga",
+              "description": "Menya byinshi kuri umwuga na umurongo wa kazi",
+              "topics": [
+                "Imiterere y'umwuga",
+                "Amahirwe ya kazi",
+                "Ubumenyi bkenewe",
+                "Gukora ubumenyi",
+                "Gukora umuryango wa umwuga"
+              ]
+            },
+            "leadership": {
+              "title": "Gukora Ubuyobozi",
+              "description": "Gukora ubumenyi n'ubwizigame bwa buyobozi",
+              "topics": [
+                "Gutora ibyemezo",
+                "Gucunga gatsiko",
+                "Ubumenyi bwo kuvugana",
+                "Gutera ibitekerezo",
+                "Gukora izina ryawe"
+              ]
+            },
+            "career": {
+              "title": "Guhinduka Umwuga",
+              "description": "Ubufasha bwo guhinduka umwuga no gukora ubumenyi",
+              "topics": [
+                "Gutera CV",
+                "Gutegura interview",
+                "Gutera amafaranga",
+                "Guhinduka umwuga",
+                "Gukora ubumenyi"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "Witeguye Gutangiza Urugendo Rwawe?",
+      "description": "Wiyunge n'umuryango wacu w'abagore bafite ubushobozi kandi utange intambwe ya mbere kuri zawe",
+      "apply": "Iyandikishe Ubu",
+      "contact": "Tuvugishe"
+    },
+    "learnMore": "Menya Byinshi",
+    "workshops": {
+      "hero": {
+        "title": "Amahugurwa Y'ingenzi",
+        "description": "Amahugurwa y'ingenzi yateguwe gufasha kwiga ubumenyi n'ubwenge"
+      },
+      "overview": {
+        "title": "Icyerekezo cy'Amahugurwa",
+        "description": "Amahugurwa yacu atanga amahugurwa y'ingenzi ayoborwa n'abanyamwuga. Buri mahugurwa yateguwe gufasha kwiga ubumenyi n'ubwenge bwoherejwe kuri kazi cyangwa business yawe.",
+        "features": {
+          "learning": {
+            "title": "Kwiga mu Buryo Bwiza",
+            "description": "Ibikorwa by'ingenzi n'ibikorwa by'ingenzi byo gukoresha ubumenyi bwawe"
+          },
+          "instructors": {
+            "title": "Abayobozi b'Ingenzi",
+            "description": "Menya kuva ku banyamwuga bafite ubumenyi bwinshi"
+          },
+          "groups": {
+            "title": "Amatsinda Matoya",
+            "description": "Amahugurwa y'ingenzi afite ubufasha n'ingenzi"
+          }
+        }
+      },
+      "details": {
+        "title": "Ibisobanuro by'Amahugurwa",
+        "duration": {
+          "title": "Igihe",
+          "value": "Amasaha 2-4 kuri buri mahugurwa"
+        },
+        "schedule": {
+          "title": "Igihe cy'akazi",
+          "value": "Amahugurwa ya buri cyumweru afite amahitamo y'igihe"
+        },
+        "location": {
+          "title": "Aho",
+          "value": "Hybrid (In-person na virtual)"
+        },
+        "prerequisites": {
+          "title": "Ibikenewe",
+          "value": "Yafunguye kuri bose bari mu porogaramu"
+        }
+      },
+      "available": {
+        "title": "Amahugurwa Ariho",
+        "workshops": {
+          "career": {
+            "title": "Amahugurwa yo Gukora Ubumenyi",
+            "description": "Ibikoresho n'uburyo bwo gukora ubumenyi",
+            "topics": [
+              "Gutera CV",
+              "Gutegura Interview",
+              "Gukora Izina Ryawe",
+              "Ubumenyi bwo Gukora Umuryango",
+              "Gutegura Umurongo wa Kazi"
+            ]
+          },
+          "leadership": {
+            "title": "Amahugurwa ya Buyobozi",
+            "description": "Gukora ubumenyi bw'ingenzi bwa buyobozi",
+            "topics": [
+              "Gucunga Gatsiko",
+              "Ubumenyi bwo Kuvugana",
+              "Gutora Ibyemezo",
+              "Gusobanukirwa Ibibazo",
+              "Gutera Ibitekerezo"
+            ]
+          },
+          "entrepreneurship": {
+            "title": "Amahugurwa ya Business",
+            "description": "Gutera no gukora business yawe",
+            "topics": [
+              "Gutegura Business",
+              "Gukora Ubushakashatsi",
+              "Gucunga Amafaranga",
+              "Gutera Marketing",
+              "Gutera Pitch"
+            ]
+          },
+          "digital": {
+            "title": "Amahugurwa ya Digital",
+            "description": "Menya ibikoresho by'ingenzi bya digital",
+            "topics": [
+              "Gucunga Social Media",
+              "Gutera Content",
+              "Digital Analytics",
+              "Gukorana kuri Interineti",
+              "By'ingenzi bya Cybersecurity"
+            ]
+          }
+        }
+      },
+      "cta": {
+        "title": "Witeguye Kwiga?",
+        "description": "Winjire mu mahugurwa yacu no kwiga ubumenyi bwawe"
+      }
+    }
+  },
+  "resources": {
+    "title": "Ibikoresho",
+    "description": "Ibikoresho by'inyigisho",
+    "community": {
+      "title": "Umuryango",
+      "description": "Jya mu muryango wacu w'abagore mu tekinoloji",
+      "events": "Ibikorwa",
+      "forum": "Forum",
+      "join": "Jya mu Muryango"
+    },
+    "learning": {
+      "title": "Ibikoresho by'Inyigisho",
+      "description": "Fata ibikoresho by'inyigisho",
+      "materials": "Ibikoresho",
+      "tutorials": "Inyigisho",
+      "guides": "Inzira"
+    },
+    "hero": {
+      "title": "Ibikoresho",
+      "description": "Fata ibikoresho byacu byose, amabwiriza, n'ibikoresho"
+    },
+    "categories": {
+      "learningMaterials": {
+        "title": "Ibikoresho By'Inyigisho",
+        "description": "Fata ibikoresho byacu byose by'inyigisho, amabwiriza, n'ibikoresho by'inyigisho",
+        "items": [
+          "Video za Tutorial",
+          "Inyandiko",
+          "Urugero rwa Code"
+        ]
+      },
+      "careerResources": {
+        "title": "Ibikoresho By'Akazi",
+        "description": "Ibikoresho n'amabwiriza yo gufasha gutera imbere muri tekinoroji",
+        "items": [
+          "Template za CV",
+          "Gutegura Interview",
+          "Amabwiriza Y'Akazi"
+        ]
+      },
+      "communityResources": {
+        "title": "Ibikoresho By'Umuryango",
+        "description": "Huzwa n'abandi banyiga kandi ufate inkunga y'umuryango",
+        "items": [
+          "Foramu za Discussion",
+          "Amatsinda Y'Inyigisho",
+          "Porogaramu ya Mentorship"
+        ]
+      }
+    },
+    "learningMaterials": {
+      "title": "Ibikoresho By'Inyigisho",
+      "computerBasics": {
+        "title": "Amabwiriza ya Computer & Hardware",
+        "description": "Menya amabwiriza ya computer, harimo uko hardware na operating systems bikora",
+        "items": [
+          "Intangiriro za Computer",
+          "Gusobanukirwa Operating Systems",
+          "Ibikoresho by'Input & Output",
+          "Gukosora Ibibazo"
+        ]
+      },
+      "internetSkills": {
+        "title": "Ubumenyi bwa Internet & Email",
+        "description": "Menya ubumenyi bw'ingenzi bwa internet, kuva kuri web browsing kugeza kuri email",
+        "items": [
+          "Amabwiriza ya Web Browsing",
+          "Gutegura & Gukoresha Email",
+          "Ubwishingizi & Ubwihisho",
+          "Gukoresha Search Engines"
+        ]
+      },
+      "microsoftWord": {
+        "title": "Microsoft Word",
+        "description": "Menya gukora inyandiko no gukoresha Microsoft Word",
+        "items": [
+          "Gukora Inyandiko",
+          "Gukoresha & Styles",
+          "Amasahani & Graphics",
+          "Template za Inyandiko"
+        ]
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Soma Byinshi",
+    "categories": "Ibyiciro",
+    "recent": "Byakozwe Vuba",
+    "popular": "Byakunzwe",
+    "search": "Shakisha",
+    "tags": "Icyitonderwa",
+    "author": "Umwanditsi",
+    "date": "Itariki",
+    "share": "Sangira",
+    "related": "Bihuzwe"
+  },
+  "contact": {
+    "title": "Twandikire",
+    "name": "Amazina",
+    "email": "Imeyili",
+    "subject": "Ingingo",
+    "message": "Ubutumwa",
+    "send": "Ohereza",
+    "address": "Aderesi",
+    "phone": "Telefoni",
+    "hours": "Amasaha y'Akazi",
+    "success": "Ubutumwa bwawe bwakozwe neza",
+    "error": "Habaye ikibazo, ongera ugerageze",
+    "hero": {
+      "title": "Tuvugishe",
+      "titleHighlight": "Hamwe",
+      "description": "Ufite ibibazo? Dushaka kumva kuri wewe. Ohereza ubutumwa kandi tuzasubiza vuba."
+    },
+    "info": {
+      "title": "Amakuru yo Kuvugana",
+      "email": {
+        "address": "info@empowerhered.org",
+        "response": "Tuzasubiza vuba"
+      },
+      "location": {
+        "address": "Kigali, Rwanda",
+        "visit": "Vugana n'ofisi yacu"
+      },
+      "hours": {
+        "days": "Kuwa mbere - Kuwa gatanu",
+        "time": "9:00 AM - 5:00 PM"
+      },
+      "social": {
+        "title": "Dukurikire",
+        "twitter": "Twitter",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram"
+      }
+    },
+    "form": {
+      "title": "Ohereza Ubutumwa",
+      "fields": {
+        "name": {
+          "label": "Amazina Yawe",
+          "placeholder": "Andika amazina yawe"
+        },
+        "email": {
+          "label": "Imeyili Yawe",
+          "placeholder": "Andika imeyili yawe"
+        },
+        "subject": {
+          "label": "Ingingo",
+          "placeholder": "Hitamo ingingo",
+          "options": {
+            "general": "Ibibazo By'Umwihariko",
+            "support": "Gufasha Mu Bumenyi",
+            "partnership": "Amahirwe yo Guhuza Imbaraga",
+            "other": "Ibindi"
+          }
+        },
+        "message": {
+          "label": "Ubutumwa",
+          "placeholder": "Andika ubutumwa bwawe"
+        }
+      },
+      "submit": "Ohereza Ubutumwa",
+      "submitting": "Ari Kuri...",
+      "success": "Ubutumwa bwakozwe neza!",
+      "error": "Ubutumwa ntibwakozwe. Ongera ugerageze."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Murakaza Neza",
+      "subtitle": "Injira kuri konte yawe",
+      "email": {
+        "label": "Email",
+        "placeholder": "Andika email yawe",
+        "required": "Email irakenewe",
+        "invalid": "Email ntabwo ari nziza"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Andika password yawe",
+        "required": "Password irakenewe"
+      },
+      "rememberMe": "Nibuke",
+      "forgotPassword": "Wibagiwe password?",
+      "signIn": "Injira",
+      "signingIn": "Injira...",
+      "success": "Winjirije neza!",
+      "error": "Ntibyemewe kwinjira",
+      "noAccount": "Nta konte ufite?",
+      "signup": "Iyandikishe"
+    },
+    "signup": {
+      "title": "Iyandikishe",
+      "subtitle": "Cyangwa",
+      "name": {
+        "label": "Amazina yawe",
+        "required": "Amazina akenewe"
+      },
+      "email": {
+        "label": "Email",
+        "required": "Email irakenewe",
+        "invalid": "Email ntabwo ari nziza"
+      },
+      "gender": {
+        "label": "Gender",
+        "required": "Hitamo gender yawe",
+        "options": {
+          "select": "Hitamo",
+          "female": "Female",
+          "male": "Male",
+          "other": "Other",
+          "preferNotToSay": "Ntibikenewe"
+        }
+      },
+      "role": {
+        "label": "Role",
+        "required": "Hitamo role yawe",
+        "options": {
+          "select": "Hitamo",
+          "student": "Student",
+          "mentor": "Mentor",
+          "admin": "Admin"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "required": "Password irakenewe",
+        "minLength": "Password igomba kuba ifite inyuguti {{count}} n'ibihingirwa"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "required": "Emeza password yawe",
+        "mismatch": "Password ntabwo zihuye"
+      },
+      "terms": {
+        "agree": "Nemerera",
+        "link": "Amabwiriza n'uburenganzira"
+      },
+      "createAccount": "Iyandikishe",
+      "creatingAccount": "Iyandikishe...",
+      "success": "Konte yawe yaremwe neza!",
+      "error": "Ntibyemewe kwakira konte",
+      "alreadyHaveAccount": "Ufite konte?",
+      "login": "Injira",
+      "success": {
+        "title": "Murakaza neza, {{name}}!",
+        "message": "Konte yawe yaremwe neza.",
+        "redirecting": "Ujya kuri dashboard..."
+      }
+    },
+    "forgotPassword": {
+      "title": "Wibagiwe password?",
+      "description": "Andika email yawe kugirango dukore password yawe rushya",
+      "email": {
+        "label": "Email",
+        "placeholder": "Andika email yawe",
+        "required": "Email irakenewe",
+        "invalid": "Email ntabwo ari nziza"
+      },
+      "resetPassword": "Ongera ushyireho password",
+      "resetting": "Ongera ushyireho password...",
+      "success": "Tumaze kohereza email yo gukemura password",
+      "error": "Ntibyemewe gukemura password",
+      "backToLogin": "Garuka kuri login"
+    }
+  },
+  "profile": {
+    "title": "Umwirondoro",
+    "editProfile": "Hindura Umwirondoro",
+    "personalInfo": "Amakuru yawe",
+    "education": "Amashuri",
+    "experience": "Ubumenyi",
+    "skills": "Ubumenyi",
+    "interests": "Ibyifuzo",
+    "saveChanges": "Bika Impinduka",
+    "uploadPhoto": "Bika Ifoto",
+    "removePhoto": "Kuraho Ifoto"
+  },
+  "dashboard": {
+    "welcome": "Murakaza neza",
+    "overview": "Aho uri",
+    "activities": "Ibikorwa Byakozwe Vuba",
+    "upcoming": "Bizaza",
+    "progress": "Aho uri",
+    "mentors": "Abajyanama bawe",
+    "mentees": "Abajyanwa bawe",
+    "settings": "Igenamiterere",
+    "notifications": "Kumenyesha",
+    "messages": "Ubutumwa"
+  },
+  "mentor": {
+    "dashboard": {
+      "title": "Umutungo wa Mentor",
+      "schedule": "Igenamiterere",
+      "meetings": "Inama",
+      "mentees": "Abajyanwa",
+      "resources": "Ibikoresho",
+      "feedback": "Ibisubizo"
+    },
+    "schedule": {
+      "title": "Igenamiterere",
+      "availability": "Aho uri",
+      "bookings": "Gahunda",
+      "calendar": "Kalendari",
+      "timeSlots": "Amasaha"
+    },
+    "meetings": {
+      "title": "Inama",
+      "upcoming": "Bizaza",
+      "past": "Byakozwe",
+      "notes": "Inyandiko",
+      "feedback": "Ibisubizo"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Umutungo wa Admin",
+      "users": "Abakoresha",
+      "mentors": "Abajyanama",
+      "mentees": "Abajyanwa",
+      "programs": "Porogaramu",
+      "reports": "Raporo"
+    },
+    "users": {
+      "title": "Gukurikiranwa kw'Abakoresha",
+      "add": "Bongeraho Umukoresha",
+      "edit": "Hindura Umukoresha",
+      "delete": "Siba Umukoresha",
+      "roles": "Umwanya w'Umukoresha"
+    },
+    "programs": {
+      "title": "Gukurikiranwa kwa Porogaramu",
+      "add": "Bongeraho Porogaramu",
+      "edit": "Hindura Porogaramu",
+      "delete": "Siba Porogaramu",
+      "enrollments": "Iyandikishe"
+    }
+  },
+  "community": {
+    "title": "Umuryango",
+    "events": "Ibikorwa",
+    "forum": "Forum",
+    "groups": "Amatsinda",
+    "discussions": "Ibiganiro",
+    "members": "Abanyamuryango"
+  },
+  "courses": {
+    "title": "Amasomo",
+    "enrolled": "Amasomo Wiyandikishije",
+    "available": "Amasomo Ariho",
+    "progress": "Aho uri",
+    "certificates": "Impamyabumenyi"
+  },
+  "settings": {
+    "title": "Igenamiterere",
+    "account": "Igenamiterere rya Konti",
+    "notifications": "Igenamiterere rya Kumenyesha",
+    "privacy": "Igenamiterere rya Ibanga",
+    "language": "Igenamiterere rya Ururimi",
+    "theme": "Igenamiterere rya Theme"
+  },
+  "footer": {
+    "about": {
+      "title": "Abo Turi",
+      "description": "Gufasha abagore binyuze mu masomo no mu tekinoroji."
+    },
+    "quickLinks": {
+      "title": "Aho Vuba",
+      "home": "Ahabanza",
+      "about": "Abo Turi",
+      "programs": "Porogaramu",
+      "stories": "Inkuru Z'Intsinzi",
+      "resources": "Ibikoresho"
+    },
+    "programs": {
+      "title": "Porogaramu Zacu",
+      "mentorship": "Ubuyobozi",
+      "communication": "Ubwumvane",
+      "techSkills": "Ubumenyi bwa Tekinoroji",
+      "workshops": "Amahugurwa"
+    },
+    "contact": {
+      "title": "Tuvugishe",
+      "getInTouch": "Duhuzwe"
+    },
+    "newsletter": {
+      "title": "Menya Ibisubizo",
+      "description": "Iyandikishe kuri newsletter yacu kugirango umenye ibisubizo n'ibisubizo vuba.",
+      "placeholder": "Andika email yawe",
+      "subscribe": "Iyandikishe",
+      "subscribing": "Iyandikishe...",
+      "success": "Urakoze kwiyandikisha!",
+      "error": "Habaye ikibazo. Nyamuneka ongera ugerageze."
+    },
+    "social": {
+      "title": "Duhuzwe",
+      "twitter": "Dukurikire kuri Twitter",
+      "linkedin": "Dukurikire kuri LinkedIn",
+      "instagram": "Dukurikire kuri Instagram"
+    },
+    "legal": {
+      "title": "Amategeko",
+      "privacy": "Politiki y'Ibanga",
+      "terms": "Amabwiriza"
+    },
+    "bottom": {
+      "copyright": "© 2024 EmpowerHerEd. Dukoreshejwe n'uburenganzira bwose."
+    }
+  },
+  "errors": {
+    "required": "Iki gice gisabwa",
+    "invalidEmail": "Imeyili ntiyemewe",
+    "passwordMismatch": "Ijambobanga ntabwo ari ryo",
+    "minLength": "Igomba kuba {{count}} inyuguti",
+    "maxLength": "Igomba kuba {{count}} inyuguti",
+    "serverError": "Habaye ikibazo kuri server",
+    "networkError": "Habaye ikibazo kuri network",
+    "notFound": "Urupapuro rutazwi",
+    "unauthorized": "Nta uburenganzira",
+    "forbidden": "Nta uburenganzira",
+    "validation": "Habaye ikibazo",
+    "unsupported": "Nta gushobora kwakira ijwi mu browser yawe",
+    "microphonePermission": "Uburenganzira bwa microphone busabwa kugirango ushakishe ijwi"
+  },
+  "success": {
+    "profileUpdated": "Umwirondoro wawe wakozwe neza",
+    "passwordChanged": "Ijambobanga ryawe ryakozwe neza",
+    "emailSent": "Imeyili yawe yakozwe neza",
+    "formSubmitted": "Ifomu yawe yakozwe neza",
+    "changesSaved": "Impinduka zawe zakozwe neza",
+    "uploaded": "Dosiye yawe yakozwe neza",
+    "deleted": "Icyo gice cyakozwe neza"
+  },
+  "search": {
+    "placeholder": "Shakisha...",
+    "voiceSearch": "Shakisha ijwi",
+    "listening": "Amafutiwe...",
+    "suggestions": "Ibyifuzo",
+    "noResults": "Nta bisubizo",
+    "error": "Habaye ikibazo",
+    "clear": "Sukura",
+    "filters": "Icyitonderwa",
+    "sort": "Gutondeka"
+  },
+  "common": {
+    "deployability": "Ikibazo",
+    "configurability": "Ikibazo",
+    "extensibility": "Ikibazo",
+    "modularity": "Ikibazo",
+    "readability": "Ikibazo",
+    "writability": "Ikibazo",
+    "executability": "Ikibazo",
+    "interpretability": "Ikibazo",
+    "compilability": "Ikibazo",
+    "linkability": "Ikibazo",
+    "loadability": "Ikibazo",
+    "runnability": "Ikibazo",
+    "debuggability": "Ikibazo",
+    "traceability": "Ikibazo",
+    "verifiability": "Ikibazo",
+    "validatability": "Ikibazo",
+    "testability": "Ikibazo",
+    "maintainability": "Ikibazo",
+    "portability": "Ikibazo",
+    "reusability": "Ikibazo",
+    "scalability": "Ikibazo",
+    "stability": "Ikibazo",
+    "reliability": "Ikibazo",
+    "compatibility": "Ikibazo",
+    "accessibility": "Ikibazo",
+    "usability": "Ikibazo",
+    "performance": "Ikibazo",
+    "security": "Ikibazo",
+    "maintenance": "Ikibazo",
+    "support": "Ikibazo",
+    "documentation": "Ikibazo",
+    "bug": "Ikibazo",
+    "feature": "Ikibazo",
+    "enhancement": "Ikibazo",
+    "blocker": "Ikibazo",
+    "trivial": "Ikibazo",
+    "minor": "Ikibazo",
+    "major": "Ikibazo",
+    "critical": "Ikibazo",
+    "fatal": "Ikibazo",
+    "trace": "Ikibazo",
+    "debug": "Ikibazo",
+    "tertiary": "Ntariho",
+    "secondary": "Ntariho",
+    "primary": "Ariho",
+    "external": "Ntariho",
+    "internal": "Ariho",
+    "private": "Ntariho",
+    "public": "Ariho",
+    "hidden": "Ntariho",
+    "visible": "Ariho",
+    "disabled": "Ntariho",
+    "enabled": "Ariho",
+    "inactive": "Ntariho",
+    "active": "Ariho",
+    "expired": "Byakozwe",
+    "scheduled": "Byakozwe",
+    "published": "Byakozwe",
+    "draft": "Byakozwe",
+    "archived": "Byakozwe",
+    "deleted": "Byakozwe",
+    "created": "Byakozwe",
+    "updated": "Byakozwe",
+    "tags": "Icyitonderwa",
+    "category": "Icyiciro",
+    "details": "Ibisobanuro",
+    "description": "Ibisobanuro",
+    "summary": "Ibigize",
+    "location": "Aho uri",
+    "time": "Isaha",
+    "date": "Itariki",
+    "status": "Aho uri",
+    "optional": "Bishoboka",
+    "required": "Bisabwa",
+    "less": "Bike",
+    "more": "Byinshi",
+    "none": "Nta na kimwe",
+    "all": "Byose",
+    "deselect": "Reka",
+    "select": "Hitamo",
+    "add": "Bongeraho",
+    "remove": "Kuraho",
+    "create": "Kora",
+    "update": "Vugurura",
+    "refresh": "Ongera",
+    "show": "Erekana",
+    "hide": "Hisha",
+    "view": "Reba",
+    "sort": "Gutondeka",
+    "filter": "Icyitonderwa",
+    "search": "Shakisha",
+    "upload": "Bika",
+    "download": "Kuramo",
+    "open": "Fungura",
+    "close": "Funga",
+    "confirm": "Emeza",
+    "no": "Oya",
+    "yes": "Yego",
+    "info": "Amakuru",
+    "warning": "Iburira",
+    "success": "Byakozwe neza",
+    "error": "Ikibazo",
+    "loading": "Amafutiwe...",
+    "previous": "Byabanjirije",
+    "next": "Ibikurikira",
+    "back": "Garuka",
+    "edit": "Hindura",
+    "delete": "Siba",
+    "save": "Bika",
+    "cancel": "Reka",
+    "submit": "Ohereza",
+    "contactUs": "Twandikire",
+    "getStarted": "Tangira",
+    "learnMore": "Menya Byinshi",
+    "readMore": "Soma Byinshi"
+  },
+  "successStories": {
+    "hero": {
+      "title": "Inkuru Z'Intsinzi",
+      "description": "Menya uko EmpowerHerEd yahinduye ubuzima no gutera imbere abagore mu Rwanda."
+    },
+    "stories": {
+      "marie": {
+        "name": "Marie Uwimana",
+        "role": "Umukora wa Software",
+        "quote": "EmpowerHerEd yampaye ubumenyi no kwizera ngo nkore umwuga wanjye wa tekinoroji. Ubufasha n'inkunga byari ngombwa cyane.",
+        "story": "Nyuma yo kurangiza amasomo ya kode, nafashe akazi nka mukora wa software mu kambani ya tekinoroji. Ubumenyi n'imyitozo byampaye byari ngombwa cyane mu kazi kanjye."
+      },
+      "grace": {
+        "name": "Grace Mukamana",
+        "role": "Umwishingizi",
+        "quote": "Porogaramu yo gutera imbere y'ubucuruzi yampaye ubumenyi bwo guhindura igitekerezo kanjye gato kikaba umucuruzi mwiza.",
+        "story": "Nkoresheje ubumenyi bwakuye mu masomo ya EmpowerHerEd, nashinze isosiyete yanjye ya fashion, nkora abandi bagore mu karere kanjye."
+      },
+      "sarah": {
+        "name": "Sarah Niyonsenga",
+        "role": "Umuyobozi w'Umuryango",
+        "quote": "Amasomo yo kuyobora yampaye ubumenyi bwo guhindura ubuzima bw'umuryango wanjye.",
+        "story": "Nkoresheje ubumenyi bwakuye mu masomo yo kuyobora, nshinzwe gahunda zifasha abagore no gutera imbere mu karere kanjye."
+      },
+      "claire": {
+        "name": "Claire Uwase",
+        "role": "Umwishingizi wa Data",
+        "quote": "Porogaramu yo gusuzuma data yampaye amahirwe mashya.",
+        "story": "Nyuma yo kurangiza amasomo ya data, nafashe akazi mu ishami ry'ubushakashatsi, nkora gahunda zifasha abaturage."
+      },
+      "joyce": {
+        "name": "Joyce Mutoni",
+        "role": "Umwishingizi wa Tekinoroji",
+        "quote": "Ubumenyi bwa tekinoroji n'ubucuruzi byari ngombwa cyane kuri njye.",
+        "story": "Nashinze porogaramu ya mobile ifasha aborozi kugurisha ibyabo, nkoresheje ubumenyi bwakuye mu masomo ya EmpowerHerEd."
+      },
+      "esther": {
+        "name": "Esther Mukamana",
+        "role": "Umwishingizi wa Marketing ya Digital",
+        "quote": "Porogaramu ya digital yampaye ubumenyi bwo guhindura umwuga wanjye.",
+        "story": "Nahinduye umwuga wanjye wo kuri marketing ya digital, nfasha amasosiyete gutera imbere kuri interineti."
+      },
+      "alice": {
+        "name": "Alice Uwamahoro",
+        "role": "Umwishingizi wa UX/UI",
+        "quote": "Porogaramu ya design yampaye ubumenyi bwo guhuza ubuhanga n'ubumenyi.",
+        "story": "Nshinzwe gahunda za design mu kambani ya tekinoroji, nkora porogaramu zifasha abaturage."
+      },
+      "beatrice": {
+        "name": "Beatrice Nyirahabimana",
+        "role": "Umwishingizi wa Cybersecurity",
+        "quote": "Amasomo ya cybersecurity yampaye amahirwe yo kwinjira mu kazi nta nubwo nari nzi.",
+        "story": "Nyuma yo kurangiza amasomo, nafashe akazi mu ishami ry'ubwishingizi, nfasha gukingira amakuru y'abakiriya."
+      },
+      "diane": {
+        "name": "Diane Uwase",
+        "role": "Umwishingizi wa AI",
+        "quote": "Porogaramu ya tekinoroji yampaye ubumenyi bwo gukora AI.",
+        "story": "Nkora gahunda za AI zifasha aborozi kugera ku birebana n'ibihe, nkora impinduka mu buzima bwabo."
+      }
+    },
+    "cta": {
+      "title": "Be Inkingi y'Intsinzi Zacu",
+      "description": "Duhuzwe n'umuryango wacu w'abagore bafite ubumenyi, utangire urugendo rwawe rwo gutera imbere.",
+      "button": "Reba Porogaramu"
+    }
+  }
+} 

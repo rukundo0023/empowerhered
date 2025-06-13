@@ -1,0 +1,1292 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "programs": "Programs",
+    "resources": "Resources",
+    "blog": "Blog",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "adminDashboard": "Admin Dashboard",
+    "mentorDashboard": "Mentor Dashboard",
+    "stories": "Success Stories",
+    "mentorship": "Mentorship",
+    "communication": "Communication",
+    "techSkills": "Tech Skills",
+    "workshops": "Workshops",
+    "community": "Community",
+    "learning": "Learning Resources",
+    "successStories": "Success Stories",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "menu": "Menu",
+    "programsDropdown": {
+      "mentorship": "Mentorship Program",
+      "communication": "Communication Skills",
+      "techSkills": "Tech Skills",
+      "workshops": "Workshops"
+    },
+    "resourcesDropdown": {
+      "workshops": "Workshops & Training",
+      "community": "Community Support",
+      "learning": "Learning Resources",
+      "faq": "Frequently Asked Questions"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Empowering Women Through",
+      "titleHighlight": "Digital Education",
+      "description1": "EmpowerHerEd is more than just a learning platform - it's a pathway to support, teach, and fund young women in Rwanda. Our mission is to bridge the gender gap in technology by providing women with the knowledge, resources, and confidence they need to thrive in the digital world.",
+      "description2": "Join Rwanda's premier digital education platform. Learn from industry experts, connect with mentors, and launch your tech career. Whether you're just starting out or looking to enhance your skills, we're here to guide your journey.",
+      "explorePrograms": "Explore Programs"
+    },
+    "stats": {
+      "womenEmpowered": "Women Empowered",
+      "successRate": "Success Rate",
+      "expertMentors": "Expert Mentors",
+      "partnerCompanies": "Partner Companies"
+    },
+    "featuredCourses": {
+      "title": "Featured Courses",
+      "subtitle": "Start Your Journey Today",
+      "description": "Choose from our carefully designed courses to accelerate your tech career",
+      "learnMore": "Learn More",
+      "courses": {
+        "computerBasics": {
+          "title": "Computer Basics & Hardware",
+          "description": "Learn the fundamentals of computer hardware and maintenance",
+          "level": "Beginner",
+          "duration": "6 weeks",
+          "students": "80 students"
+        },
+        "internetSkills": {
+          "title": "Internet & Email Skills",
+          "description": "Master essential internet navigation and email communication",
+          "level": "Beginner",
+          "duration": "4 weeks",
+          "students": "100 students"
+        },
+        "microsoftWord": {
+          "title": "Microsoft Word",
+          "description": "Become proficient in Microsoft Word for professional documents",
+          "level": "Beginner",
+          "duration": "3 weeks",
+          "students": "50 students"
+        }
+      }
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us",
+      "subtitle": "Your Path to Success",
+      "description": "We provide everything you need to succeed in the tech industry",
+      "features": {
+        "expertLearning": {
+          "title": "Expert-Led Learning",
+          "description": "Learn from industry professionals with years of experience"
+        },
+        "mentorship": {
+          "title": "Mentorship",
+          "description": "Get personalized guidance from experienced mentors"
+        },
+        "careerSupport": {
+          "title": "Career Support",
+          "description": "Access job opportunities and career development resources"
+        }
+      }
+    },
+    "features": {
+      "title": "What We Offer",
+      "mentorship": {
+        "title": "Mentorship",
+        "description": "Connect with experienced mentors to guide your career journey"
+      },
+      "training": {
+        "title": "Training",
+        "description": "Gain essential skills in leadership and communication"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Join our supportive community of women in tech"
+      }
+    },
+    "programs": {
+      "title": "Our Programs",
+      "viewAll": "View All",
+      "mentorship": {
+        "title": "Mentorship Program",
+        "description": "Connect with experienced mentors to guide your career journey"
+      },
+      "leadership": {
+        "title": "Leadership & Communication",
+        "description": "Gain essential skills in leadership and communication"
+      },
+      "tech": {
+        "title": "Tech Skills",
+        "description": "Learn essential tech skills needed in the digital age"
+      },
+      "communication": {
+        "hero": {
+          "title": "Online Communication & Collaboration",
+          "description": "Empowering young women in Rwanda to communicate and work effectively in the digital world."
+        },
+        "overview": {
+          "title": "Program Overview",
+          "description": "This program equips participants with the digital communication and collaboration skills necessary for modern work and learning environments. Through interactive sessions and practical projects, you'll become confident using tools and strategies to collaborate online.",
+          "features": {
+            "messaging": {
+              "title": "Effective Messaging",
+              "description": "Communicate clearly and professionally"
+            },
+            "tools": {
+              "title": "Tool Proficiency",
+              "description": "Master collaborative digital platforms"
+            },
+            "citizenship": {
+              "title": "Digital Citizenship",
+              "description": "Safe, respectful, and effective online behavior"
+            }
+          }
+        },
+        "details": {
+          "title": "Program Details",
+          "duration": "Duration",
+          "schedule": "Schedule",
+          "location": "Location",
+          "prerequisites": "Prerequisites",
+          "certification": "Certification",
+          "applyButton": "Apply Now"
+        },
+        "curriculum": {
+          "title": "Curriculum Modules",
+          "modules": {
+            "basics": {
+              "title": "Digital Communication Basics",
+              "description": "Understand how to communicate effectively in online environments.",
+              "topics": [
+                "Email Etiquette",
+                "Professional Messaging",
+                "Digital Body Language",
+                "Tone and Clarity",
+                "Cross-cultural Communication"
+              ]
+            },
+            "tools": {
+              "title": "Collaboration Tools",
+              "description": "Learn to use modern tools for online teamwork and productivity.",
+              "topics": [
+                "Google Drive & Docs",
+                "Microsoft Teams",
+                "Zoom & Google Meet",
+                "Task Management Tools (e.g., Trello)",
+                "File Sharing & Version Control"
+              ]
+            },
+            "meetings": {
+              "title": "Virtual Meeting Skills",
+              "description": "Gain confidence in organizing and participating in virtual meetings.",
+              "topics": [
+                "Setting Agendas",
+                "Speaking Confidently Online",
+                "Engaging Participants",
+                "Using Breakout Rooms",
+                "Follow-up Communication"
+              ]
+            },
+            "team": {
+              "title": "Team Communication Strategies",
+              "description": "Develop techniques for leading and working within remote teams.",
+              "topics": [
+                "Roles & Responsibilities",
+                "Feedback Mechanisms",
+                "Collaboration Norms",
+                "Time Zone Management",
+                "Respectful Dialogue"
+              ]
+            },
+            "safety": {
+              "title": "Online Safety & Professionalism",
+              "description": "Maintain security, professionalism, and trust in digital spaces.",
+              "topics": [
+                "Data Privacy",
+                "Cyber Hygiene",
+                "Professional Profiles",
+                "Building Digital Trust",
+                "Avoiding Miscommunication"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Success Stories",
+      "readMore": "Read More",
+      "viewAll": "View All"
+    },
+    "cta": {
+      "title": "Want to Be a Woman in Tech?",
+      "description": "Sign up now to advance your career",
+      "button": "Get Started"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About",
+      "titleHighlight": "EmpowerHerEd",
+      "description": "Empowering women through technology, education, and community support."
+    },
+    "story": {
+      "title": "Our Story",
+      "description1": "EmpowerHerEd was born from a simple but powerful idea: when women are educated and empowered, entire communities prosper. Founded by a passionate team of educators, mentors, and advocates, EmpowerHerEd exists to bridge the gender gap in education and opportunity.",
+      "description2": "Our platform is a safe, inclusive space where women and girls can learn, connect, and grow academically, professionally, and personally."
+    },
+    "whatWeDo": {
+      "title": "What We Do",
+      "description": "We offer curated educational content, mentorship programs, workshops, and career support to help women at every stage of their journey. From high school students to working professionals, we're here to uplift, equip, and empower.",
+      "services": {
+        "education": "Educational Content",
+        "mentorship": "Mentorship",
+        "workshops": "Workshops",
+        "career": "Career Support"
+      }
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To bridge the gender gap in technology by providing women with the skills, resources, and support they need to succeed in the tech industry."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "A world where women are equally represented in technology and have the opportunity to shape the future of innovation."
+    },
+    "whyItMatters": {
+      "title": "Why It Matters",
+      "description": "Despite progress, millions of women around the world still face limited access to education and leadership roles. EmpowerHerEd is changing that by nurturing confidence, capability, and community.",
+      "highlight": "Together, we are shaping a future where education is a right and not a privilege for every woman."
+    },
+    "values": {
+      "title": "Our Values",
+      "subtitle": "These core values guide everything we do at EmpowerHerEd",
+      "items": {
+        "empowerment": {
+          "title": "Empowerment",
+          "description": "We believe in empowering women through education and skill development."
+        },
+        "community": {
+          "title": "Community",
+          "description": "Building a supportive network of women in tech who lift each other up."
+        },
+        "innovation": {
+          "title": "Innovation",
+          "description": "Fostering creativity and innovation in technology through diverse perspectives."
+        }
+      }
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "Meet the passionate individuals driving our mission forward",
+      "members": {
+        "founder": {
+          "name": "Rukundo Nshimiyimana",
+          "role": "Founder & CEO"
+        },
+        "education": {
+          "name": "Maria Garcia",
+          "role": "Head of Education"
+        }
+      }
+    }
+  },
+  "programs": {
+    "title": "Our Programs",
+    "description": "Our programs help women become tech professionals",
+    "hero": {
+      "title": "Our Programs",
+      "description": "Comprehensive training and development programs designed to empower young women in Rwanda"
+    },
+    "programs": {
+      "digitalLiteracy": {
+        "title": "Digital Literacy & Office Tools",
+        "description": "Master essential computer and internet skills needed in today's digital workplace",
+        "features": [
+          "Microsoft Office Suite",
+          "Google Workspace",
+          "Basic Computer Skills",
+          "Internet Navigation",
+          "Email Communication"
+        ]
+      },
+      "communication": {
+        "title": "Online Communication & Collaboration",
+        "description": "Learn to communicate effectively and collaborate online using modern tools",
+        "features": [
+          "Video Conferencing",
+          "Team Collaboration",
+          "Digital Etiquette",
+          "Online Presentations",
+          "Remote Work Skills"
+        ]
+      },
+      "jobReadiness": {
+        "title": "Job Readiness & Networking",
+        "description": "Prepare for the job market with essential skills and professional networking",
+        "features": [
+          "CV Writing",
+          "Interview Preparation",
+          "Professional Networking",
+          "Career Planning",
+          "Job Search Strategies"
+        ]
+      },
+      "mentorship": {
+        "title": "Mentorship Program",
+        "description": "Connect with experienced mentors for personalized guidance and support",
+        "features": [
+          "One-on-One Mentoring",
+          "Career Guidance",
+          "Skill Development",
+          "Professional Growth",
+          "Industry Insights"
+        ]
+      },
+      "networking": {
+        "title": "Networking Events",
+        "description": "Build your professional network through community events and workshops",
+        "features": [
+          "Industry Meetups",
+          "Career Fairs",
+          "Professional Workshops",
+          "Community Events",
+          "Peer Networking"
+        ]
+      },
+      "techSkills": {
+        "hero": {
+          "title": "Tech Skills Development",
+          "description": "Empowering young women with essential technical skills for the digital age"
+        },
+        "overview": {
+          "title": "Program Overview",
+          "description": "Our Tech Skills Development program is designed to equip young women with the essential technical skills needed to thrive in today's digital world. Through hands-on learning and practical projects, participants will gain confidence and competence in various technical domains.",
+          "features": {
+            "curriculum": {
+              "title": "Comprehensive Curriculum",
+              "description": "From basics to advanced concepts"
+            },
+            "projects": {
+              "title": "Hands-on Projects",
+              "description": "Real-world application of skills"
+            },
+            "mentorship": {
+              "title": "Mentorship Support",
+              "description": "Guidance from industry experts"
+            }
+          }
+        },
+        "details": {
+          "title": "Program Details",
+          "duration": "Duration",
+          "schedule": "Schedule",
+          "location": "Location",
+          "prerequisites": "Prerequisites",
+          "certification": "Certification",
+          "applyButton": "Apply Now"
+        },
+        "curriculum": {
+          "title": "Curriculum Modules",
+          "modules": {
+            "computerBasics": {
+              "title": "Computer Basics & Hardware",
+              "description": "Understand how computers work and how to use them efficiently.",
+              "topics": [
+                "Parts of a Computer",
+                "Operating Systems",
+                "File Management",
+                "Installing Software",
+                "Keyboard Shortcuts"
+              ]
+            },
+            "internet": {
+              "title": "Internet & Email Skills",
+              "description": "Learn how to navigate the web and use email for professional communication.",
+              "topics": [
+                "Web Browsers & Search Engines",
+                "Creating & Managing Email Accounts",
+                "Email Etiquette",
+                "Attachments & Folders",
+                "Safe Internet Use"
+              ]
+            },
+            "word": {
+              "title": "Microsoft Word",
+              "description": "Master the basics of document creation and formatting.",
+              "topics": [
+                "Creating Documents",
+                "Formatting Text & Paragraphs",
+                "Inserting Tables & Images",
+                "Using Templates",
+                "Printing & Saving Documents"
+              ]
+            },
+            "excel": {
+              "title": "Microsoft Excel",
+              "description": "Learn to organize data and perform basic calculations.",
+              "topics": [
+                "Spreadsheets & Cells",
+                "Basic Formulas & Functions",
+                "Charts & Graphs",
+                "Sorting & Filtering Data",
+                "Formatting Worksheets"
+              ]
+            },
+            "powerpoint": {
+              "title": "Microsoft PowerPoint",
+              "description": "Create professional presentations with ease.",
+              "topics": [
+                "Creating Slides",
+                "Design Themes",
+                "Adding Media (Images/Videos)",
+                "Animations & Transitions",
+                "Delivering a Presentation"
+              ]
+            }
+          }
+        }
+      },
+      "workshops": {
+        "hero": {
+          "title": "Interactive Workshops",
+          "description": "Hands-on learning experiences designed to develop practical skills and knowledge"
+        },
+        "overview": {
+          "title": "Workshop Overview",
+          "description": "Our workshops provide practical, hands-on learning experiences led by industry experts. Each workshop is designed to help you develop specific skills and knowledge that you can immediately apply in your career or business.",
+          "features": {
+            "learning": {
+              "title": "Practical Learning",
+              "description": "Hands-on activities and real-world projects to apply your knowledge"
+            },
+            "instructors": {
+              "title": "Expert Instructors",
+              "description": "Learn from industry professionals with extensive experience"
+            },
+            "groups": {
+              "title": "Small Groups",
+              "description": "Interactive sessions with personalized attention and feedback"
+            }
+          }
+        },
+        "details": {
+          "title": "Workshop Details",
+          "duration": {
+            "title": "Duration",
+            "value": "2-4 hours per workshop"
+          },
+          "schedule": {
+            "title": "Schedule",
+            "value": "Weekly workshops with flexible timing options"
+          },
+          "location": {
+            "title": "Location",
+            "value": "Hybrid (In-person and virtual options available)"
+          },
+          "prerequisites": {
+            "title": "Prerequisites",
+            "value": "Open to all program participants"
+          }
+        },
+        "available": {
+          "title": "Available Workshops",
+          "workshops": {
+            "career": {
+              "title": "Career Development Workshop",
+              "description": "Tools and strategies for career advancement",
+              "topics": [
+                "Resume Writing",
+                "Interview Preparation",
+                "Personal Branding",
+                "Networking Skills",
+                "Career Planning"
+              ]
+            },
+            "leadership": {
+              "title": "Leadership Workshop",
+              "description": "Developing essential leadership skills",
+              "topics": [
+                "Team Management",
+                "Communication Skills",
+                "Decision Making",
+                "Conflict Resolution",
+                "Strategic Planning"
+              ]
+            },
+            "entrepreneurship": {
+              "title": "Entrepreneurship Workshop",
+              "description": "Building and growing your business",
+              "topics": [
+                "Business Planning",
+                "Market Research",
+                "Financial Management",
+                "Marketing Strategy",
+                "Pitch Development"
+              ]
+            },
+            "digital": {
+              "title": "Digital Skills Workshop",
+              "description": "Mastering essential digital tools and platforms",
+              "topics": [
+                "Social Media Management",
+                "Content Creation",
+                "Digital Analytics",
+                "Online Collaboration",
+                "Cybersecurity Basics"
+              ]
+            }
+          }
+        },
+        "cta": {
+          "title": "Ready to Learn?",
+          "description": "Join our workshops and develop the skills you need to succeed"
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Your Journey?",
+      "description": "Join our community of empowered women and take the first step towards your future",
+      "apply": "Apply Now",
+      "contact": "Contact Us"
+    },
+    "learnMore": "Learn More",
+    "mentorship": {
+      "hero": {
+        "title": "Mentorship Program",
+        "description": "Connect with experienced mentors who will guide you through your professional journey"
+      },
+      "overview": {
+        "title": "Program Overview",
+        "description": "Our mentorship program pairs you with experienced professionals who provide guidance, support, and insights to help you achieve your career goals. Through one-on-one and group mentoring sessions, you'll gain valuable knowledge and build a strong professional network.",
+        "features": {
+          "personalized": {
+            "title": "Personalized Guidance",
+            "description": "Get tailored advice and support based on your specific goals and challenges"
+          },
+          "expertise": {
+            "title": "Industry Expertise",
+            "description": "Learn from mentors with extensive experience in your target industry"
+          },
+          "network": {
+            "title": "Network Building",
+            "description": "Connect with professionals and expand your professional network"
+          }
+        }
+      },
+      "details": {
+        "title": "Program Details",
+        "duration": {
+          "title": "Duration",
+          "value": "6 months with optional extension"
+        },
+        "schedule": {
+          "title": "Schedule",
+          "value": "Bi-weekly one-on-one sessions and monthly group meetings"
+        },
+        "location": {
+          "title": "Location",
+          "value": "Hybrid (In-person and virtual options available)"
+        },
+        "prerequisites": {
+          "title": "Prerequisites",
+          "value": "Open to all program participants with clear career goals"
+        }
+      },
+      "modules": {
+        "title": "Program Modules",
+        "oneOnOne": {
+          "title": "One-on-One Mentoring",
+          "description": "Personalized guidance and support from experienced professionals",
+          "topics": [
+            "Career path planning",
+            "Skill development",
+            "Professional networking",
+            "Work-life balance",
+            "Personal growth"
+          ]
+        },
+        "group": {
+          "title": "Group Mentoring",
+          "description": "Collaborative learning and peer support in a group setting",
+          "topics": [
+            "Group discussions",
+            "Peer learning",
+            "Team projects",
+            "Shared experiences",
+            "Collective problem-solving"
+          ]
+        },
+        "industry": {
+          "title": "Industry Insights",
+          "description": "Deep dive into specific industries and career paths",
+          "topics": [
+            "Industry trends",
+            "Career opportunities",
+            "Required skills",
+            "Professional development",
+            "Industry networking"
+          ]
+        },
+        "leadership": {
+          "title": "Leadership Development",
+          "description": "Building leadership skills and confidence",
+          "topics": [
+            "Decision making",
+            "Team management",
+            "Communication skills",
+            "Strategic thinking",
+            "Personal branding"
+          ]
+        },
+        "career": {
+          "title": "Career Transition",
+          "description": "Support for career changes and advancement",
+          "topics": [
+            "Resume building",
+            "Interview preparation",
+            "Salary negotiation",
+            "Career pivoting",
+            "Professional growth"
+          ]
+        }
+      }
+    }
+  },
+  "resources": {
+    "title": "Resources",
+    "description": "Curated learning resources",
+    "hero": {
+      "title": "Resources",
+      "description": "Access our comprehensive collection of learning materials, guides, and tools"
+    },
+    "categories": {
+      "learningMaterials": {
+        "title": "Learning Materials",
+        "description": "Access our comprehensive collection of tutorials, guides, and learning resources",
+        "items": [
+          "Tutorial Videos",
+          "Documentation",
+          "Code Examples"
+        ]
+      },
+      "careerResources": {
+        "title": "Career Resources",
+        "description": "Tools and guides to help you advance your career in technology",
+        "items": [
+          "Resume Templates",
+          "Interview Prep",
+          "Career Path Guides"
+        ]
+      },
+      "communityResources": {
+        "title": "Community Resources",
+        "description": "Connect with other learners and access community support",
+        "items": [
+          "Discussion Forums",
+          "Study Groups",
+          "Mentorship Program"
+        ]
+      }
+    },
+    "learningMaterials": {
+      "title": "Learning Materials",
+      "computerBasics": {
+        "title": "Computer Basics & Hardware",
+        "description": "Learn foundational computer skills, including how hardware and operating systems work",
+        "items": [
+          "Introduction to Computers",
+          "Understanding Operating Systems",
+          "Input & Output Devices",
+          "Basic Troubleshooting"
+        ]
+      },
+      "internetSkills": {
+        "title": "Internet & Email Skills",
+        "description": "Gain essential internet skills, from browsing safely to using email effectively",
+        "items": [
+          "Web Browsing Basics",
+          "Email Setup & Usage",
+          "Internet Safety & Privacy",
+          "Using Search Engines"
+        ]
+      },
+      "microsoftWord": {
+        "title": "Microsoft Word",
+        "description": "Master document creation and formatting with Microsoft Word",
+        "items": [
+          "Basic Document Creation",
+          "Formatting & Styles",
+          "Tables & Graphics",
+          "Document Templates"
+        ]
+      }
+    },
+    "community": {
+      "title": "Community",
+      "description": "Join our supportive community of women in tech",
+      "events": "Events",
+      "forum": "Forum",
+      "join": "Join Community"
+    },
+    "learning": {
+      "title": "Learning Resources",
+      "description": "Access curated learning resources",
+      "materials": "Materials",
+      "tutorials": "Tutorials",
+      "guides": "Guides"
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Read More",
+    "categories": "Categories",
+    "recent": "Recent Posts",
+    "popular": "Popular Posts",
+    "search": "Search Posts",
+    "tags": "Tags",
+    "author": "Author",
+    "date": "Date",
+    "share": "Share",
+    "related": "Related Posts"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send Message",
+    "address": "Address",
+    "phone": "Phone",
+    "hours": "Business Hours",
+    "success": "Your message has been sent successfully",
+    "error": "An error occurred, please try again",
+    "hero": {
+      "title": "Get in",
+      "titleHighlight": "Touch",
+      "description": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": {
+        "address": "info@empowerhered.org",
+        "response": "We'll respond as soon as possible"
+      },
+      "location": {
+        "address": "Kigali, Rwanda",
+        "visit": "Visit our office"
+      },
+      "hours": {
+        "days": "Monday - Friday",
+        "time": "9:00 AM - 5:00 PM"
+      },
+      "social": {
+        "title": "Follow Us",
+        "twitter": "Twitter",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram"
+      }
+    },
+    "form": {
+      "title": "Send us a Message",
+      "fields": {
+        "name": {
+          "label": "Your Name",
+          "placeholder": "Enter your name"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "Enter your email"
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "Select a subject",
+          "options": {
+            "general": "General Inquiry",
+            "support": "Technical Support",
+            "partnership": "Partnership Opportunity",
+            "other": "Other"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Enter your message"
+        }
+      },
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message. Please try again."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account",
+      "email": {
+        "label": "Email address",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "or": "OR",
+      "loginWithGoogle": "Login with Google",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "success": "Login successful!",
+      "error": "Login failed. Please try again."
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Or sign in to your account",
+      "name": {
+        "label": "Full Name",
+        "required": "Name is required"
+      },
+      "email": {
+        "label": "Email address",
+        "required": "Email is required",
+        "invalid": "Email is invalid"
+      },
+      "gender": {
+        "label": "Gender",
+        "required": "Please select your gender",
+        "options": {
+          "select": "Select gender",
+          "female": "Female",
+          "male": "Male",
+          "other": "Other",
+          "preferNotToSay": "Prefer not to say"
+        }
+      },
+      "role": {
+        "label": "Role",
+        "required": "Please select your role",
+        "options": {
+          "select": "Select role",
+          "student": "Student",
+          "mentor": "Mentor",
+          "admin": "Admin"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "required": "Password is required",
+        "minLength": "Password must be at least 8 characters"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "required": "Please confirm your password",
+        "mismatch": "Passwords do not match"
+      },
+      "terms": {
+        "agree": "I agree to the",
+        "link": "Terms and Conditions"
+      },
+      "createAccount": "Create account",
+      "creatingAccount": "Creating account...",
+      "success": {
+        "title": "Welcome, {{name}}!",
+        "message": "Your account has been created successfully.",
+        "redirecting": "Redirecting to dashboard..."
+      },
+      "error": "Registration failed"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "description": "Enter your email address and we'll send you instructions to reset your password.",
+      "email": {
+        "label": "Email Address",
+        "placeholder": "Enter your email"
+      },
+      "sendInstructions": "Send Reset Instructions",
+      "sending": "Sending...",
+      "backToLogin": "Back to Login",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "success": "Password reset instructions sent to your email!",
+      "error": "Failed to send reset instructions. Please try again."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "personalInfo": "Personal Information",
+    "education": "Education",
+    "experience": "Experience",
+    "skills": "Skills",
+    "interests": "Interests",
+    "saveChanges": "Save Changes",
+    "uploadPhoto": "Upload Photo",
+    "removePhoto": "Remove Photo"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "activities": "Recent Activities",
+    "upcoming": "Upcoming Events",
+    "progress": "Your Progress",
+    "mentors": "Your Mentors",
+    "mentees": "Your Mentees",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "messages": "Messages"
+  },
+  "mentor": {
+    "dashboard": {
+      "title": "Mentor Dashboard",
+      "schedule": "Schedule",
+      "meetings": "Meetings",
+      "mentees": "Mentees",
+      "resources": "Resources",
+      "feedback": "Feedback"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "availability": "Availability",
+      "bookings": "Bookings",
+      "calendar": "Calendar",
+      "timeSlots": "Time Slots"
+    },
+    "meetings": {
+      "title": "Meetings",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "notes": "Notes",
+      "feedback": "Feedback"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "users": "Users",
+      "mentors": "Mentors",
+      "mentees": "Mentees",
+      "programs": "Programs",
+      "reports": "Reports"
+    },
+    "users": {
+      "title": "User Management",
+      "add": "Add User",
+      "edit": "Edit User",
+      "delete": "Delete User",
+      "roles": "User Roles"
+    },
+    "programs": {
+      "title": "Program Management",
+      "add": "Add Program",
+      "edit": "Edit Program",
+      "delete": "Delete Program",
+      "enrollments": "Enrollments"
+    }
+  },
+  "community": {
+    "title": "Community",
+    "events": "Events",
+    "forum": "Forum",
+    "groups": "Groups",
+    "discussions": "Discussions",
+    "members": "Members"
+  },
+  "courses": {
+    "title": "Courses",
+    "enrolled": "Enrolled Courses",
+    "available": "Available Courses",
+    "progress": "Course Progress",
+    "certificates": "Certificates"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account Settings",
+    "notifications": "Notification Settings",
+    "privacy": "Privacy Settings",
+    "language": "Language Settings",
+    "theme": "Theme Settings"
+  },
+  "footer": {
+    "about": {
+      "title": "About Us",
+      "description": "Empowering women through education and technology."
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "about": "About Us",
+      "programs": "Programs",
+      "stories": "Success Stories",
+      "resources": "Resources"
+    },
+    "programs": {
+      "title": "Our Programs",
+      "mentorship": "Mentorship",
+      "communication": "Communication",
+      "techSkills": "Tech Skills",
+      "workshops": "Workshops"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "getInTouch": "Get in Touch"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Subscribe to our newsletter for the latest updates, resources, and opportunities in tech.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "subscribing": "Subscribing...",
+      "success": "Thank you for subscribing!",
+      "error": "Something went wrong. Please try again."
+    },
+    "social": {
+      "title": "Connect With Us",
+      "twitter": "Follow us on Twitter",
+      "linkedin": "Follow us on LinkedIn",
+      "instagram": "Follow us on Instagram"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions"
+    },
+    "bottom": {
+      "copyright": "© 2024 EmpowerHerEd. All rights reserved."
+    }
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordMismatch": "Passwords do not match",
+    "minLength": "Must be at least {{count}} characters",
+    "maxLength": "Must be at most {{count}} characters",
+    "serverError": "Server error occurred",
+    "networkError": "Network error occurred",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access forbidden",
+    "validation": "Validation error occurred",
+    "unsupported": "Speech recognition is not supported in your browser",
+    "microphonePermission": "Microphone permission is required for voice search"
+  },
+  "success": {
+    "profileUpdated": "Profile updated successfully",
+    "passwordChanged": "Password changed successfully",
+    "emailSent": "Email sent successfully",
+    "formSubmitted": "Form submitted successfully",
+    "changesSaved": "Changes saved successfully",
+    "uploaded": "File uploaded successfully",
+    "deleted": "Item deleted successfully"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "voiceSearch": "Voice Search",
+    "listening": "Listening...",
+    "suggestions": "Suggestions",
+    "noResults": "No results found",
+    "error": "Search error occurred",
+    "clear": "Clear",
+    "filters": "Filters",
+    "sort": "Sort"
+  },
+  "common": {
+    "readMore": "Read More",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "contactUs": "Contact Us",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading...",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "close": "Close",
+    "open": "Open",
+    "download": "Download",
+    "upload": "Upload",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "hide": "Hide",
+    "show": "Show",
+    "refresh": "Refresh",
+    "update": "Update",
+    "create": "Create",
+    "remove": "Remove",
+    "add": "Add",
+    "select": "Select",
+    "deselect": "Deselect",
+    "all": "All",
+    "none": "None",
+    "more": "More",
+    "less": "Less",
+    "required": "Required",
+    "optional": "Optional",
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "description": "Description",
+    "details": "Details",
+    "summary": "Summary",
+    "category": "Category",
+    "tags": "Tags",
+    "author": "Author",
+    "published": "Published",
+    "updated": "Updated",
+    "created": "Created",
+    "deleted": "Deleted",
+    "archived": "Archived",
+    "draft": "Draft",
+    "scheduled": "Scheduled",
+    "expired": "Expired",
+    "active": "Active",
+    "inactive": "Inactive",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "public": "Public",
+    "private": "Private",
+    "internal": "Internal",
+    "external": "External",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "tertiary": "Tertiary",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "debug": "Debug",
+    "trace": "Trace",
+    "fatal": "Fatal",
+    "critical": "Critical",
+    "major": "Major",
+    "minor": "Minor",
+    "trivial": "Trivial",
+    "blocker": "Blocker",
+    "enhancement": "Enhancement",
+    "feature": "Feature",
+    "bug": "Bug",
+    "documentation": "Documentation",
+    "support": "Support",
+    "maintenance": "Maintenance",
+    "security": "Security",
+    "performance": "Performance",
+    "usability": "Usability",
+    "accessibility": "Accessibility",
+    "compatibility": "Compatibility",
+    "reliability": "Reliability",
+    "stability": "Stability",
+    "scalability": "Scalability",
+    "maintainability": "Maintainability",
+    "portability": "Portability",
+    "reusability": "Reusability",
+    "testability": "Testability",
+    "deployability": "Deployability",
+    "configurability": "Configurability",
+    "extensibility": "Extensibility",
+    "modularity": "Modularity",
+    "readability": "Readability",
+    "writability": "Writability",
+    "executability": "Executability",
+    "interpretability": "Interpretability",
+    "compilability": "Compilability",
+    "linkability": "Linkability",
+    "loadability": "Loadability",
+    "runnability": "Runnability",
+    "debuggability": "Debuggability",
+    "traceability": "Traceability",
+    "verifiability": "Verifiability",
+    "validatability": "Validatability"
+  },
+  "successStories": {
+    "hero": {
+      "title": "Success Stories",
+      "description": "Discover how EmpowerHerEd has transformed lives and created opportunities for women in Rwanda."
+    },
+    "stories": {
+      "marie": {
+        "name": "Marie Uwimana",
+        "role": "Software Developer",
+        "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech. The mentorship and support were invaluable.",
+        "story": "After completing the coding bootcamp, I secured a position as a junior developer at a local tech company. The practical skills and real-world projects prepared me well for the industry."
+      },
+      "grace": {
+        "name": "Grace Mukamana",
+        "role": "Business Owner",
+        "quote": "The business development program helped me turn my small idea into a thriving enterprise.",
+        "story": "With the knowledge gained from EmpowerHerEd's business program, I successfully launched my own fashion brand, creating employment opportunities for other women in my community."
+      },
+      "sarah": {
+        "name": "Sarah Niyonsenga",
+        "role": "Community Leader",
+        "quote": "The leadership training empowered me to make a real difference in my community.",
+        "story": "Through the community leadership program, I learned how to organize and mobilize resources effectively. Now I'm leading initiatives that support education and women's empowerment in my district."
+      },
+      "claire": {
+        "name": "Claire Uwase",
+        "role": "Data Scientist",
+        "quote": "The data analysis program opened up a whole new world of opportunities for me.",
+        "story": "After completing the data science track, I joined a research institute where I'm now working on projects that use data to improve healthcare delivery in rural communities."
+      },
+      "joyce": {
+        "name": "Joyce Mutoni",
+        "role": "Tech Entrepreneur",
+        "quote": "The combination of technical skills and business training was exactly what I needed.",
+        "story": "I developed a mobile app that connects farmers with markets, and with the support from EmpowerHerEd's entrepreneurship program, I've grown it into a successful startup."
+      },
+      "esther": {
+        "name": "Esther Mukamana",
+        "role": "Digital Marketing Specialist",
+        "quote": "The digital skills program helped me pivot my career during the pandemic.",
+        "story": "I transitioned from traditional marketing to digital marketing, and now I'm helping local businesses establish their online presence and reach new customers."
+      },
+      "alice": {
+        "name": "Alice Uwamahoro",
+        "role": "UX/UI Designer",
+        "quote": "The design program helped me combine my creativity with technical skills.",
+        "story": "I now lead the design team at a tech startup, creating user-friendly interfaces for mobile applications that serve local communities."
+      },
+      "beatrice": {
+        "name": "Beatrice Nyirahabimana",
+        "role": "Cybersecurity Analyst",
+        "quote": "The cybersecurity training opened doors to a field I never thought I could enter.",
+        "story": "After completing the program, I joined a financial institution's security team, where I help protect customer data and prevent cyber threats."
+      },
+      "diane": {
+        "name": "Diane Uwase",
+        "role": "AI Research Engineer",
+        "quote": "The advanced tech program helped me pursue my passion for artificial intelligence.",
+        "story": "I'm now working on AI projects that help improve agricultural yields and predict weather patterns, making a real impact on farmers' lives."
+      }
+    },
+    "cta": {
+      "title": "Be Part of Our Success Story",
+      "description": "Join our community of empowered women and start your journey to success.",
+      "button": "Explore Programs"
+    }
+  }
+} 

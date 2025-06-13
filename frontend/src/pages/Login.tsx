@@ -4,7 +4,8 @@ import { useAuth } from "../context/AuthContext"
 import { toast } from "react-toastify"
 import api from "../api/axios"
 import { GoogleLogin } from "@react-oauth/google"
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
+import { useTranslation } from "react-i18next"
 
 interface DecodedToken {
   role?: string
@@ -12,6 +13,7 @@ interface DecodedToken {
 }
 
 const Login = () => {
+  const { t } = useTranslation()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -56,12 +58,12 @@ const Login = () => {
       if (response.data.token) {
         // Call context login to update user state
         login(response.data)
-        toast.success("Login successful!")
+        toast.success(t('auth.login.success'))
         // Let useEffect handle navigation
       }
     } catch (error: any) {
       console.error("Login component - Login error:", error)
-      toast.error(error.response?.data?.message || "Login failed. Please try again.")
+      toast.error(error.response?.data?.message || t('auth.login.error'))
     } finally {
       setIsLoading(false)
     }
@@ -77,7 +79,7 @@ const Login = () => {
 
       await loginWithGoogle(token)
 
-      toast.success("Login successful!")
+      toast.success(t('auth.login.success'))
 
       // Navigate based on user role saved in localStorage
       const userData = JSON.parse(localStorage.getItem("user") || "{}")
@@ -91,7 +93,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Google login error:", error)
-      toast.error("Google login failed")
+      toast.error(t('auth.login.error'))
     }
   }
 
@@ -100,10 +102,10 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Welcome Back
+            {t('auth.login.title')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to your account
+            {t('auth.login.subtitle')}
           </p>
         </div>
 
@@ -111,7 +113,7 @@ const Login = () => {
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                {t('auth.login.email.label')}
               </label>
               <input
                 id="email"
@@ -122,14 +124,14 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 mt-1 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Enter your email"
+                placeholder={t('auth.login.email.placeholder')}
                 disabled={isLoading}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                {t('auth.login.password.label')}
               </label>
               <input
                 id="password"
@@ -140,7 +142,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-2 mt-1 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Enter your password"
+                placeholder={t('auth.login.password.placeholder')}
                 disabled={isLoading}
               />
             </div>
@@ -156,13 +158,13 @@ const Login = () => {
                 disabled={isLoading}
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
+                {t('auth.login.rememberMe')}
               </label>
             </div>
 
             <div className="text-sm">
               <Link to="/ForgotPassword" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot your password?
+                {t('auth.login.forgotPassword')}
               </Link>
             </div>
           </div>
@@ -190,10 +192,10 @@ const Login = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Signing in...
+                  {t('auth.login.signingIn')}
                 </span>
               ) : (
-                "Sign in"
+                t('auth.login.signIn')
               )}
             </button>
           </div>
@@ -201,22 +203,22 @@ const Login = () => {
 
         <div>
           <h2 className="mt-6 text-center text-xl font-sm text-gray-900 mb-3">
-            <span className="font-bold">OR</span> Login with Google
+            <span className="font-bold">{t('auth.login.or')}</span> {t('auth.login.loginWithGoogle')}
           </h2>
 
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={() => {
-              toast.error("Google login failed")
+              toast.error(t('auth.login.error'))
             }}
           />
         </div>
 
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
+            {t('auth.login.noAccount')}{" "}
             <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-              Sign up
+              {t('auth.login.signUp')}
             </Link>
           </p>
         </div>

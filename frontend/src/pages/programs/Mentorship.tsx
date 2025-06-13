@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import assets from "../../assets/assets"
 import api from "../../api/axios"
+import { useTranslation } from "react-i18next"
 
 const Mentorship = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   
   const handleBookNow = async () => {
     try {
@@ -13,7 +15,7 @@ const Mentorship = () => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
       
       if (!userInfo._id) {
-        toast.error('Please login to book a mentorship session')
+        toast.error(t('programs.mentorship.booking.loginRequired'))
         navigate('/login')
         return
       }
@@ -23,7 +25,7 @@ const Mentorship = () => {
       const availableMentors = mentorsResponse.data
 
       if (!availableMentors || availableMentors.length === 0) {
-        toast.error('No mentors available at the moment')
+        toast.error(t('programs.mentorship.booking.noMentors'))
         return
       }
 
@@ -32,90 +34,60 @@ const Mentorship = () => {
       
       // Create booking request
       const bookingData = {
-        mentor: selectedMentor._id, // Required field
-        mentee: userInfo._id, // Required field
+        mentor: selectedMentor._id,
+        mentee: userInfo._id,
         name: userInfo.name,
         email: userInfo.email,
         status: 'pending',
         date: new Date().toISOString(),
         topic: 'Initial Mentorship Session',
-        duration: 60 // Default duration in minutes
+        duration: 60
       }
 
       // Send booking request to backend
       const response = await api.post('/mentors/bookings', bookingData)
       
       // Show success message
-      toast.success('Booking request sent successfully!')
+      toast.success(t('programs.mentorship.booking.success'))
       
       // Navigate to mentor dashboard
       navigate('/mentorDashboard', { 
         state: { 
           bookingInfo: response.data,
-          message: 'Your booking request has been sent successfully!' 
+          message: t('programs.mentorship.booking.success')
         }
       })
     } catch (error) {
       console.error('Error booking mentorship:', error)
-      toast.error(error.response?.data?.message || 'Failed to send booking request. Please try again.')
+      toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'))
     }
   }
 
   const modules = [
     {
-      title: "One-on-One Mentoring",
-      description: "Personalized guidance and support from experienced professionals",
-      topics: [
-        "Career path planning",
-        "Skill development",
-        "Professional networking",
-        "Work-life balance",
-        "Personal growth"
-      ]
+      title: t('programs.mentorship.modules.oneOnOne.title'),
+      description: t('programs.mentorship.modules.oneOnOne.description'),
+      topics: t('programs.mentorship.modules.oneOnOne.topics', { returnObjects: true })
     },
     {
-      title: "Group Mentoring",
-      description: "Collaborative learning and peer support in a group setting",
-      topics: [
-        "Group discussions",
-        "Peer learning",
-        "Team projects",
-        "Shared experiences",
-        "Collective problem-solving"
-      ]
+      title: t('programs.mentorship.modules.group.title'),
+      description: t('programs.mentorship.modules.group.description'),
+      topics: t('programs.mentorship.modules.group.topics', { returnObjects: true })
     },
     {
-      title: "Industry Insights",
-      description: "Deep dive into specific industries and career paths",
-      topics: [
-        "Industry trends",
-        "Career opportunities",
-        "Required skills",
-        "Professional development",
-        "Industry networking"
-      ]
+      title: t('programs.mentorship.modules.industry.title'),
+      description: t('programs.mentorship.modules.industry.description'),
+      topics: t('programs.mentorship.modules.industry.topics', { returnObjects: true })
     },
     {
-      title: "Leadership Development",
-      description: "Building leadership skills and confidence",
-      topics: [
-        "Decision making",
-        "Team management",
-        "Communication skills",
-        "Strategic thinking",
-        "Personal branding"
-      ]
+      title: t('programs.mentorship.modules.leadership.title'),
+      description: t('programs.mentorship.modules.leadership.description'),
+      topics: t('programs.mentorship.modules.leadership.topics', { returnObjects: true })
     },
     {
-      title: "Career Transition",
-      description: "Support for career changes and advancement",
-      topics: [
-        "Resume building",
-        "Interview preparation",
-        "Salary negotiation",
-        "Career pivoting",
-        "Professional growth"
-      ]
+      title: t('programs.mentorship.modules.career.title'),
+      description: t('programs.mentorship.modules.career.description'),
+      topics: t('programs.mentorship.modules.career.topics', { returnObjects: true })
     }
   ]
 
@@ -132,10 +104,10 @@ const Mentorship = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
-              Mentorship <span className="text-blue-600">Program</span>
+              {t('programs.mentorship.hero.title')}
             </h1>
             <p className="text-lg text-white max-w-2xl mx-auto">
-              Connect with experienced mentors who will guide you through your professional journey
+              {t('programs.mentorship.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -145,11 +117,9 @@ const Mentorship = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Program Overview</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('programs.mentorship.overview.title')}</h2>
             <p className="text-lg text-gray-600">
-              Our mentorship program pairs you with experienced professionals who provide guidance,
-              support, and insights to help you achieve your career goals. Through one-on-one and
-              group mentoring sessions, you'll gain valuable knowledge and build a strong professional network.
+              {t('programs.mentorship.overview.description')}
             </p>
           </div>
 
@@ -160,9 +130,9 @@ const Mentorship = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="bg-white p-6 rounded-lg shadow-lg"
             >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Personalized Guidance</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.personalized.title')}</h3>
               <p className="text-gray-600">
-                Get tailored advice and support based on your specific goals and challenges
+                {t('programs.mentorship.overview.features.personalized.description')}
               </p>
             </motion.div>
 
@@ -172,9 +142,9 @@ const Mentorship = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="bg-white p-6 rounded-lg shadow-lg"
             >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Industry Expertise</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.expertise.title')}</h3>
               <p className="text-gray-600">
-                Learn from mentors with extensive experience in your target industry
+                {t('programs.mentorship.overview.features.expertise.description')}
               </p>
             </motion.div>
 
@@ -184,9 +154,9 @@ const Mentorship = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="bg-white p-6 rounded-lg shadow-lg"
             >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Network Building</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.network.title')}</h3>
               <p className="text-gray-600">
-                Connect with professionals and expand your professional network
+                {t('programs.mentorship.overview.features.network.description')}
               </p>
             </motion.div>
           </div>
@@ -197,23 +167,23 @@ const Mentorship = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Program Details</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{t('programs.mentorship.details.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Duration</h3>
-                <p className="text-gray-600">6 months with optional extension</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.duration.title')}</h3>
+                <p className="text-gray-600">{t('programs.mentorship.details.duration.value')}</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Schedule</h3>
-                <p className="text-gray-600">Bi-weekly one-on-one sessions and monthly group meetings</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.schedule.title')}</h3>
+                <p className="text-gray-600">{t('programs.mentorship.details.schedule.value')}</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Location</h3>
-                <p className="text-gray-600">Hybrid (In-person and virtual options available)</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.location.title')}</h3>
+                <p className="text-gray-600">{t('programs.mentorship.details.location.value')}</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Prerequisites</h3>
-                <p className="text-gray-600">Open to all program participants with clear career goals</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.prerequisites.title')}</h3>
+                <p className="text-gray-600">{t('programs.mentorship.details.prerequisites.value')}</p>
               </div>
             </div>
           </div>
@@ -223,7 +193,7 @@ const Mentorship = () => {
       {/* Curriculum Modules */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Program Modules</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t('programs.mentorship.modules.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {modules.map((module, index) => (
               <motion.div

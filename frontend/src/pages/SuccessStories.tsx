@@ -1,80 +1,82 @@
 import { motion } from "framer-motion"
 import assets from "../assets/assets"
-
+import { useTranslation } from 'react-i18next'
 
 const SuccessStories = () => {
+  const { t } = useTranslation();
+  
   const stories = [
     {
       id: 1,
-      name: "Marie Uwimana",
-      role: "Software Developer",
+      name: t('successStories.stories.marie.name'),
+      role: t('successStories.stories.marie.role'),
       image: assets.profile,
-      quote: "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech. The mentorship and support were invaluable.",
-      story: "After completing the coding bootcamp, I secured a position as a junior developer at a local tech company. The practical skills and real-world projects prepared me well for the industry."
+      quote: t('successStories.stories.marie.quote'),
+      story: t('successStories.stories.marie.story')
     },
     {
       id: 2,
-      name: "Grace Mukamana",
-      role: "Business Owner",
+      name: t('successStories.stories.grace.name'),
+      role: t('successStories.stories.grace.role'),
       image: assets.profile,
-      quote: "The business development program helped me turn my small idea into a thriving enterprise.",
-      story: "With the knowledge gained from EmpowerHerEd's business program, I successfully launched my own fashion brand, creating employment opportunities for other women in my community."
+      quote: t('successStories.stories.grace.quote'),
+      story: t('successStories.stories.grace.story')
     },
     {
       id: 3,
-      name: "Sarah Niyonsenga",
-      role: "Community Leader",
+      name: t('successStories.stories.sarah.name'),
+      role: t('successStories.stories.sarah.role'),
       image: assets.profile,
-      quote: "The leadership training empowered me to make a real difference in my community.",
-      story: "Through the community leadership program, I learned how to organize and mobilize resources effectively. Now I'm leading initiatives that support education and women's empowerment in my district."
+      quote: t('successStories.stories.sarah.quote'),
+      story: t('successStories.stories.sarah.story')
     },
     {
       id: 4,
-      name: "Claire Uwase",
-      role: "Data Scientist",
+      name: t('successStories.stories.claire.name'),
+      role: t('successStories.stories.claire.role'),
       image: assets.profile,
-      quote: "The data analysis program opened up a whole new world of opportunities for me.",
-      story: "After completing the data science track, I joined a research institute where I'm now working on projects that use data to improve healthcare delivery in rural communities."
+      quote: t('successStories.stories.claire.quote'),
+      story: t('successStories.stories.claire.story')
     },
     {
       id: 5,
-      name: "Joyce Mutoni",
-      role: "Tech Entrepreneur",
+      name: t('successStories.stories.joyce.name'),
+      role: t('successStories.stories.joyce.role'),
       image: assets.profile,
-      quote: "The combination of technical skills and business training was exactly what I needed.",
-      story: "I developed a mobile app that connects farmers with markets, and with the support from EmpowerHerEd's entrepreneurship program, I've grown it into a successful startup."
+      quote: t('successStories.stories.joyce.quote'),
+      story: t('successStories.stories.joyce.story')
     },
     {
       id: 6,
-      name: "Esther Mukamana",
-      role: "Digital Marketing Specialist",
+      name: t('successStories.stories.esther.name'),
+      role: t('successStories.stories.esther.role'),
       image: assets.profile,
-      quote: "The digital skills program helped me pivot my career during the pandemic.",
-      story: "I transitioned from traditional marketing to digital marketing, and now I'm helping local businesses establish their online presence and reach new customers."
+      quote: t('successStories.stories.esther.quote'),
+      story: t('successStories.stories.esther.story')
     },
     {
       id: 7,
-      name: "Alice Uwamahoro",
-      role: "UX/UI Designer",
+      name: t('successStories.stories.alice.name'),
+      role: t('successStories.stories.alice.role'),
       image: assets.profile,
-      quote: "The design program helped me combine my creativity with technical skills.",
-      story: "I now lead the design team at a tech startup, creating user-friendly interfaces for mobile applications that serve local communities."
+      quote: t('successStories.stories.alice.quote'),
+      story: t('successStories.stories.alice.story')
     },
     {
       id: 8,
-      name: "Beatrice Nyirahabimana",
-      role: "Cybersecurity Analyst",
+      name: t('successStories.stories.beatrice.name'),
+      role: t('successStories.stories.beatrice.role'),
       image: assets.profile,
-      quote: "The cybersecurity training opened doors to a field I never thought I could enter.",
-      story: "After completing the program, I joined a financial institution's security team, where I help protect customer data and prevent cyber threats."
+      quote: t('successStories.stories.beatrice.quote'),
+      story: t('successStories.stories.beatrice.story')
     },
     {
       id: 9,
-      name: "Diane Uwase",
-      role: "AI Research Engineer",
+      name: t('successStories.stories.diane.name'),
+      role: t('successStories.stories.diane.role'),
       image: assets.profile,
-      quote: "The advanced tech program helped me pursue my passion for artificial intelligence.",
-      story: "I'm now working on AI projects that help improve agricultural yields and predict weather patterns, making a real impact on farmers' lives."
+      quote: t('successStories.stories.diane.quote'),
+      story: t('successStories.stories.diane.story')
     }
   ]
 
@@ -91,10 +93,10 @@ const SuccessStories = () => {
             className="text-center"
           >
             <h1 className="text-4xl font-bold text-blue-600 sm:text-5xl md:text-6xl">
-              <span className="text-black">Success</span> Stories
+              <span className="text-black">{t('successStories.hero.title')}</span>
             </h1>
             <p className="mt-4 text-xl text-neutral-600 max-w-3xl mx-auto">
-              Discover how EmpowerHerEd has transformed lives and created opportunities for women in Rwanda.
+              {t('successStories.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -143,17 +145,17 @@ const SuccessStories = () => {
             className="text-center"
           >
             <h2 className="text-3xl font-bold text-neutral-900">
-              Be Part of Our Success Story
+              {t('successStories.cta.title')}
             </h2>
             <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
-              Join our community of empowered women and start your journey to success.
+              {t('successStories.cta.description')}
             </p>
             <div className="mt-8">
               <a
                 href="/programs"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800"
               >
-                Explore Programs
+                {t('successStories.cta.button')}
               </a>
             </div>
           </motion.div>

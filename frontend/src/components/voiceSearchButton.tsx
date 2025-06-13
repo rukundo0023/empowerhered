@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import assets from "../assets/assets";
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import assets from '../assets/assets';
 
-interface VoiceSearchProps {
+interface VoiceSearchButtonProps {
   onResult: (text: string) => void;
 }
 
@@ -33,298 +34,297 @@ interface SpeechRecognition extends EventTarget {
   interimResults: boolean;
   lang: string;
   maxAlternatives: number;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: SpeechRecognitionEvent) => void;
-  onend: () => void;
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionEvent) => void) | null;
+  onend: (() => void) | null;
   start: () => void;
   stop: () => void;
   abort: () => void;
 }
 
-interface SearchSuggestion {
-  text: string;
-  path: string;
-  category: string;
-  description?: string;
+declare global {
+  interface Window {
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+  }
 }
 
-const VoiceSearchButton = ({ onResult }: VoiceSearchProps) => {
+const VoiceSearchButton: React.FC<VoiceSearchButtonProps> = ({ onResult }) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const [isListening, setIsListening] = useState(false);
-  const [permissionError, setPermissionError] = useState<string | null>(null);
-  const [interimTranscript, setInterimTranscript] = useState("");
-  const [finalTranscript, setFinalTranscript] = useState("");
-  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
-  const timeoutRef = useRef<number | null>(null);
-  const lastNavigationRef = useRef<string>("");
+  const [transcript, setTranscript] = useState('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [history, setHistory] = useState<string[]>([]);
+  const suggestionsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // Comprehensive searchable content with categories and descriptions
-  const searchableContent: SearchSuggestion[] = [
-    // Main Pages
-    { text: "home", path: "/", category: "Main Pages", description: "Go to homepage" },
-    { text: "about", path: "/about", category: "Main Pages", description: "Learn about EmpowerHer" },
-    { text: "contact", path: "/contact", category: "Main Pages", description: "Get in touch with us" },
-    { text: "success stories", path: "/success-stories", category: "Main Pages", description: "Read success stories" },
-    
-    // Programs
-    { text: "mentorship", path: "/programs/mentorship", category: "Programs", description: "Join our mentorship program" },
-    { text: "communication", path: "/programs/Communication", category: "Programs", description: "Leadership and communication training" },
-    { text: "tech skills", path: "/programs/tech-skills", category: "Programs", description: "Learn technical skills" },
-    { text: "workshops", path: "/programs/workshops", category: "Programs", description: "Attend our workshops" },
-    
-    // Resources
-    { text: "blog", path: "/blog", category: "Resources", description: "Read our latest articles" },
-    { text: "community", path: "/resources/community", category: "Resources", description: "Join our community" },
-    { text: "learning", path: "/resources/learning", category: "Resources", description: "Access learning resources" },
-    
-    // Authentication
-    { text: "login", path: "/login", category: "Account", description: "Sign in to your account" },
-    { text: "sign up", path: "/signup", category: "Account", description: "Create a new account" },
-    { text: "profile", path: "/profile", category: "Account", description: "View your profile" },
-    { text: "settings", path: "/settings", category: "Account", description: "Manage your settings" },
-    
-    // Additional Content
-    { text: "leadership", path: "/programs/Communication", category: "Programs", description: "Leadership development program" },
-    { text: "training", path: "/programs/tech-skills", category: "Programs", description: "Technical training programs" },
-    { text: "events", path: "/programs/workshops", category: "Programs", description: "Upcoming events and workshops" },
-    { text: "support", path: "/contact", category: "Support", description: "Get help and support" },
-    { text: "faq", path: "/faq", category: "Support", description: "Frequently asked questions" },
-    { text: "privacy", path: "/privacy", category: "Legal", description: "Privacy policy" },
-    { text: "terms", path: "/terms", category: "Legal", description: "Terms of service" }
+  // Helper to get history key for current language
+  const getHistoryKey = () => `searchHistory_${i18n.language}`;
+
+  // Load search history for the current language
+  useEffect(() => {
+    const stored = localStorage.getItem(getHistoryKey());
+    setHistory(stored ? JSON.parse(stored) : []);
+  }, [i18n.language]);
+
+  // Save to history
+  const addToHistory = (query: string) => {
+    if (!query.trim()) return;
+    const newHistory = [query, ...history.filter((item) => item !== query)].slice(0, 10);
+    setHistory(newHistory);
+    localStorage.setItem(getHistoryKey(), JSON.stringify(newHistory));
+  };
+
+  // Clear history for current language
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem(getHistoryKey());
+  };
+
+  // Define searchable content with translations
+  const searchableContent = [
+    { path: '/', text: t('nav.home') },
+    { path: '/about', text: t('nav.about') },
+    { path: '/programs', text: t('nav.programs') },
+    { path: '/resources', text: t('nav.resources') },
+    { path: '/blog', text: t('nav.blog') },
+    { path: '/contact', text: t('nav.contact') },
+    { path: '/login', text: t('nav.login') },
+    { path: '/signup', text: t('nav.signup') },
+    { path: '/profile', text: t('nav.profile') },
+    { path: '/settings', text: t('nav.settings') },
+    { path: '/admin', text: t('nav.adminDashboard') },
+    { path: '/mentor', text: t('nav.mentorDashboard') },
+    { path: '/success-stories', text: t('nav.stories') },
+    { path: '/programs/mentorship', text: t('nav.mentorship') },
+    { path: '/programs/communication', text: t('nav.communication') },
+    { path: '/programs/tech-skills', text: t('nav.techSkills') },
+    { path: '/resources/workshops', text: t('nav.workshops') },
+    { path: '/resources/community', text: t('nav.community') },
+    { path: '/resources/learning', text: t('nav.learning') },
+    { path: '/resources/faq', text: t('nav.faq') },
+    { path: '/privacy', text: t('nav.privacy') },
+    { path: '/terms', text: t('nav.terms') }
   ];
 
-  useEffect(() => {
-    return () => {
+  // Function to handle suggestions timeout
+  const handleSuggestionsTimeout = () => {
+    if (suggestionsTimeoutRef.current) {
+      clearTimeout(suggestionsTimeoutRef.current);
+    }
+    suggestionsTimeoutRef.current = setTimeout(() => {
+      setSuggestions([]);
+      setTranscript('');
+      setIsListening(false); // Stop listening after timeout
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  const clearTranscripts = () => {
-    setInterimTranscript("");
-    setFinalTranscript("");
-    setSuggestions([]);
+    }, 5000); // 5 seconds
   };
 
-  const findMatchingSuggestions = (text: string): SearchSuggestion[] => {
-    const searchText = text.toLowerCase().trim();
-    const words = searchText.split(/\s+/);
-    
-    return searchableContent.filter(item => {
-      const itemText = item.text.toLowerCase();
-      const itemDesc = item.description?.toLowerCase() || "";
-      const itemCategory = item.category.toLowerCase();
-      
-      // Check for exact matches first
-      if (itemText === searchText || itemDesc === searchText) {
-        return true;
-      }
-      
-      // Check if any word matches exactly
-      if (words.some(word => itemText === word || itemDesc === word)) {
-        return true;
-      }
-      
-      // Check for partial matches
-      return words.some(word => 
-        itemText.includes(word) || 
-        itemDesc.includes(word) || 
-        itemCategory.includes(word)
-      );
-    });
-  };
-
-  const handleNavigation = (suggestion: SearchSuggestion) => {
-    // Prevent duplicate navigation to the same path
-    if (lastNavigationRef.current === suggestion.path) {
+  // Initialize recognition instance once
+  useEffect(() => {
+    if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+      setError(t('errors.unsupported'));
       return;
     }
-    
-    lastNavigationRef.current = suggestion.path;
-    navigate(suggestion.path);
-    clearTranscripts();
-  };
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setError(t('errors.unsupported'));
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // Changed to false to stop after one result
+    recognition.interimResults = true;
+    recognition.lang = i18n.language === 'rw' ? 'rw-RW' : 'en-US';
+    recognition.maxAlternatives = 1;
+    recognitionRef.current = recognition;
 
-  const requestMicrophonePermission = async () => {
+    // Event handlers
+    recognition.onstart = () => {
+      setIsListening(true);
+      setError(null);
+    };
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join('');
+      setTranscript(transcript);
+      // Robust normalization and fuzzy matching for all search items
+      const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, '').trim();
+      const normTranscript = normalize(transcript);
+      console.log('Transcript:', transcript);
+      console.log('Normalized Transcript:', normTranscript);
+      const matches = searchableContent.filter((item) =>
+        normalize(item.text).includes(normTranscript) || normTranscript.includes(normalize(item.text))
+      );
+      console.log('Matches:', matches);
+      setSuggestions(matches.map((item) => item.text));
+      handleSuggestionsTimeout(); // Start the timeout when suggestions are set
+
+      if (event.results[0].isFinal) {
+        onResult(transcript);
+        addToHistory(transcript);
+        // Try matching the last 1, 2, or 3 words as a phrase
+        const words = transcript.split(/\s+/).filter(Boolean);
+        let match = null;
+        for (let n = 1; n <= 3 && n <= words.length; n++) {
+          const phrase = words.slice(-n).join(' ');
+          const normPhrase = normalize(phrase);
+          console.log('Trying phrase:', phrase, 'Normalized:', normPhrase);
+          match = searchableContent.find((item) =>
+            normalize(item.text) === normPhrase ||
+            normalize(item.text).includes(normPhrase) ||
+            normPhrase.includes(normalize(item.text))
+          );
+          if (match) {
+            console.log('Match found for phrase:', phrase, 'Match:', match);
+            break;
+          }
+        }
+        // If still no match, fall back to previous logic (single words, backwards)
+        if (!match) {
+          for (const word of words.slice().reverse()) {
+            const normWord = normalize(word);
+            console.log('Trying word:', word, 'Normalized:', normWord);
+            match = searchableContent.find((item) =>
+              normalize(item.text) === normWord ||
+              normalize(item.text).includes(normWord) ||
+              normWord.includes(normalize(item.text))
+            );
+            if (match) {
+              console.log('Match found for word:', word, 'Match:', match);
+              break;
+            }
+          }
+        }
+        console.log('Final Match:', match);
+        if (match) {
+          navigate(match.path);
+          // Clear everything after navigation
+          setSuggestions([]);
+          setTranscript('');
+          setIsListening(false);
+          if (recognitionRef.current) {
+            recognitionRef.current.stop();
+          }
+        }
+      }
+    };
+    recognition.onerror = (event: SpeechRecognitionEvent) => {
+      setError(t(`errors.${event.error}`));
+      setIsListening(false);
+      setSuggestions([]);
+      setTranscript('');
+    };
+    recognition.onend = () => {
+      setIsListening(false);
+      setSuggestions([]);
+      setTranscript('');
+    };
+
+    return () => {
+      recognition.onstart = null;
+      recognition.onresult = null;
+      recognition.onerror = null;
+      recognition.onend = null;
+      recognitionRef.current = null;
+    };
+  }, [i18n.language, t]);
+
+  // Update recognition language when language changes
+  useEffect(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = i18n.language === 'rw' ? 'rw-RW' : 'en-US';
+    }
+  }, [i18n.language]);
+
+  const startListening = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach(track => track.stop());
-      return true;
-    } catch (error) {
-      console.error("Microphone permission error:", error);
-      return false;
+      setError(null);
+      setSuggestions([]); // Clear any existing suggestions
+      setTranscript(''); // Clear any existing transcript
+      if (recognitionRef.current && !isListening) {
+        recognitionRef.current.start();
+      }
+    } catch {
+      setError(t('errors.microphonePermission'));
     }
   };
 
-  const startVoiceSearch = async () => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert("Your browser does not support voice search.");
-      return;
+  const stopListening = () => {
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
     }
-
-    const hasPermission = await requestMicrophonePermission();
-    if (!hasPermission) {
-      setPermissionError("Microphone access was denied. Please allow microphone access in your browser settings.");
-      alert("Microphone access is required for voice search. Please allow microphone access in your browser settings.");
-      return;
-    }
-
-    if (!recognitionRef.current) {
-      const recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 3;
-      recognition.continuous = true;
-
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
-        let interimTranscript = "";
-        let finalTranscript = "";
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript;
-            // Get alternative transcripts for better matching
-            const alternatives = Array.from(event.results[i]).slice(1).map(alt => alt.transcript);
-            onResult(finalTranscript + " " + alternatives.join(" "));
-            
-            // Find matching suggestions
-            const matches = findMatchingSuggestions(finalTranscript);
-            setSuggestions(matches);
-            
-            // If we have a single exact match, navigate immediately
-            if (matches.length === 1) {
-              handleNavigation(matches[0]);
-            }
-            // If we have multiple matches, show them but don't navigate automatically
-            else if (matches.length > 1) {
-              setSuggestions(matches);
-            }
-          } else {
-            interimTranscript += transcript;
-            // Show suggestions for interim results
-            const matches = findMatchingSuggestions(interimTranscript);
-            setSuggestions(matches);
-          }
-        }
-
-        setInterimTranscript(interimTranscript);
-        if (finalTranscript) {
-          setFinalTranscript(finalTranscript);
-          // Clear transcripts after 5 seconds
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-          timeoutRef.current = window.setTimeout(clearTranscripts, 5000);
-        }
-      };
-
-      recognition.onerror = (event: SpeechRecognitionEvent) => {
-        console.error("Voice search error:", event.error);
-        setIsListening(false);
-        
-        switch (event.error) {
-          case "not-allowed":
-          case "permission-denied":
-            setPermissionError("Microphone access was denied. Please allow microphone access in your browser settings.");
-            alert("Microphone access is required for voice search. Please allow microphone access in your browser settings.");
-            break;
-          case "no-speech":
-            alert("No speech was detected. Please try again.");
-            break;
-          case "audio-capture":
-            alert("No microphone was found. Please ensure your microphone is properly connected.");
-            break;
-          case "network":
-            alert("Network error occurred. Please check your internet connection.");
-            break;
-          default:
-            alert(`Voice search error: ${event.error}`);
-        }
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-        clearTranscripts();
-      };
-
-      recognitionRef.current = recognition;
-    }
-
-    try {
-      if (recognitionRef.current) {
-        recognitionRef.current.start();
-        setIsListening(true);
-        setPermissionError(null);
-        clearTranscripts();
-        lastNavigationRef.current = ""; // Reset last navigation
-      }
-    } catch (error) {
-      console.error("Failed to start voice recognition:", error);
-      setIsListening(false);
-      alert("Failed to start voice recognition. Please try again.");
-    }
+    setIsListening(false);
+    setTranscript('');
+    setSuggestions([]);
   };
 
   return (
-    <div className="relative z-50">
+    <div className="relative inline-flex items-center">
       <button
-        type="button"
-        onClick={startVoiceSearch}
-        className={`p-1.5 rounded-full transition-colors duration-200 ${
-          isListening ? "bg-red-100" : "hover:bg-gray-100"
-        }`}
-        aria-label={isListening ? "Stop voice search" : "Start voice search"}
+        onClick={isListening ? stopListening : startListening}
+        className={`p-1.5 rounded-full ${isListening ? 'bg-red-500' : 'bg-gray-200'} hover:bg-gray-300 transition-colors`}
+        aria-label={isListening ? t('search.listening') : t('search.voiceSearch')}
       >
-        <img 
-          src={assets.voiceicon} 
-          className={`w-4 h-4 ${isListening ? "animate-pulse" : ""}`} 
-          alt={isListening ? "Listening..." : "Voice search"} 
+        <img
+          src={assets.voiceicon}
+          alt={isListening ? t('search.listening') : t('search.voiceSearch')}
+          className={`w-4 h-4 ${isListening ? 'animate-pulse' : ''}`}
         />
       </button>
-      {(interimTranscript || finalTranscript || suggestions.length > 0) && (
-        <div className="absolute right-0 mt-2 w-80 p-2 bg-white text-gray-700 text-xs rounded shadow-lg transition-opacity duration-300 z-50">
-          {interimTranscript && (
-            <div className="text-gray-500 italic">
-              {interimTranscript}
-            </div>
-          )}
-          {finalTranscript && (
-            <div className="text-gray-900 font-medium mt-1">
-              {finalTranscript}
+
+      {isListening && (
+        <div className="absolute top-full right-0 mt-2 p-4 bg-white rounded-lg shadow-lg w-64 z-50">
+          <div className="text-sm font-medium mb-2">{t('search.suggestions')}</div>
+          {transcript && (
+            <div className="text-sm text-gray-600 mb-2">
+              {transcript}
             </div>
           )}
           {suggestions.length > 0 && (
-            <div className="mt-2 border-t pt-2">
-              <div className="text-gray-500 mb-1">Suggestions:</div>
+            <ul className="text-sm">
               {suggestions.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleNavigation(suggestion)}
-                  className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-blue-600 hover:text-blue-800"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{suggestion.text}</span>
-                    <span className="text-gray-500 text-xs">{suggestion.description}</span>
-                    <span className="text-gray-400 text-xs">{suggestion.category}</span>
-                  </div>
-                </button>
+                <li key={index} className="py-1 hover:bg-gray-100 cursor-pointer">
+                  {suggestion}
+                </li>
               ))}
+            </ul>
+          )}
+          {/* Show search history for this language if no suggestions */}
+          {suggestions.length === 0 && history.length > 0 && (
+            <div className="mt-2">
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-gray-400">{t('search.history')}</div>
+                <button
+                  onClick={clearHistory}
+                  className="text-xs text-blue-500 hover:underline ml-2"
+                  type="button"
+                >
+                  {t('search.clearHistory')}
+                </button>
+              </div>
+              <ul className="text-xs">
+                {history.map((item, idx) => (
+                  <li key={idx} className="py-1 hover:bg-gray-100 cursor-pointer">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
-        </div>
-      )}
-      {permissionError && (
-        <div className="absolute right-0 mt-2 w-64 p-2 bg-red-50 text-red-700 text-xs rounded shadow-lg z-50">
-          {permissionError}
+          {error && (
+            <div className="text-sm text-red-500 mt-2">
+              {error}
+            </div>
+          )}
         </div>
       )}
     </div>

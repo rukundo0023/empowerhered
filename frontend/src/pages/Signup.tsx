@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import { useTranslation } from "react-i18next";
 
 const Signup = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { signup } = useAuth();
 
@@ -49,28 +51,28 @@ const Signup = () => {
       role: "",
     };
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.name.trim()) newErrors.name = t('auth.signup.name.required');
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t('auth.signup.email.required');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
+      newErrors.email = t('auth.signup.email.invalid');
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = t('auth.signup.password.required');
     } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+      newErrors.password = t('auth.signup.password.minLength');
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
+      newErrors.confirmPassword = t('auth.signup.confirmPassword.required');
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = t('auth.signup.confirmPassword.mismatch');
     }
 
-    if (!formData.gender) newErrors.gender = "Please select your gender";
-    if (!formData.role) newErrors.role = "Please select your role";
+    if (!formData.gender) newErrors.gender = t('auth.signup.gender.required');
+    if (!formData.role) newErrors.role = t('auth.signup.role.required');
 
     setErrors(newErrors);
     return !Object.values(newErrors).some((err) => err !== "");
@@ -91,13 +93,13 @@ const Signup = () => {
     setLoading(true);
     try {
       const response = await api.post("/users/register", formData);
-      toast.success("Registration successful!");
+      toast.success(t('auth.signup.success'));
       setRegistrationSuccess(true);
 
       setTimeout(() => navigate("/login"), 2000);
     } catch (error: any) {
       console.error(error);
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || t('auth.signup.error'));
     } finally {
       setLoading(false);
     }
@@ -112,10 +114,10 @@ const Signup = () => {
               {getUserInitials(formData.name)}
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome, {formData.name}!
+              {t('auth.signup.success.title', { name: formData.name })}
             </h2>
-            <p className="text-gray-600 mb-4">Your account has been created successfully.</p>
-            <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
+            <p className="text-gray-600 mb-4">{t('auth.signup.success.message')}</p>
+            <p className="text-sm text-gray-500">{t('auth.signup.success.redirecting')}</p>
           </div>
         </div>
       </div>
@@ -125,11 +127,11 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{t('auth.signup.title')}</h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
+          {t('auth.signup.subtitle')}{" "}
           <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-            sign in to your account
+            {t('auth.login.signIn')}
           </Link>
         </p>
       </div>
@@ -139,7 +141,9 @@ const Signup = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.name.label')}
+              </label>
               <input
                 id="name"
                 name="name"
@@ -153,7 +157,9 @@ const Signup = () => {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.email.label')}
+              </label>
               <input
                 id="email"
                 name="email"
@@ -167,7 +173,9 @@ const Signup = () => {
 
             {/* Gender */}
             <div>
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+              <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.gender.label')}
+              </label>
               <select
                 id="gender"
                 name="gender"
@@ -175,18 +183,20 @@ const Signup = () => {
                 onChange={handleChange}
                 className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm"
               >
-                <option value="">Select gender</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="other">Other</option>
-                <option value="prefer-not-to-say">Prefer not to say</option>
+                <option value="">{t('auth.signup.gender.options.select')}</option>
+                <option value="female">{t('auth.signup.gender.options.female')}</option>
+                <option value="male">{t('auth.signup.gender.options.male')}</option>
+                <option value="other">{t('auth.signup.gender.options.other')}</option>
+                <option value="prefer-not-to-say">{t('auth.signup.gender.options.preferNotToSay')}</option>
               </select>
               {errors.gender && <p className="text-sm text-red-600">{errors.gender}</p>}
             </div>
 
             {/* Role */}
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.role.label')}
+              </label>
               <select
                 id="role"
                 name="role"
@@ -194,17 +204,19 @@ const Signup = () => {
                 onChange={handleChange}
                 className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm"
               >
-                <option value="">Select role</option>
-                <option value="student">Student</option>
-                <option value="mentor">Mentor</option>
-                <option value="admin">Admin</option>
+                <option value="">{t('auth.signup.role.options.select')}</option>
+                <option value="student">{t('auth.signup.role.options.student')}</option>
+                <option value="mentor">{t('auth.signup.role.options.mentor')}</option>
+                <option value="admin">{t('auth.signup.role.options.admin')}</option>
               </select>
               {errors.role && <p className="text-sm text-red-600">{errors.role}</p>}
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.password.label')}
+              </label>
               <input
                 id="password"
                 name="password"
@@ -218,7 +230,9 @@ const Signup = () => {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                {t('auth.signup.confirmPassword.label')}
+              </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -241,9 +255,9 @@ const Signup = () => {
                 className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 text-sm text-gray-900">
-                I agree to the{" "}
+                {t('auth.signup.terms.agree')}{" "}
                 <Link to="/TermsAndConditions" className="text-indigo-600 hover:text-indigo-500">
-                  Terms and Conditions
+                  {t('auth.signup.terms.link')}
                 </Link>
               </label>
             </div>
@@ -255,7 +269,7 @@ const Signup = () => {
                 disabled={loading}
                 className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow-sm disabled:opacity-50"
               >
-                {loading ? "Creating account..." : "Create account"}
+                {loading ? t('auth.signup.creatingAccount') : t('auth.signup.createAccount')}
               </button>
             </div>
           </form>

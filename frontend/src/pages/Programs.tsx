@@ -1,81 +1,53 @@
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import assets from "../assets/assets"
+import { useTranslation } from 'react-i18next'
 
 const Programs = () => {
+  const { t } = useTranslation();
+  
   const programs = [
-  {
-    id: 1,
-    title: "Digital Literacy & Office Tools",
-    description:
-      "Master essential computer and internet skills, and learn to use tools like Microsoft Word, Excel, and Google Docs.",
-    icon: "💻",
-    features: [
-      "Computer & internet basics",
-      "Microsoft Office & Google Workspace",
-      "Email & online etiquette",
-      "Document creation and sharing"
-    ],
-    route: "/programs/tech-skills"
-  },
-  {
-    id: 2,
-    title: "Online Communication & Collaboration",
-    description:
-      "Learn how to communicate and collaborate effectively online using popular digital platforms.",
-    icon: "👩‍💼",
-    features: [
-      "Zoom & Google Meet",
-      "Team communication tools",
-      "Professional online behavior",
-      "Google Drive & file sharing"
-    ],
-    route: "/programs/Communication"
-  },
-  {
-    id: 3,
-    title: "Job Readiness & Networking",
-    description:
-      "Prepare for the job market with essential career skills, networking strategies, and digital presence building.",
-    icon: "🚀",
-    features: [
-      "CV & cover letter writing",
-      "LinkedIn & email setup",
-      "Interview skills",
-      "Building professional connections"
-    ],
-    route: "/programs/workshops"
-  },
-  {
-    id: 4,
-    title: "Mentorship Program",
-    description:
-      "Connect with mentors who guide and support your personal, academic, and professional development journey.",
-    icon: "👩‍🏫",
-    features: [
-      "One-on-one mentoring",
-      "Career advice & support",
-      "Goal-setting sessions",
-      "Skill development guidance"
-    ],
-    route: "/programs/mentorship"
-  },
-  {
-    id: 5,
-    title: "Networking Events",
-    description:
-      "Participate in community events that connect you with professionals and inspire your future journey.",
-    icon: "🤝",
-    features: [
-      "Industry meetups",
-      "Workshops & panel talks",
-      "Success story sharing",
-      "Community building"
-    ],
-    route: "/programs/workshops"
-  }
-];
-
+    {
+      id: 1,
+      title: t('programs.programs.digitalLiteracy.title'),
+      description: t('programs.programs.digitalLiteracy.description'),
+      icon: "💻",
+      features: t('programs.programs.digitalLiteracy.features', { returnObjects: true }),
+      route: "/programs/tech-skills"
+    },
+    {
+      id: 2,
+      title: t('programs.programs.communication.title'),
+      description: t('programs.programs.communication.description'),
+      icon: "👩‍💼",
+      features: t('programs.programs.communication.features', { returnObjects: true }),
+      route: "/programs/communication"
+    },
+    {
+      id: 3,
+      title: t('programs.programs.jobReadiness.title'),
+      description: t('programs.programs.jobReadiness.description'),
+      icon: "🚀",
+      features: t('programs.programs.jobReadiness.features', { returnObjects: true }),
+      route: "/programs/workshops"
+    },
+    {
+      id: 4,
+      title: t('programs.programs.mentorship.title'),
+      description: t('programs.programs.mentorship.description'),
+      icon: "👩‍🏫",
+      features: t('programs.programs.mentorship.features', { returnObjects: true }),
+      route: "/programs/mentorship"
+    },
+    {
+      id: 5,
+      title: t('programs.programs.networking.title'),
+      description: t('programs.programs.networking.description'),
+      icon: "🤝",
+      features: t('programs.programs.networking.features', { returnObjects: true }),
+      route: "/programs/workshops"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -87,19 +59,18 @@ const Programs = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-800">
-              <span className="text-black mr-3">Our</span><span className="text-primary-600">Programs</span>
-            </h1>
-            <p className="text-lg text-neutral-700 mb-8">
-              Empowering young women in Rwanda through comprehensive training and development programs.
-            </p>
-          </motion.div>
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-800">
+                <span className="text-black mr-3">{t('programs.hero.title')}</span>
+              </h1>
+              <p className="text-lg text-neutral-700 mb-8">
+                {t('programs.hero.description')}
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -132,7 +103,7 @@ const Programs = () => {
                   to={program.route}
                   className="inline-block w-full text-center bg-gray-700 text-white py-2 rounded-md hover:bg-gray-800 transition-colors duration-200"
                 >
-                  Learn More
+                  {t('programs.learnMore')}
                 </Link>
               </motion.div>
             ))}
@@ -141,33 +112,32 @@ const Programs = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            
-            <h2 className="text-3xl font-bold mb-6 text-neutral-800">Ready to Start Your Journey?</h2>
-            <p className="text-lg text-neutral-600 mb-8">
-              Take the first step towards your future in technology. Apply now and join our community of learners.
-            </p>
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <h2 className="text-3xl font-bold mb-6 text-neutral-800">{t('programs.cta.title')}</h2>
+              <p className="text-lg text-neutral-600 mb-8">
+                {t('programs.cta.description')}
+              </p>
             </motion.div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/signup"
                 className="px-8 py-3 bg-gray-700 text-white rounded-md hover:bg-gray-800 transition-colors duration-200"
               >
-                Apply Now
+                {t('programs.cta.apply')}
               </Link>
               <Link
                 to="/contact"
                 className="px-8 py-3 border border-gray-700 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-200"
               >
-                Contact Us
+                {t('programs.cta.contact')}
               </Link>
             </div>
           </div>

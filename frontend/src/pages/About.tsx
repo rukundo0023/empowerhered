@@ -1,8 +1,11 @@
 import { motion } from "framer-motion"
 import assets from "../assets/assets"
 import Newsletter from "../components/Newsletter"
+import { useTranslation } from 'react-i18next'
 
 const About = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -16,10 +19,10 @@ const About = () => {
             className="text-center"
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
-              About <span className="text-blue-600">EmpowerHerEd</span>
+              {t('about.hero.title')} <span className="text-blue-600">{t('about.hero.titleHighlight')}</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Empowering women through technology, education, and community support.
+              {t('about.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -35,12 +38,12 @@ const About = () => {
               transition={{ duration: 0.5 }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-bold text-gray-900">Our Story</h2>
+              <h2 className="text-3xl font-bold text-gray-900">{t('about.story.title')}</h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                EmpowerHerEd was born from a simple but powerful idea: when women are educated and empowered, entire communities prosper. Founded by a passionate team of educators, mentors, and advocates, EmpowerHerEd exists to bridge the gender gap in education and opportunity.
+                {t('about.story.description1')}
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Our platform is a safe, inclusive space where women and girls can learn, connect, and grow  academically, professionally, and personally.
+                {t('about.story.description2')}
               </p>
             </motion.div>
             <motion.div 
@@ -49,16 +52,16 @@ const About = () => {
               transition={{ duration: 0.5 }}
               className="bg-white p-8 rounded-2xl shadow-lg"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">What We Do</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('about.whatWeDo.title')}</h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                We offer curated educational content, mentorship programs, workshops, and career support to help women at every stage of their journey. From high school students to working professionals, we're here to uplift, equip, and empower.
+                {t('about.whatWeDo.description')}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { icon: "📚", label: "Educational Content" },
-                  { icon: "👥", label: "Mentorship" },
-                  { icon: "🎯", label: "Workshops" },
-                  { icon: "💼", label: "Career Support" }
+                  { icon: "📚", label: t('about.whatWeDo.services.education') },
+                  { icon: "👥", label: t('about.whatWeDo.services.mentorship') },
+                  { icon: "🎯", label: t('about.whatWeDo.services.workshops') },
+                  { icon: "💼", label: t('about.whatWeDo.services.career') }
                 ].map((item) => (
                   <div key={item.label} className="flex items-center space-x-3">
                     <span className="text-2xl">{item.icon}</span>
@@ -81,10 +84,9 @@ const About = () => {
               transition={{ duration: 0.5 }}
               className="bg-white p-8 rounded-2xl shadow-lg"
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('about.mission.title')}</h2>
               <p className="text-gray-600">
-                To bridge the gender gap in technology by providing women with the skills, 
-                resources, and support they need to succeed in the tech industry.
+                {t('about.mission.description')}
               </p>
             </motion.div>
             <motion.div 
@@ -93,10 +95,9 @@ const About = () => {
               transition={{ duration: 0.5 }}
               className="bg-white p-8 rounded-2xl shadow-lg"
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('about.vision.title')}</h2>
               <p className="text-gray-600">
-                A world where women are equally represented in technology and have the 
-                opportunity to shape the future of innovation.
+                {t('about.vision.description')}
               </p>
             </motion.div>
           </div>
@@ -112,12 +113,12 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Why It Matters</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('about.whyItMatters.title')}</h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              Despite progress, millions of women around the world still face limited access to education and leadership roles. EmpowerHerEd is changing that by nurturing confidence, capability, and community.
+              {t('about.whyItMatters.description')}
             </p>
             <p className="text-xl font-semibold text-gray-700">
-              Together, we are shaping a future where education is a right and not a privilege for every woman.
+              {t('about.whyItMatters.highlight')}
             </p>
           </motion.div>
         </div>
@@ -132,27 +133,27 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Values</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.values.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              These core values guide everything we do at EmpowerHerEd
+              {t('about.values.subtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Empowerment",
-                description: "We believe in empowering women through education and skill development.",
+                title: t('about.values.items.empowerment.title'),
+                description: t('about.values.items.empowerment.description'),
                 icon: "🌟"
               },
               {
-                title: "Community",
-                description: "Building a supportive network of women in tech who lift each other up.",
+                title: t('about.values.items.community.title'),
+                description: t('about.values.items.community.description'),
                 icon: "🤝"
               },
               {
-                title: "Innovation",
-                description: "Fostering creativity and innovation in technology through diverse perspectives.",
+                title: t('about.values.items.innovation.title'),
+                description: t('about.values.items.innovation.description'),
                 icon: "💡"
               }
             ].map((value, index) => (
@@ -181,27 +182,22 @@ const About = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Team</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.team.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Meet the passionate individuals driving our mission forward
+              {t('about.team.subtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-5">
             {[
               {
-                name: "Rukundo Nshimiyimana",
-                role: "Founder & CEO",
+                name: t('about.team.members.founder.name'),
+                role: t('about.team.members.founder.role'),
                 image: assets.profile
               },
               {
-                name: "Maria Garcia",
-                role: "Head of Education",
-                image: assets.profile
-              },
-              {
-                name: "Aisha Patel",
-                role: "Community Director",
+                name: t('about.team.members.education.name'),
+                role: t('about.team.members.education.role'),
                 image: assets.profile
               }
             ].map((member, index) => (
@@ -210,19 +206,15 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                className="bg-white p-8 rounded-2xl shadow-lg text-center"
               >
-                <div className="relative h-72">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-gray-700">{member.role}</p>
-                </div>
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
+                />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                <p className="text-gray-600">{member.role}</p>
               </motion.div>
             ))}
           </div>
