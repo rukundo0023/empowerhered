@@ -44,11 +44,11 @@
   },
   "home": {
     "hero": {
-      "title": "Gufasha Abagore mu Tekinoroji",
-      "description": "Jya mu muryango wacu w'abagore mu tekinoroji kandi utangize inzira yawe yo gutsinda",
-      "getStarted": "Tangiza Ubu",
-      "learnMore": "Menya Byinshi",
-      "contactUs": "Twandikire"
+      "title": "Gufasha Abagore Binyuze mu",
+      "titleHighlight": "Uburezi bwa Digital",
+      "description1": "EmpowerHerEd si gusa ikoranabuhanga ryo kwiga — ni umuyoboro wo gufasha, kwigisha, no gutera inkunga abakobwa bato mu Rwanda. Intego yacu ni ugufunga icyuho cy'uburinganire mu nganda za tekinoroji binyuze mu gufasha abagore ubumenyi, inkunga, n'umwete bakeneye kugira ngo bongere imbaraga mu isi ya digital.",
+      "description2": "Wiyunge n'ikoranabuhanga rya mbere ryo kwigisha tekinoroji mu Rwanda. Wige kuva ku bafite ubumenyi mu nganda, huzwa n'abayoboramikorere, kandi utangize umwuga wawe wa tekinoroji. Niba utangira gusa cyangwa witeguye kongera ubumenyi bwawe, turi hano kugirango dukuyobore mu rugendo rwawe.",
+      "explorePrograms": "Shakisha Porogaramu"
     },
     "stats": {
       "womenEmpowered": "Abagore Bafite Ubushobozi",
