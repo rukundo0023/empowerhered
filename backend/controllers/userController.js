@@ -2,6 +2,8 @@ import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import { AUTHORIZED_USERS } from '../config/authorizedUsers.js';
+import bcrypt from 'bcrypt';
+import { client } from '../config/googleClient.js';
 
 // Generate JWT
 const generateToken = (id) => {
@@ -16,14 +18,15 @@ const generateToken = (id) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, role, gender } = req.body;
 
-  // Check if user already exists
+  // Check if user exists
   const userExists = await User.findOne({ email });
+
   if (userExists) {
     res.status(400);
     throw new Error('User already exists');
   }
 
-  // Check if the user is authorized based on role and email
+  // Role-based authorization
   if (role === 'admin') {
     if (email !== AUTHORIZED_USERS.superAdmin.email) {
       res.status(403);
@@ -36,13 +39,21 @@ const registerUser = asyncHandler(async (req, res) => {
     }
   }
 
-  // Create user
+  // Create user with plain password - it will be hashed by the pre-save hook
   const user = await User.create({
     name,
     email,
-    password,
+    password, // The pre-save hook will hash this
     role,
-    gender
+    gender,
+  });
+
+  console.log('Created user:', {
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    hasPassword: !!user.password,
+    passwordLength: user.password ? user.password.length : 0
   });
 
   if (user) {
@@ -52,7 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       gender: user.gender,
-      token: generateToken(user._id)
+      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -71,7 +82,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Please provide email and password');
   }
 
-  // Find user and explicitly select password field
+  // Find user and explicitly select password
   const user = await User.findOne({ email }).select('+password');
   
   if (!user) {
@@ -79,6 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 
+  // Match password using the model's method
   const isMatch = await user.matchPassword(password);
   
   if (!isMatch) {
@@ -86,25 +98,32 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 
-  // Verify admin and mentor authorization
-  if (user.role === 'admin' && email !== AUTHORIZED_USERS.superAdmin.email) {
-    res.status(403);
-    throw new Error('Unauthorized admin access');
-  }
-  
-  if (user.role === 'mentor' && !AUTHORIZED_USERS.mentors.includes(email)) {
-    res.status(403);
-    throw new Error('Unauthorized mentor access');
+  // Check if user is admin
+  if (email === AUTHORIZED_USERS.superAdmin.email) {
+    console.log('Authorized admin login attempt:', { email, currentRole: user.role });
+    // Update role to admin if it's not already
+    if (user.role !== 'admin') {
+      user.role = 'admin';
+      await user.save();
+      console.log('Updated user role to admin:', { email, newRole: user.role });
+    }
   }
 
-  res.json({
+  // Generate token and send response
+  const token = generateToken(user._id);
+  
+  const responseData = {
     _id: user._id,
     name: user.name,
     email: user.email,
     role: user.role,
     gender: user.gender,
-    token: generateToken(user._id)
-  });
+    token
+  };
+
+  console.log('Login response:', { ...responseData, token: '***' });
+  
+  res.json(responseData);
 });
 
 // @desc    Get current user
@@ -171,6 +190,58 @@ const updateUser = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error('User not found');
+  }
+});
+
+// @desc    Google login
+// @route   POST /api/users/google-login
+// @access  Public
+export const googleLogin = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    res.status(400);
+    throw new Error('Google token is required');
+  }
+
+  try {
+    // Verify the Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user if doesn't exist
+      user = await User.create({
+        name,
+        email,
+        password: Math.random().toString(36).slice(-8), // Generate random password
+        profilePicture: picture,
+        isGoogleUser: true
+      });
+    }
+
+    // Generate JWT token
+    const token = generateToken(user._id);
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      profilePicture: user.profilePicture,
+      token
+    });
+  } catch (error) {
+    res.status(401);
+    throw new Error('Invalid Google token');
   }
 });
 

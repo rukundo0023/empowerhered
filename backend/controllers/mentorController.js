@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Meeting from '../models/meetingModel.js';
 import Mentorship from '../models/mentorshipModel.js';
+import Booking from '../models/bookingModel.js';
 
 // @desc    Get mentor's mentees
 // @route   GET /api/mentors/mentees
@@ -173,6 +174,65 @@ const getMentorStats = asyncHandler(async (req, res) => {
   res.json(stats);
 });
 
+// @desc    Get available mentors
+// @route   GET /api/mentors/available
+// @access  Public
+const getAvailableMentors = asyncHandler(async (req, res) => {
+  const mentors = await User.find({ 
+    role: 'mentor',
+    isAvailable: true 
+  }).select('name email expertise bio');
+
+  res.json(mentors);
+});
+
+// @desc    Create new booking request
+// @route   POST /api/mentors/bookings
+// @access  Public
+const createBookingRequest = asyncHandler(async (req, res) => {
+  const { mentor, mentee, name, email, topic, duration } = req.body;
+
+  // Validate required fields
+  if (!mentor || !mentee) {
+    res.status(400);
+    throw new Error('Mentor and mentee IDs are required');
+  }
+
+  // Verify mentor exists and is available
+  const mentorExists = await User.findOne({ 
+    _id: mentor,
+    role: 'mentor',
+    isAvailable: true
+  });
+
+  if (!mentorExists) {
+    res.status(404);
+    throw new Error('Mentor not found or not available');
+  }
+
+  // Verify mentee exists
+  const menteeExists = await User.findById(mentee);
+  if (!menteeExists) {
+    res.status(404);
+    throw new Error('Mentee not found');
+  }
+
+  // Create new booking
+  const booking = await Booking.create({
+    mentor,
+    mentee,
+    menteeName: name,
+    menteeEmail: email,
+    topic,
+    duration: duration || 60,
+    status: 'pending',
+    date: new Date(),
+    time: 'To be scheduled'
+  });
+
+  res.status(201).json(booking);
+});
+
 export {
   getMentees,
   getMenteeDetails,
@@ -181,5 +241,7 @@ export {
   updateMeeting,
   scheduleMeeting,
   cancelMeeting,
-  getMentorStats
+  getMentorStats,
+  getAvailableMentors,
+  createBookingRequest
 }; 

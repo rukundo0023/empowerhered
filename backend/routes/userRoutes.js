@@ -7,7 +7,7 @@ import {
   getAllUsers,
   deleteUser,
   updateUser,
-
+  googleLogin,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -15,6 +15,7 @@ const router = express.Router();
 // Public routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/google-login', googleLogin);
 
 // Protected routes
 router.get('/me', protect, getCurrentUser);

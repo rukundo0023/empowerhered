@@ -9,11 +9,17 @@ import {
   getMentorStats,
   scheduleMeeting,
   cancelMeeting,
+  createBookingRequest,
+  getAvailableMentors
 } from '../controllers/mentorController.js';
 
 const router = express.Router();
 
-// Protect all mentor routes
+// Public routes
+router.get('/available', getAvailableMentors);
+router.post('/bookings', createBookingRequest);
+
+// Protected routes
 router.use(protect);
 router.use(mentor);
 

@@ -55,7 +55,7 @@ export const register = async (userData: RegisterData): Promise<AuthResponse> =>
         name: userData.fullName,
         email: userData.email,
         password: userData.password,
-        role: userData.role || 'student',
+        role: userData.role || 'user',
         gender: userData.gender
       };
 

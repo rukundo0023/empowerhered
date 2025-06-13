@@ -20,17 +20,27 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
       minlength: 6,
+      select: false
     },
     role: {
       type: String,
-      enum: ['admin', 'user', 'student', 'mentor'],
-      default: 'user',
+      enum: ['student', 'mentor', 'admin'],
+      default: 'student',
+    },
+    isGoogleUser: {
+      type: Boolean,
+      default: false
+    },
+    profilePicture: {
+      type: String
     },
     gender: {
       type: String,
-      enum: ['female', 'male', 'other', 'prefer-not-to-say'],
-      required: true,
+      enum: ['male', 'female', 'other'],
+      required: [true, 'Please specify your gender'],
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
     enrolledCourses: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -63,15 +73,7 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  if (!enteredPassword || !this.password) {
-    return false;
-  }
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// Encrypt password before saving
+// Encrypt password using bcrypt
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
@@ -86,6 +88,16 @@ userSchema.pre('save', async function (next) {
     next(error);
   }
 });
+
+// Match user entered password to hashed password in database
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  try {
+    return await bcrypt.compare(enteredPassword, this.password);
+  } catch (error) {
+    console.error('Password comparison error:', error);
+    return false;
+  }
+};
 
 const User = mongoose.model('User', userSchema);
 

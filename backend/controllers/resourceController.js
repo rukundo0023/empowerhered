@@ -64,9 +64,9 @@ const createResource = asyncHandler(async (req, res) => {
     const resourceData = {
       title: title.trim(),
       description: description.trim(),
-      type,
-      category,
-      courseId,
+    type,
+    category,
+    courseId,
       createdBy: req.user._id,
     };
 
@@ -89,7 +89,7 @@ const createResource = asyncHandler(async (req, res) => {
       await course.save();
     }
 
-    res.status(201).json(resource);
+  res.status(201).json(resource);
   } catch (error) {
     console.error('Resource creation error:', error);
     if (error.code === 11000) {

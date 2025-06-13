@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { contactService } from "../api/contactService"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Contact = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -23,11 +25,14 @@ const Contact = () => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus(null)
+    setErrorMessage("")
 
     try {
-      // Here you would typically make an API call to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await contactService.submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        message: `Subject: ${formData.subject}\n\n${formData.message}`
+      })
       setSubmitStatus("success")
       setFormData({
         name: "",
@@ -35,9 +40,9 @@ const Contact = () => {
         subject: "",
         message: "",
       })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (error: any) {
       setSubmitStatus("error")
+      setErrorMessage(error.message || "Failed to send message. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -240,7 +245,7 @@ const Contact = () => {
                     </div>
                     <div className="ml-3">
                       <p className="text-sm font-medium text-red-800">
-                        There was an error sending your message. Please try again.
+                        {errorMessage}
                       </p>
                     </div>
                   </div>

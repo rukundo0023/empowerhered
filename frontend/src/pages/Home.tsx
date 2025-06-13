@@ -11,7 +11,7 @@ const Home = () => {
     description: "Learn the fundamentals of computer hardware and maintenance",
     level: "Beginner",
     duration: "6 weeks",
-    students: "1.2k",
+    students: "80",
     route: "/resources/learning"
   },
   {
@@ -19,7 +19,7 @@ const Home = () => {
     description: "Master essential internet navigation and email communication",
     level: "Beginner",
     duration: "4 weeks",
-    students: "1.1k",
+    students: "100",
     route: "/resources/learning"
   },
   {
@@ -27,7 +27,7 @@ const Home = () => {
     description: "Become proficient in Microsoft Word for professional documents",
     level: "Beginner",
     duration: "3 weeks",
-    students: "950",
+    students: "50",
     route: "/resources/learning"
   }
 ]
@@ -36,8 +36,13 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden pt-28"
-      style={{ backgroundImage: `url(${assets.herobg})`, backgroundSize: "cover" }} >
+      <section className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden pt-28 min-h-[600px]"
+      style={{ 
+        backgroundImage: `url(${assets.herobg})`, 
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat"
+      }} >
 
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAzNGMwLTIuMjA5IDEuNzkxLTQgNC00czQgMS43OTEgNCA0LTEuNzkxIDQtNCA0LTQtMS43OTEtNC00eiIgZmlsbD0iI2U1ZTdlYiIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -85,10 +90,10 @@ const Home = () => {
               {/* Trust Indicators */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {[
-                  { number: "1000+", label: "Women Empowered" },
+                  { number: "100+", label: "Women Empowered" },
                   { number: "95%", label: "Success Rate" },
-                  { number: "50+", label: "Expert Mentors" },
-                  { number: "15+", label: "Partner Companies" }
+                  { number: "10+", label: "Expert Mentors" },
+                  { number: "5+", label: "Partner Companies" }
               ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
@@ -112,12 +117,12 @@ const Home = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-black font-medium tracking-wide">Featured Programs</span>
+            <span className="text-black font-medium tracking-wide">Featured Courses</span>
             <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-4 tracking-tight">
               Start Your Journey Today
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Choose from our carefully designed programs to accelerate your tech career
+              Choose from our carefully designed courses to accelerate your tech career
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

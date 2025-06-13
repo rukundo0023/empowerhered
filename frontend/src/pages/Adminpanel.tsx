@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import api from "../services/api";
+import api from "../api/axios";
 
 interface User {
   _id: string;
@@ -60,6 +60,7 @@ const Adminpanel = () => {
   const [studentProgress, setStudentProgress] = useState<StudentProgress[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [showCourseModal, setShowCourseModal] = useState(false);
@@ -116,11 +117,37 @@ const [newResource, setNewResource] = useState({
   };
 
   useEffect(() => {
-    if (user) {
-      fetchData();
-      fetchCourses(); // Fetch courses on component mount
-    }
-  }, []);
+    const initializeData = async () => {
+      if (!user || !user.token) {
+        console.log('No user or token found');
+        return;
+      }
+
+      if (isInitialized) {
+        console.log('Already initialized');
+        return;
+      }
+
+      console.log('Initializing admin panel with user:', { email: user.email, role: user.role });
+      
+      try {
+        setIsLoading(true);
+        await Promise.all([
+          fetchData(),
+          fetchCourses()
+        ]);
+        setIsInitialized(true);
+        console.log('Admin panel initialized successfully');
+      } catch (error) {
+        console.error('Initialization error:', error);
+        handleApiError(error, 'Error initializing admin panel');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeData();
+  }, [user]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -301,6 +328,16 @@ const [newResource, setNewResource] = useState({
       }
     }
   };
+
+  if (!user || user.role !== 'admin') {
+    console.log('Not an admin user:', user);
+    return null;
+  }
+
+  if (isLoading && !isInitialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 mt-6">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -514,7 +551,7 @@ const [newResource, setNewResource] = useState({
                                 className="text-blue-600 hover:text-blue-900"
                               >
                                 {resource.type === 'Video' ? 'Watch Video' : 'View Document'}
-                              </a>
+                            </a>
                             ) : (
                               <span className="text-gray-500">N/A</span>
                             )}
@@ -704,20 +741,20 @@ const [newResource, setNewResource] = useState({
                   </select>
                 </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
-                  <select
-                    value={newCourse.category}
-                    onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                  >
+  <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
+  <select
+    value={newCourse.category}
+    onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
+    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    required
+  >
                     <option value="">Select category</option>
                     <option value="tech">Technology</option>
                     <option value="business">Business</option>
                     <option value="personal-development">Personal Development</option>
                     <option value="leadership">Leadership</option>
-                  </select>
-                </div>
+  </select>
+</div>
                 <div className="flex justify-end space-x-3">
                   <button
                     type="button"
@@ -740,56 +777,56 @@ const [newResource, setNewResource] = useState({
       )}
 
       {/* Add Resource Modal */}
-      {showResourceModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900">Add New Resource</h3>
+                  {showResourceModal && (
+  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div className="mt-3">
+        <h3 className="text-lg font-medium text-gray-900">Add New Resource</h3>
               {error && (
                 <div className="mt-2 text-sm text-red-600">
                   {error}
                 </div>
               )}
-              <form onSubmit={handleAddResource} className="mt-4">
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
-                  <input
-                    type="text"
-                    value={newResource.title}
-                    onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                  />
-                </div>
+        <form onSubmit={handleAddResource} className="mt-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
+            <input
+              type="text"
+              value={newResource.title}
+              onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
-                  <textarea
-                    value={newResource.description}
-                    onChange={(e) => setNewResource({ ...newResource, description: e.target.value })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                  />
-                </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
+            <textarea
+              value={newResource.description}
+              onChange={(e) => setNewResource({ ...newResource, description: e.target.value })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">Type</label>
-                  <select
-                    value={newResource.type}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Type</label>
+            <select
+              value={newResource.type}
                     onChange={(e) => handleTypeChange(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                  >
-                    <option value="Video">Video</option>
-                    <option value="Document">Document</option>
-                    <option value="Link">Link</option>
-                    <option value="Quiz">Quiz</option>
-                    <option value="Assignment">Assignment</option>
-                  </select>
-                </div>
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            >
+              <option value="Video">Video</option>
+              <option value="Document">Document</option>
+              <option value="Link">Link</option>
+              <option value="Quiz">Quiz</option>
+              <option value="Assignment">Assignment</option>
+            </select>
+          </div>
 
                 {['Video', 'Document'].includes(newResource.type) && (
-                  <div className="mb-4">
+          <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       File URL <span className="text-red-500">*</span>
                     </label>
@@ -797,36 +834,36 @@ const [newResource, setNewResource] = useState({
                       type="url"
                       value={newResource.fileUrl || ''}
                       onChange={(e) => setNewResource({ ...newResource, fileUrl: e.target.value })}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
                       placeholder={`Enter ${newResource.type.toLowerCase()} file URL`}
                     />
-                  </div>
+          </div>
                 )}
 
-                {newResource.type === 'Link' && (
-                  <div className="mb-4">
+          {newResource.type === 'Link' && (
+            <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       URL <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="url"
+              <input
+                type="url"
                       value={newResource.url}
-                      onChange={(e) => setNewResource({ ...newResource, url: e.target.value })}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
+                onChange={(e) => setNewResource({ ...newResource, url: e.target.value })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
                       placeholder="Enter URL"
-                    />
-                  </div>
-                )}
+              />
+            </div>
+          )}
 
-                <div className="mb-4">
+            <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
                   <select
                     value={newResource.category}
                     onChange={(e) => setNewResource({ ...newResource, category: e.target.value })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
                   >
                     <option value="">Select category</option>
                     <option value="Technology">Technology</option>
@@ -835,17 +872,17 @@ const [newResource, setNewResource] = useState({
                     <option value="Education">Education</option>
                     <option value="Other">Other</option>
                   </select>
-                </div>
+            </div>
 
-                <div className="mb-4">
+          <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Course <span className="text-red-500">*</span>
                   </label>
                   <select
-                    value={newResource.courseId}
-                    onChange={(e) => setNewResource({ ...newResource, courseId: e.target.value })}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
+              value={newResource.courseId}
+              onChange={(e) => setNewResource({ ...newResource, courseId: e.target.value })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
                   >
                     <option value="">Select a course</option>
                     {courses && courses.length > 0 ? (

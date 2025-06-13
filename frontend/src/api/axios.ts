@@ -1,21 +1,31 @@
 import axios from 'axios';
 
+const API_PORT = import.meta.env.VITE_API_PORT || 5000;
+const API_URL = `http://localhost:${API_PORT}/api`;
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Enable sending cookies
   timeout: 10000, // 10 second timeout
+  withCredentials: true
 });
 
-// Add a request interceptor to include the auth token
+// Request interceptor
 api.interceptors.request.use(
   (config) => {
-    console.log('Making request to:', config.url, 'with data:', config.data);
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    console.log('Making request to:', config.url);
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const { token } = JSON.parse(user);
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
     }
     return config;
   },
@@ -25,30 +35,31 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle errors
+// Response interceptor
 api.interceptors.response.use(
   (response) => {
-    console.log('Response received:', response.data);
+    console.log('Response received:', response.status);
     return response;
   },
   (error) => {
+    console.error('Response error:', error.response || error);
+    
     if (error.code === 'ECONNABORTED') {
-      console.error('Request timeout');
       return Promise.reject(new Error('Request timeout. Please try again.'));
     }
 
     if (!error.response) {
-      console.error('Network error:', error);
       return Promise.reject(new Error('Network error. Please check your connection.'));
     }
-
-    console.error('Response error:', error.response || error);
     
+    // Handle specific token errors
     if (error.response.status === 401) {
-      // Clear local storage and redirect to login if token is invalid
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      const errorMessage = error.response.data?.message || '';
+      if (errorMessage.includes('token') || errorMessage.includes('Token')) {
+        console.log('Token error detected, clearing user data');
+        localStorage.removeItem('user');
+        // Don't redirect here, let the components handle it
+      }
     }
 
     const errorMessage = error.response?.data?.message || 'An error occurred';

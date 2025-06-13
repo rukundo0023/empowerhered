@@ -15,6 +15,7 @@ import workshopbg from "./workshopbg.png"
 import resourcesbg from "./resourcesbg.png"
 import blogbg from "./blogbg.png"
 import communitybg2 from "./communitybg2.png"
+import voiceicon from "./voiceicon.png"
 
 // Export all assets
 const assets = {
@@ -33,7 +34,8 @@ const assets = {
   workshopbg,
   resourcesbg,
   blogbg,
-  communitybg2
+  communitybg2,
+  voiceicon
   
 
 }

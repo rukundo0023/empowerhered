@@ -64,23 +64,24 @@ const TechSkills = () => {
   return (
     <div className="minh-screen">
       {/* Hero Section */}
-      <div className="relative  text-black "
+      <section className="relative pt-24 md:pt-32 pb-20"
         style={{ backgroundImage: `url(${assets.skillsbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 pb-16 ">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-3xl font-bold mb-4 text-blue-500"><span className="text-white mr-3">Tech Skills</span>Development</h1>
-            <p className="text-lg max-w-2xl mx-auto text-white">
+            <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+              Tech Skills <span className="text-blue-600">Development</span>
+            </h1>
+            <p className="text-lg text-white max-w-2xl mx-auto">
               Empowering young women with essential technical skills for the digital age
             </p>
           </motion.div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gray-700"></div>
-      </div>
+      </section>
 
       {/* Program Overview */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

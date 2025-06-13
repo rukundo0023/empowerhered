@@ -13,42 +13,67 @@ export const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(' ')[1];
+      console.log('Protect middleware - Verifying token');
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log('Protect middleware - Token decoded:', { id: decoded.id });
 
-      req.user = await User.findById(decoded.id).select('-password');
+      // Only select necessary fields
+      const user = await User.findById(decoded.id).select('_id name email role');
+      console.log('Protect middleware - User found:', { 
+        id: user?._id, 
+        email: user?.email, 
+        role: user?.role 
+      });
 
-      if (!req.user) {
+      if (!user) {
+        console.log('Protect middleware - User not found');
         return res.status(401).json({ message: 'User not found' });
       }
 
+      req.user = user;
+      console.log('Protect middleware - User authenticated successfully');
       return next();
     } catch (error) {
-      console.error(error);
+      console.error('Protect middleware - Token verification error:', error);
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Token expired' });
+      }
+      if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({ message: 'Invalid token' });
+      }
       return res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
 
+  console.log('Protect middleware - No token provided');
   return res.status(401).json({ message: 'Not authorized, no token' });
 };
 
 // Only allow the super admin with specific email
 export const admin = (req, res, next) => {
   const { role, email } = req.user;
+  console.log('Admin middleware - Checking admin access:', { role, email });
 
-  if (role === 'admin' && email === AUTHORIZED_USERS.superAdmin.email) {
+  if (role === 'admin') {
+    console.log('Admin middleware - Access granted');
     return next();
   }
 
-  return res.status(401).json({ message: 'Not authorized as super admin' });
+  console.log('Admin middleware - Access denied');
+  return res.status(401).json({ message: 'Not authorized as admin' });
 };
 
 // Allow only authorized mentors
 export const mentor = (req, res, next) => {
   const { role, email } = req.user;
+  console.log('Mentor middleware - Checking mentor access:', { role, email });
 
   if (role === 'mentor' && AUTHORIZED_USERS.mentors.includes(email)) {
+    console.log('Mentor middleware - Access granted');
     return next();
   }
 
+  console.log('Mentor middleware - Access denied');
   return res.status(401).json({ message: 'Not authorized as a valid mentor' });
 };

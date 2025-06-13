@@ -30,7 +30,9 @@ import Communication from "./pages/programs/Communication";
 import TestConnection from "./components/TestConnection.tsx";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
-import MentorDashboard from "./components/MentorDashboard";
+import MentorDashboard from "./pages/Mentordashboard";
+import MentorSchedule from './pages/MentorSchedule';
+import MentorMeetingDetails from './pages/MentorMeetingDetails';
 
 function App() {
   return (
@@ -92,15 +94,23 @@ function App() {
                 }
               />
               <Route
-                path="/mentor/mentee/:id"
+                path="/mentor/schedule/:menteeId?"
                 element={
                   <MentorRoute>
-                    <MentorDashboard />
+                    <MentorSchedule />
                   </MentorRoute>
                 }
               />
               <Route
                 path="/mentor/meeting/:id"
+                element={
+                  <MentorRoute>
+                    <MentorMeetingDetails />
+                  </MentorRoute>
+                }
+              />
+              <Route
+                path="/mentor/mentee/:id"
                 element={
                   <MentorRoute>
                     <MentorDashboard />

@@ -157,13 +157,13 @@ const enrollInCourse = async (req, res) => {
 
     // Check if user is already enrolled
     const isEnrolled = user.enrolledCourses.includes(course._id);
-    
+
     if (!isEnrolled) {
       // First time enrollment
-      user.enrolledCourses.push(course._id);
-      user.courseProgress.push({
-        courseId: course._id,
-        progress: 0,
+    user.enrolledCourses.push(course._id);
+    user.courseProgress.push({
+      courseId: course._id,
+      progress: 0,
         lastAccessed: new Date(),
         enrollmentId: new mongoose.Types.ObjectId()
       });
@@ -177,7 +177,7 @@ const enrollInCourse = async (req, res) => {
       
       if (progressIndex !== -1) {
         user.courseProgress[progressIndex].lastAccessed = new Date();
-        await user.save();
+    await user.save();
       }
       
       return res.json({ message: 'Already enrolled in course' });

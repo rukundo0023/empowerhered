@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-
+import VoiceSearchButton from "./voiceSearchButton";
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -233,6 +233,8 @@ const Navbar = () => {
                       <img src={assets.crossicon} className="w-4 h-4" alt="Clear search" />
                     </button>
                   )}
+                  {/* Voice Search Button */}
+                 <VoiceSearchButton onResult={(text) => setSearchQuery(text)} />
                   <button
                     type="submit"
                     className="p-1.5 hover:bg-gray-100 rounded-full transition-colors duration-200"
@@ -357,6 +359,7 @@ const Navbar = () => {
                         <img src={assets.crossicon} className="w-3 h-3" alt="Clear search" />
                       </button>
                     )}
+                    <VoiceSearchButton onResult={(text) => setSearchQuery(text)} />
                     <button
                       type="submit"
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"

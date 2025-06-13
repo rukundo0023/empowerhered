@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import UserProfile from '../components/UserProfile';
+import Profile from './Profile';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <UserProfile />
+            <Profile />
           </div>
           
           <div className="bg-white shadow rounded-lg p-6">

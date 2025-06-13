@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 interface AdminRouteProps {
   children: React.ReactNode;
@@ -7,18 +8,56 @@ interface AdminRouteProps {
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
+  const location = useLocation();
+  const [isChecking, setIsChecking] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  if (!isAuthenticated) {
-    // Redirect to login if not authenticated
-    return <Navigate to="/login" replace />;
+  useEffect(() => {
+    const checkAuth = async () => {
+      console.log('AdminRoute - Checking auth state:', { 
+        isAuthenticated, 
+        userRole: user?.role,
+        path: location.pathname 
+      });
+
+      if (!isAuthenticated || !user) {
+        console.log('AdminRoute - Not authenticated');
+        setIsAdmin(false);
+        setIsChecking(false);
+        return;
+      }
+
+      if (user.role !== 'admin') {
+        console.log('AdminRoute - Not admin');
+        setIsAdmin(false);
+        setIsChecking(false);
+        return;
+      }
+
+      console.log('AdminRoute - Admin access confirmed');
+      setIsAdmin(true);
+      setIsChecking(false);
+    };
+
+    checkAuth();
+  }, [isAuthenticated, user, location]);
+
+  if (isChecking) {
+    console.log('AdminRoute - Checking authentication...');
+    return <div>Loading...</div>;
   }
 
-  if (user?.role !== 'admin') {
-    // Redirect to home if not an admin
+  if (!isAuthenticated) {
+    console.log('AdminRoute - Not authenticated, redirecting to login');
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!isAdmin) {
+    console.log('AdminRoute - Not admin, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
-  // If authenticated and is admin, render the children
+  console.log('AdminRoute - Admin access granted, rendering admin panel');
   return <>{children}</>;
 };
 

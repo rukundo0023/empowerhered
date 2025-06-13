@@ -1,7 +1,66 @@
 import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import assets from "../../assets/assets"
+import api from "../../api/axios"
 
 const Mentorship = () => {
+  const navigate = useNavigate()
+  
+  const handleBookNow = async () => {
+    try {
+      // Get current user info from localStorage or your auth context
+      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+      
+      if (!userInfo._id) {
+        toast.error('Please login to book a mentorship session')
+        navigate('/login')
+        return
+      }
+
+      // First, get available mentors
+      const mentorsResponse = await api.get('/mentors/available')
+      const availableMentors = mentorsResponse.data
+
+      if (!availableMentors || availableMentors.length === 0) {
+        toast.error('No mentors available at the moment')
+        return
+      }
+
+      // Select the first available mentor (you can implement mentor selection later)
+      const selectedMentor = availableMentors[0]
+      
+      // Create booking request
+      const bookingData = {
+        mentor: selectedMentor._id, // Required field
+        mentee: userInfo._id, // Required field
+        name: userInfo.name,
+        email: userInfo.email,
+        status: 'pending',
+        date: new Date().toISOString(),
+        topic: 'Initial Mentorship Session',
+        duration: 60 // Default duration in minutes
+      }
+
+      // Send booking request to backend
+      const response = await api.post('/mentors/bookings', bookingData)
+      
+      // Show success message
+      toast.success('Booking request sent successfully!')
+      
+      // Navigate to mentor dashboard
+      navigate('/mentorDashboard', { 
+        state: { 
+          bookingInfo: response.data,
+          message: 'Your booking request has been sent successfully!' 
+        }
+      })
+    } catch (error) {
+      console.error('Error booking mentorship:', error)
+      toast.error(error.response?.data?.message || 'Failed to send booking request. Please try again.')
+    }
+  }
+
   const modules = [
     {
       title: "One-on-One Mentoring",
@@ -72,7 +131,7 @@ const Mentorship = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-black   mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
               Mentorship <span className="text-blue-600">Program</span>
             </h1>
             <p className="text-lg text-white max-w-2xl mx-auto">
@@ -203,13 +262,16 @@ const Mentorship = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gray-700">
+      <section className="bg-blue-600 py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Mentor?</h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Join our mentorship program and take the next step in your professional journey
           </p>
-          <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300">
+          <button 
+            onClick={handleBookNow}
+            className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300"
+          >
             Book Now
           </button>
         </div>
