@@ -4,6 +4,8 @@ import { toast } from "react-toastify"
 import assets from "../../assets/assets"
 import api from "../../api/axios"
 import { useTranslation } from "react-i18next"
+import Newsletter from "../../components/Newsletter"
+import { AxiosError } from "axios"
 
 const Mentorship = () => {
   const navigate = useNavigate()
@@ -59,132 +61,107 @@ const Mentorship = () => {
       })
     } catch (error) {
       console.error('Error booking mentorship:', error)
-      toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'))
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'))
+      } else {
+        toast.error(t('programs.mentorship.booking.error'))
+      }
     }
   }
 
-  const modules = [
-    {
-      title: t('programs.mentorship.modules.oneOnOne.title'),
-      description: t('programs.mentorship.modules.oneOnOne.description'),
-      topics: t('programs.mentorship.modules.oneOnOne.topics', { returnObjects: true })
-    },
-    {
-      title: t('programs.mentorship.modules.group.title'),
-      description: t('programs.mentorship.modules.group.description'),
-      topics: t('programs.mentorship.modules.group.topics', { returnObjects: true })
-    },
-    {
-      title: t('programs.mentorship.modules.industry.title'),
-      description: t('programs.mentorship.modules.industry.description'),
-      topics: t('programs.mentorship.modules.industry.topics', { returnObjects: true })
-    },
-    {
-      title: t('programs.mentorship.modules.leadership.title'),
-      description: t('programs.mentorship.modules.leadership.description'),
-      topics: t('programs.mentorship.modules.leadership.topics', { returnObjects: true })
-    },
-    {
-      title: t('programs.mentorship.modules.career.title'),
-      description: t('programs.mentorship.modules.career.description'),
-      topics: t('programs.mentorship.modules.career.topics', { returnObjects: true })
-    }
-  ]
-
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative pt-24 md:pt-32 pb-20"
-        style={{ backgroundImage: `url(${assets.mentorshipbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-        <div className="container mx-auto px-4">
+      <div className="relative pt-28"
+        style={{ backgroundImage: `url(${assets.blogbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
               {t('programs.mentorship.hero.title')}
             </h1>
-            <p className="text-lg text-white max-w-2xl mx-auto">
+            <p className="text-xl text-black max-w-3xl mx-auto">
               {t('programs.mentorship.hero.description')}
             </p>
           </motion.div>
         </div>
-      </section>
+      </div>
 
       {/* Program Overview */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('programs.mentorship.overview.title')}</h2>
-            <p className="text-lg text-gray-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {t('programs.mentorship.overview.title')}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               {t('programs.mentorship.overview.description')}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white p-6 rounded-lg shadow-lg"
-            >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.personalized.title')}</h3>
-              <p className="text-gray-600">
-                {t('programs.mentorship.overview.features.personalized.description')}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white p-6 rounded-lg shadow-lg"
-            >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.expertise.title')}</h3>
-              <p className="text-gray-600">
-                {t('programs.mentorship.overview.features.expertise.description')}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white p-6 rounded-lg shadow-lg"
-            >
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.overview.features.network.title')}</h3>
-              <p className="text-gray-600">
-                {t('programs.mentorship.overview.features.network.description')}
-              </p>
-            </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: t('programs.mentorship.overview.features.personalized.title'),
+                description: t('programs.mentorship.overview.features.personalized.description'),
+                icon: "🎯"
+              },
+              {
+                title: t('programs.mentorship.overview.features.expertise.title'),
+                description: t('programs.mentorship.overview.features.expertise.description'),
+                icon: "👩‍💼"
+              },
+              {
+                title: t('programs.mentorship.overview.features.network.title'),
+                description: t('programs.mentorship.overview.features.network.description'),
+                icon: "🌐"
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white p-8 rounded-xl shadow-lg text-center"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Program Details */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{t('programs.mentorship.details.title')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.duration.title')}</h3>
-                <p className="text-gray-600">{t('programs.mentorship.details.duration.value')}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.schedule.title')}</h3>
-                <p className="text-gray-600">{t('programs.mentorship.details.schedule.value')}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.location.title')}</h3>
-                <p className="text-gray-600">{t('programs.mentorship.details.location.value')}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('programs.mentorship.details.prerequisites.title')}</h3>
-                <p className="text-gray-600">{t('programs.mentorship.details.prerequisites.value')}</p>
-              </div>
+      <section className="py-16 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {t('programs.mentorship.details.title')}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">{t('programs.mentorship.details.duration')}</h3>
+              <p className="text-gray-600">{t('programs.mentorship.details.durationValue')}</p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">{t('programs.mentorship.details.schedule')}</h3>
+              <p className="text-gray-600">{t('programs.mentorship.details.scheduleValue')}</p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">{t('programs.mentorship.details.location')}</h3>
+              <p className="text-gray-600">{t('programs.mentorship.details.locationValue')}</p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">{t('programs.mentorship.details.prerequisites')}</h3>
+              <p className="text-gray-600">{t('programs.mentorship.details.prerequisitesValue')}</p>
             </div>
           </div>
         </div>
@@ -192,39 +169,41 @@ const Mentorship = () => {
 
       {/* Curriculum Modules */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t('programs.mentorship.modules.title')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {modules.map((module, index) => (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {t('programs.mentorship.curriculum.title')}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                title: t('programs.mentorship.curriculum.modules.oneOnOne.title'),
+                description: t('programs.mentorship.curriculum.modules.oneOnOne.description')
+              },
+              {
+                title: t('programs.mentorship.curriculum.modules.group.title'),
+                description: t('programs.mentorship.curriculum.modules.group.description')
+              },
+              {
+                title: t('programs.mentorship.curriculum.modules.industry.title'),
+                description: t('programs.mentorship.curriculum.modules.industry.description')
+              },
+              {
+                title: t('programs.mentorship.curriculum.modules.leadership.title'),
+                description: t('programs.mentorship.curriculum.modules.leadership.description')
+              }
+            ].map((module, index) => (
               <motion.div
                 key={module.title}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-lg shadow-lg"
+                className="bg-white p-8 rounded-xl shadow-lg"
               >
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{module.title}</h3>
-                <p className="text-gray-600 mb-4">{module.description}</p>
-                <ul className="space-y-2">
-                  {module.topics.map((topic) => (
-                    <li key={topic} className="flex items-center text-gray-600">
-                      <svg
-                        className="w-4 h-4 mr-2 text-gray-700"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      {topic}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{module.title}</h3>
+                <p className="text-gray-600">{module.description}</p>
               </motion.div>
             ))}
           </div>
@@ -232,22 +211,29 @@ const Mentorship = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-blue-600 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Mentor?</h2>
-          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Join our mentorship program and take the next step in your professional journey
-          </p>
-          <button 
-            onClick={handleBookNow}
-            className="bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300"
-          >
-            Book Now
-          </button>
+      <section className="py-16 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {t('programs.mentorship.cta.title')}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              {t('programs.mentorship.cta.description')}
+            </p>
+            <button 
+              onClick={handleBookNow}
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              {t('programs.mentorship.cta.button')}
+            </button>
+          </div>
         </div>
       </section>
+
+      {/* Newsletter Section */}
+      <Newsletter />
     </div>
   )
 }
 
-export default Mentorship 
+export default Mentorship; 

@@ -1,33 +1,36 @@
 import { motion } from "framer-motion"
 import Newsletter from "../components/Newsletter"
 import assets from "../assets/assets"
+import { useTranslation } from 'react-i18next'
 
 const Blog = () => {
+  const { t } = useTranslation();
+
   const blogPosts = [
     {
-      title: "Breaking Barriers: Women in Tech",
-      excerpt: "Exploring the challenges and triumphs of women in the technology industry.",
+      title: t('blog.posts.items.breakingBarriers.title'),
+      excerpt: t('blog.posts.items.breakingBarriers.excerpt'),
       image: assets.profile,
       date: "March 15, 2024",
       author: "Rukundo Nshimiyimana"
     },
     {
-      title: "The Future of Women in STEM",
-      excerpt: "How we're working to increase female representation in STEM fields.",
+      title: t('blog.posts.items.futureWomen.title'),
+      excerpt: t('blog.posts.items.futureWomen.excerpt'),
       image: assets.profile,
       date: "March 10, 2024",
       author: "Maria Garcia"
     },
     {
-      title: "Building a Supportive Tech Community",
-      excerpt: "The importance of community in fostering women's success in tech.",
+      title: t('blog.posts.items.supportiveCommunity.title'),
+      excerpt: t('blog.posts.items.supportiveCommunity.excerpt'),
       image: assets.profile,
       date: "March 5, 2024",
       author: "Aisha Patel"
     },
     {
-      title: "Coding Bootcamp Success Stories",
-      excerpt: "Real stories from women who transformed their careers through coding.",
+      title: t('blog.posts.items.codingBootcamp.title'),
+      excerpt: t('blog.posts.items.codingBootcamp.excerpt'),
       image: assets.profile,
       date: "February 28, 2024",
       author: "Rukundo Nshimiyimana"
@@ -47,17 +50,17 @@ const Blog = () => {
             className="text-center"
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Our <span className="text-blue-600">Blog</span>
+              {t('blog.hero.title')} <span className="text-blue-600">{t('blog.hero.titleHighlight')}</span>
             </h1>
             <p className="text-xl text-black max-w-3xl mx-auto">
-              Insights, stories, and updates from our community
+              {t('blog.hero.description')}
             </p>
           </motion.div>
         </div>
       </div>
 
       {/* Blog Posts Grid */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {blogPosts.map((post, index) => (
@@ -88,7 +91,7 @@ const Blog = () => {
                     {post.excerpt}
                   </p>
                   <button className="text-gray-700 font-semibold hover:text-gray-900 transition-colors">
-                    Read More →
+                    {t('blog.posts.readMore')} →
                   </button>
                 </div>
               </motion.article>

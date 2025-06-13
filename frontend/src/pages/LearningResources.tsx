@@ -4,6 +4,7 @@ import api from "../api/axios"
 import { useAuth } from "../context/AuthContext"
 import { toast } from "react-toastify"
 import assets from "../assets/assets"
+import { useTranslation } from 'react-i18next'
 
 interface Course {
   _id: string
@@ -20,6 +21,7 @@ const LearningResources = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchCourses()
@@ -116,26 +118,54 @@ const LearningResources = () => {
     }
   }
 
-  const additionalResources = [
+  const categories = [
     {
-      title: "Practice Exercises",
-      description: "Hands-on activities to reinforce your learning of computer skills.",
-      icon: "🖱️"
+      title: t('learningResources.categories.beginner.title'),
+      description: t('learningResources.categories.beginner.description'),
+      resources: [
+        {
+          title: t('learningResources.resources.videos.title'),
+          description: t('learningResources.resources.videos.description'),
+          link: "#"
+        },
+        {
+          title: t('learningResources.resources.documents.title'),
+          description: t('learningResources.resources.documents.description'),
+          link: "#"
+        }
+      ]
     },
     {
-      title: "Step-by-Step Guides",
-      description: "Simple tutorials covering each topic with clear instructions.",
-      icon: "📘"
+      title: t('learningResources.categories.intermediate.title'),
+      description: t('learningResources.categories.intermediate.description'),
+      resources: [
+        {
+          title: t('learningResources.resources.exercises.title'),
+          description: t('learningResources.resources.exercises.description'),
+          link: "#"
+        },
+        {
+          title: t('learningResources.resources.quizzes.title'),
+          description: t('learningResources.resources.quizzes.description'),
+          link: "#"
+        }
+      ]
     },
     {
-      title: "FAQs & Troubleshooting",
-      description: "Quick solutions to common beginner problems.",
-      icon: "❓"
-    },
-    {
-      title: "Sample Documents",
-      description: "Download example Word files and email templates to get started.",
-      icon: "📄"
+      title: t('learningResources.categories.advanced.title'),
+      description: t('learningResources.categories.advanced.description'),
+      resources: [
+        {
+          title: t('learningResources.resources.projects.title'),
+          description: t('learningResources.resources.projects.description'),
+          link: "#"
+        },
+        {
+          title: t('learningResources.resources.caseStudies.title'),
+          description: t('learningResources.resources.caseStudies.description'),
+          link: "#"
+        }
+      ]
     }
   ]
 
@@ -261,17 +291,30 @@ const LearningResources = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {additionalResources.map((resource, index) => (
+            {categories.map((category, index) => (
               <motion.div
-                key={resource.title}
+                key={category.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-2xl shadow-lg text-center"
+                className="bg-white p-8 rounded-2xl shadow-lg"
               >
-                <div className="text-4xl mb-4">{resource.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{resource.title}</h3>
-                <p className="text-gray-600">{resource.description}</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{category.title}</h2>
+                <p className="text-gray-600 mb-6">{category.description}</p>
+                <div className="space-y-4">
+                  {category.resources.map((resource) => (
+                    <div key={resource.title} className="border-t pt-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{resource.title}</h3>
+                      <p className="text-gray-600 mb-3">{resource.description}</p>
+                      <a
+                        href={resource.link}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        {t('learningResources.resources.viewMore')}
+                      </a>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>

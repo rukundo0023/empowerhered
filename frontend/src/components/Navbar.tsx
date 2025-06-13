@@ -33,19 +33,19 @@ const Navbar = () => {
   ];
 
   const searchableContent = [
-    { title: "Home", path: "/" },
-    { title: "About Us", path: "/about" },
-    { title: "Stories", path: "/SuccessStories" },
-    { title: "Contact", path: "/contact" },
-    { title: "Mentorship Program", path: "/programs/mentorship" },
-    { title: "Leadership Training", path: "/programs/Communication" },
-    { title: "Tech Skills", path: "/programs/tech-skills" },
-    { title: "Workshops", path: "/programs/workshops" },
-    { title: "Blog", path: "/blog" },
-    { title: "Community", path: "/resources/community" },
-    { title: "Learning Resources", path: "/resources/learning" },
-    { title: "Login", path: "/login" },
-    { title: "Sign Up", path: "/signup" }
+    { title: t('nav.home'), path: "/" },
+    { title: t('nav.about'), path: "/about" },
+    { title: t('nav.stories'), path: "/SuccessStories" },
+    { title: t('nav.contact'), path: "/contact" },
+    { title: t('nav.programsDropdown.mentorship'), path: "/programs/mentorship" },
+    { title: t('nav.programsDropdown.communication'), path: "/programs/Communication" },
+    { title: t('nav.programsDropdown.techSkills'), path: "/programs/tech-skills" },
+    { title: t('nav.programsDropdown.workshops'), path: "/programs/workshops" },
+    { title: t('nav.blog'), path: "/blog" },
+    { title: t('nav.community'), path: "/resources/community" },
+    { title: t('nav.learning'), path: "/resources/learning" },
+    { title: t('nav.login'), path: "/login" },
+    { title: t('nav.signup'), path: "/signup" }
   ];
 
   // Function to handle search results timeout
@@ -147,7 +147,7 @@ const Navbar = () => {
                 location.pathname === '/'
                   ? 'border-primary text-gray-900'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
               {t('nav.home')}
             </NavLink>
@@ -157,7 +157,7 @@ const Navbar = () => {
                 location.pathname === '/about'
                   ? 'border-primary text-gray-900'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
               {t('nav.about')}
             </NavLink>
@@ -170,7 +170,7 @@ const Navbar = () => {
                   location.pathname === '/programs'
                     ? 'border-primary text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
                 {t('nav.programs')}
               </NavLink>
@@ -199,7 +199,7 @@ const Navbar = () => {
                   location.pathname === '/resources'
                     ? 'border-primary text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
                 {t('nav.resources')}
               </NavLink>
@@ -228,7 +228,7 @@ const Navbar = () => {
                   isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
                 }
               >
-                Mentor Dashboard
+                {t('nav.mentorDashboard')}
               </NavLink>
             )}
 
@@ -238,7 +238,7 @@ const Navbar = () => {
                 location.pathname === '/success-stories'
                   ? 'border-primary text-gray-900'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
               {t('nav.stories')}
             </NavLink>
@@ -249,7 +249,7 @@ const Navbar = () => {
                 location.pathname === '/contact'
                   ? 'border-primary text-gray-900'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
               {t('nav.contact')}
             </NavLink>
@@ -265,7 +265,7 @@ const Navbar = () => {
               >
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder={t('search.placeholder')}
                   value={searchQuery}
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
@@ -477,9 +477,9 @@ const Navbar = () => {
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded-full"
-                aria-label="Close menu"
+                aria-label={t('nav.closeMenu')}
               >
-                <img src={assets.crossicon} className="w-5 h-5" alt="Close" />
+                <img src={assets.crossicon} className="w-5 h-5" alt={t('nav.closeMenu')} />
               </button>
             </div>
             <div className="px-4 py-2 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">

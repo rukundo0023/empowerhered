@@ -1,50 +1,53 @@
 import { motion } from "framer-motion"
 import assets from "../assets/assets"
+import { useTranslation } from 'react-i18next'
 
 const Community = () => {
+  const { t } = useTranslation();
+
   const events = [
     {
-      title: "Monthly Meetup",
+      title: t('community.events.monthlyMeetup.title'),
       date: "March 25, 2024",
       time: "6:00 PM - 8:00 PM",
       location: "Virtual",
-      description: "Join us for our monthly community meetup featuring guest speakers and networking opportunities."
+      description: t('community.events.monthlyMeetup.description')
     },
     {
-      title: "Coding Workshop",
+      title: t('community.events.codingWorkshop.title'),
       date: "April 2, 2024",
       time: "10:00 AM - 2:00 PM",
       location: "Tech Hub",
-      description: "Hands-on coding workshop focusing on web development fundamentals."
+      description: t('community.events.codingWorkshop.description')
     },
     {
-      title: "Career Fair",
+      title: t('community.events.careerFair.title'),
       date: "April 15, 2024",
       time: "11:00 AM - 4:00 PM",
       location: "Convention Center",
-      description: "Connect with tech companies and explore career opportunities."
+      description: t('community.events.careerFair.description')
     }
   ]
 
   const features = [
     {
-      title: "Mentorship Program",
-      description: "Connect with experienced professionals in the tech industry for guidance and support.",
+      title: t('community.features.mentorship.title'),
+      description: t('community.features.mentorship.description'),
       icon: "👥"
     },
     {
-      title: "Study Groups",
-      description: "Join study groups to learn and practice coding together with peers.",
+      title: t('community.features.studyGroups.title'),
+      description: t('community.features.studyGroups.description'),
       icon: "📚"
     },
     {
-      title: "Job Board",
-      description: "Access exclusive job opportunities from our partner companies.",
+      title: t('community.features.jobBoard.title'),
+      description: t('community.features.jobBoard.description'),
       icon: "💼"
     },
     {
-      title: "Discussion Forums",
-      description: "Engage in meaningful discussions with community members.",
+      title: t('community.features.forums.title'),
+      description: t('community.features.forums.description'),
       icon: "💬"
     }
   ]
@@ -62,10 +65,10 @@ const Community = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
-              Our <span className="text-blue-600">Community</span>
+              {t('community.hero.title')}
             </h1>
             <p className="text-lg text-white max-w-2xl mx-auto">
-              Join a supportive network of women in technology
+              {t('community.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -101,9 +104,9 @@ const Community = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('community.events.title')}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Join us for these exciting community events
+              {t('community.events.description')}
             </p>
           </motion.div>
 
@@ -119,18 +122,18 @@ const Community = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
                 <div className="space-y-2 mb-4">
                   <p className="text-gray-600">
-                    <span className="font-semibold">Date:</span> {event.date}
+                    <span className="font-semibold">Itariki:</span> {event.date}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-semibold">Time:</span> {event.time}
+                    <span className="font-semibold">Igihe:</span> {event.time}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-semibold">Location:</span> {event.location}
+                    <span className="font-semibold">Ahantu:</span> {event.location}
                   </p>
                 </div>
                 <p className="text-gray-600 mb-4">{event.description}</p>
                 <button className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
-                  Register Now
+                  {t('community.join.button')}
                 </button>
               </motion.div>
             ))}
@@ -147,12 +150,12 @@ const Community = () => {
             transition={{ duration: 0.5 }}
             className="bg-gray-700 rounded-2xl p-12 text-center"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">Join Our Community</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">{t('community.join.title')}</h2>
             <p className="text-gray-100 mb-8 max-w-2xl mx-auto">
-              Be part of a supportive network of women in technology. Connect, learn, and grow together.
+              {t('community.join.description')}
             </p>
             <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              Sign Up Now
+              {t('community.join.button')}
             </button>
           </motion.div>
         </div>

@@ -36,16 +36,19 @@
       "community": "Gufasha Umuryango",
       "learning": "Ibikoresho by'Inyigisho",
       "faq": "Ibibazo Byibanze"
+    },
+    "closeMenu": "Funga ibikubiyemo",
+    "search": {
+      "placeholder": "Shakisha..."
     }
   },
   "home": {
     "hero": {
-      "title": "Gufasha Abagore Binyuze mu",
-      "titleHighlight": "Uburezi bwa Digital",
-      "description1": "EmpowerHerEd si gusa ikoranabuhanga ryo kwiga — ni umuyoboro wo gufasha, kwigisha, no gutera inkunga abakobwa bato mu Rwanda. Intego yacu ni ugufunga icyuho cy'uburinganire mu nganda za tekinoroji binyuze mu gufasha abakobwa n'abagore ubumenyi, inkunga, n'umwete bakeneye kugira ngo bongere imbaraga mu isi ya digital.",
-      "description2": "Wiyunge n'ikoranabuhanga rya mbere ryo kwigisha tekinoroji mu Rwanda. Wige kuva ku bafite ubumenyi mu nganda, huzwa n'abayoboramikorere, kandi utangize umwuga wawe wa tekinoroji. Niba utangira gusa cyangwa witeguye kongera ubumenyi bwawe, turi hano kugirango dukuyobore mu rugendo rwawe.",
-      "explorePrograms": "Shakisha Porogaramu",
-      "contactUs": "Tuvugishe"
+      "title": "Gufasha Abagore mu Tekinoroji",
+      "description": "Jya mu muryango wacu w'abagore mu tekinoroji kandi utangize inzira yawe yo gutsinda",
+      "getStarted": "Tangiza Ubu",
+      "learnMore": "Menya Byinshi",
+      "contactUs": "Twandikire"
     },
     "stats": {
       "womenEmpowered": "Abagore Bafite Ubushobozi",
@@ -121,7 +124,7 @@
       "viewAll": "Reba Zose",
       "mentorship": {
         "title": "Porogaramu ya Mentorship",
-        "description": "Huzwa n'abayoboramikorere bafite ubumenyi kugirango bakubere inama mu rugendo rwawe rwa karire"
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi bazo kuyobora mu rugendo rwawe rwa professional"
       },
       "leadership": {
         "title": "Ubuyobozi & Kuvugana",
@@ -253,118 +256,25 @@
       },
       "mentorship": {
         "title": "Porogaramu ya Mentorship",
-        "description": "Huzwa n'abayoboramikorere bafite ubumenyi kugirango bakubere inama n'inkunga",
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi bazo kuyobora mu rugendo rwawe rwa karire",
         "features": [
-          "Mentorship ya One-on-One",
-          "Inama za Karire",
-          "Iterambere ry'Ubumenyi",
-          "Iterambere rya Professional",
-          "Ubumenyi bw'Inganda"
-        ]
-      },
-      "networking": {
-        "title": "Ibikorwa bya Networking",
-        "description": "Korera urusobe rwawe rwa professional binyuze mu bikorwa by'umuryango n'amahugurwa",
-        "features": [
-          "Ibikorwa by'Inganda",
-          "Ibikorwa by'Akazi",
-          "Amahugurwa ya Professional",
-          "Ibikorwa by'Umuryango",
-          "Networking ya Peer"
+          "Inama Zihariye",
+          "Ubumenyi mu Nganda",
+          "Umuryango wa Professional",
+          "Gutera Imbere mu Karire",
+          "Gutegura Karire"
         ]
       },
       "techSkills": {
-        "hero": {
-          "title": "Gukora Ubumenyi bwa Tekinoroji",
-          "description": "Gufasha abakobwa bato kugira ubumenyi bw'ingenzi bwa tekinoroji mu gihe cya digital"
-        },
-        "overview": {
-          "title": "Icyerekezo cya Porogaramu",
-          "description": "Porogaramu yacu ya mentorship ikuvanga n'abanyamwuga bafite ubumenyi batanga inama, ubufasha, n'ubumenyi kugufasha kugera ku ntego zawe za kazi. Binyuze mu nama za mentorship z'umuntu ku giti cye na za gatsiko, uzakora ubumenyi bw'ingenzi no gukora umuryango wa professional.",
-          "features": {
-            "guidance": {
-              "title": "Inama Zihariye",
-              "description": "Fata inama n'ubufasha bwoherejwe ku ntego na zawe n'ibibazo"
-            },
-            "expertise": {
-              "title": "Ubumenyi bw'Umwuga",
-              "description": "Menya kuva ku bayobozi bafite ubumenyi bwinshi mu mwuga wawe"
-            },
-            "network": {
-              "title": "Gukora Umuryango",
-              "description": "Vugana n'abanyamwuga no kwagura umuryango wawe wa professional"
-            }
-          }
-        },
-        "details": {
-          "title": "Ibisobanuro bya Porogaramu",
-          "duration": "Igihe",
-          "schedule": "Igihe cy'akazi",
-          "location": "Aho",
-          "prerequisites": "Ibikenewe",
-          "certification": "Impamyabumenyi",
-          "applyButton": "Iyandikishe Ubu"
-        },
-        "curriculum": {
-          "title": "Amasomo",
-          "modules": {
-            "oneOnOne": {
-              "title": "Mentorship y'Umuntu ku Giti Cye",
-              "description": "Inama n'ubufasha bwoherejwe ku giti cye biva ku banyamwuga bafite ubumenyi",
-              "topics": [
-                "Gutegura umurongo wa kazi",
-                "Gukora ubumenyi",
-                "Gukora umuryango wa professional",
-                "Gutondeka kazi n'ubuzima",
-                "Gukura mu giti cye"
-              ]
-            },
-            "group": {
-              "title": "Mentorship ya Gatsiko",
-              "description": "Kwiga hamwe n'ubufasha bwa bagenzi mu gatsiko",
-              "topics": [
-                "Ibiganiro bya gatsiko",
-                "Kwiga hamwe na bagenzi",
-                "Ibikorwa bya gatsiko",
-                "Gahunda zihariye",
-                "Gusobanukirwa ibibazo hamwe"
-              ]
-            },
-            "industry": {
-              "title": "Ubumenyi bw'Umwuga",
-              "description": "Menya byinshi kuri umwuga na umurongo wa kazi",
-              "topics": [
-                "Imiterere y'umwuga",
-                "Amahirwe ya kazi",
-                "Ubumenyi bkenewe",
-                "Gukora ubumenyi",
-                "Gukora umuryango wa umwuga"
-              ]
-            },
-            "leadership": {
-              "title": "Gukora Ubuyobozi",
-              "description": "Gukora ubumenyi n'ubwizigame bwa buyobozi",
-              "topics": [
-                "Gutora ibyemezo",
-                "Gucunga gatsiko",
-                "Ubumenyi bwo kuvugana",
-                "Gutera ibitekerezo",
-                "Gukora izina ryawe"
-              ]
-            },
-            "career": {
-              "title": "Guhinduka Umwuga",
-              "description": "Ubufasha bwo guhinduka umwuga no gukora ubumenyi",
-              "topics": [
-                "Gutera CV",
-                "Gutegura interview",
-                "Gutera amafaranga",
-                "Guhinduka umwuga",
-                "Gukora ubumenyi"
-              ]
-            }
-          }
-        }
+        "title": "Porogaramu ya Ubumenyi bwa Tekinoroji",
+        "description": "Menya ubumenyi bw'ingenzi bwa tekinoroji bakenewe mu kinyejana cya digital",
+        "features": [
+          "Amahugurwa Y'ingenzi",
+          "Abarezi Bafite Ubumenyi",
+          "Impamyabumenyi",
+          "Ubumenyi bw'Ingenzi",
+          "Gutera Imbere mu Karire"
+        ]
       }
     },
     "cta": {
@@ -376,98 +286,312 @@
     "learnMore": "Menya Byinshi",
     "workshops": {
       "hero": {
-        "title": "Amahugurwa Y'ingenzi",
-        "description": "Amahugurwa y'ingenzi yateguwe gufasha kwiga ubumenyi n'ubwenge"
+        "title": "Amahugurwa",
+        "description": "Amahugurwa y'ingenzi ku mitwe itandukanye ya tekinoroji"
       },
       "overview": {
-        "title": "Icyerekezo cy'Amahugurwa",
-        "description": "Amahugurwa yacu atanga amahugurwa y'ingenzi ayoborwa n'abanyamwuga. Buri mahugurwa yateguwe gufasha kwiga ubumenyi n'ubwenge bwoherejwe kuri kazi cyangwa business yawe.",
+        "title": "Icyerekezo cya Porogaramu",
+        "description": "Amahugurwa yacu atanga amahugurwa y'ingenzi ku mitwe itandukanye ya tekinoroji",
         "features": {
-          "learning": {
-            "title": "Kwiga mu Buryo Bwiza",
-            "description": "Ibikorwa by'ingenzi n'ibikorwa by'ingenzi byo gukoresha ubumenyi bwawe"
+          "handsOn": {
+            "title": "Kwiga Binyuze mu Gukora",
+            "description": "Wiga binyuze mu myitozo n'imirimo y'ingenzi"
           },
-          "instructors": {
-            "title": "Abayobozi b'Ingenzi",
-            "description": "Menya kuva ku banyamwuga bafite ubumenyi bwinshi"
+          "expert": {
+            "title": "Abarimu Bafite Ubumenyi",
+            "description": "Wiga kuri banyamwuga n'abarimu bafite ubumenyi"
           },
-          "groups": {
-            "title": "Amatsinda Matoya",
-            "description": "Amahugurwa y'ingenzi afite ubufasha n'ingenzi"
+          "networking": {
+            "title": "Gukora Umuryango",
+            "description": "Huzwa n'abarwanawe na banyamwuga"
           }
         }
       },
       "details": {
-        "title": "Ibisobanuro by'Amahugurwa",
-        "duration": {
-          "title": "Igihe",
-          "value": "Amasaha 2-4 kuri buri mahugurwa"
-        },
-        "schedule": {
-          "title": "Igihe cy'akazi",
-          "value": "Amahugurwa ya buri cyumweru afite amahitamo y'igihe"
-        },
-        "location": {
-          "title": "Aho",
-          "value": "Hybrid (In-person na virtual)"
-        },
-        "prerequisites": {
-          "title": "Ibikenewe",
-          "value": "Yafunguye kuri bose bari mu porogaramu"
-        }
+        "title": "Ibisobanuro bya Porogaramu",
+        "duration": "Igihe",
+        "schedule": "Igenamiterere",
+        "location": "Ahantu",
+        "prerequisites": "Ibikenewe",
+        "durationValue": "Amasaha 4-6 buri mahugurwa",
+        "scheduleValue": "Amahugurwa ya buri kwezi ku ngingo zitandukanye",
+        "locationValue": "Mu nzu yacu",
+        "prerequisitesValue": "Byihuse ku ngingo ya mahugurwa"
       },
-      "available": {
-        "title": "Amahugurwa Ariho",
+      "upcoming": {
+        "title": "Amahugurwa Azaza",
         "workshops": {
-          "career": {
-            "title": "Amahugurwa yo Gukora Ubumenyi",
-            "description": "Ibikoresho n'uburyo bwo gukora ubumenyi",
-            "topics": [
-              "Gutera CV",
-              "Gutegura Interview",
-              "Gukora Izina Ryawe",
-              "Ubumenyi bwo Gukora Umuryango",
-              "Gutegura Umurongo wa Kazi"
-            ]
+          "webDev": {
+            "title": "Ubumenyi bw'ibanze bwo Gukora Web",
+            "description": "Menya ubumenyi bw'ibanze bwo gukora web harimo HTML, CSS, na JavaScript",
+            "date": "Ukwezi Gutaha"
+          },
+          "data": {
+            "title": "Mahugurwa yo Gukurikiranwa kwa Data",
+            "description": "Menya ibikoresho n'uburyo bwo gukurikiranwa kwa data kugirango utore ibyemezo byiza",
+            "date": "Mu Bihe 2"
+          },
+          "cybersecurity": {
+            "title": "Ubwishingizi kuri Interineti",
+            "description": "Menya uburyo bw'ingenzi bwo kurinda ibikoresho byawe bya digital",
+            "date": "Mu Bihe 3"
           },
           "leadership": {
-            "title": "Amahugurwa ya Buyobozi",
-            "description": "Gukora ubumenyi bw'ingenzi bwa buyobozi",
-            "topics": [
-              "Gucunga Gatsiko",
-              "Ubumenyi bwo Kuvugana",
-              "Gutora Ibyemezo",
-              "Gusobanukirwa Ibibazo",
-              "Gutera Ibitekerezo"
-            ]
-          },
-          "entrepreneurship": {
-            "title": "Amahugurwa ya Business",
-            "description": "Gutera no gukora business yawe",
-            "topics": [
-              "Gutegura Business",
-              "Gukora Ubushakashatsi",
-              "Gucunga Amafaranga",
-              "Gutera Marketing",
-              "Gutera Pitch"
-            ]
-          },
-          "digital": {
-            "title": "Amahugurwa ya Digital",
-            "description": "Menya ibikoresho by'ingenzi bya digital",
-            "topics": [
-              "Gucunga Social Media",
-              "Gutera Content",
-              "Digital Analytics",
-              "Gukorana kuri Interineti",
-              "By'ingenzi bya Cybersecurity"
-            ]
+            "title": "Ubuyobozi mu Tekinoroji",
+            "description": "Fata ubumenyi bw'ingenzi mu kuyobora tekinoroji no gukora itsinda",
+            "date": "Mu Bihe 4"
           }
         }
       },
       "cta": {
         "title": "Witeguye Kwiga?",
-        "description": "Winjire mu mahugurwa yacu no kwiga ubumenyi bwawe"
+        "description": "Winjire mu mahugurwa azaza kandi wongere ubumenyi bwawe",
+        "button": "Iyandikishe Ubu"
+      }
+    },
+    "communication": {
+      "hero": {
+        "title": "Ubumenyi bwo Kuvugana",
+        "description": "Menya uburyo bwo kuvugana neza mu gihe cya digital"
+      },
+      "overview": {
+        "title": "Icyerekezo cya Porogaramu",
+        "description": "Porogaramu yacu yo kuvugana ifasha gukora ubumenyi bw'ingenzi bwo kuvugana mu mwuga",
+        "features": {
+          "presentation": {
+            "title": "Ubumenyi bwo Kwerekana",
+            "description": "Wiga uburyo bwo kwerekana neza"
+          },
+          "writing": {
+            "title": "Kwandika mu Mwuga",
+            "description": "Menya ubumenyi bwo kwandika mu mwuga"
+          },
+          "digital": {
+            "title": "Kuvugana kwa Digital",
+            "description": "Wiga uburyo bwo kuvugana neza kuri Internet"
+          }
+        }
+      },
+      "details": {
+        "title": "Ibisobanuro bya Porogaramu",
+        "duration": "Igihe",
+        "schedule": "Igenamiterere",
+        "location": "Ahantu",
+        "prerequisites": "Ibikenewe",
+        "durationValue": "Ibihe 8",
+        "scheduleValue": "Iseanshi 2 buri cyumweru, amasaha 2 buri seanshi",
+        "locationValue": "Hybrid (Kuri Interineti & Mu Nzu)",
+        "prerequisitesValue": "Bafunguye abagore bose"
+      },
+      "curriculum": {
+        "title": "Amasomo",
+        "modules": {
+          "publicSpeaking": {
+            "title": "Kuvuga Imbere y'Abantu",
+            "description": "Gukora ubwizigame mu kuvuga imbere y'abantu"
+          },
+          "businessWriting": {
+            "title": "Kwandika mu Mwuga",
+            "description": "Menya uburyo bwo kwandika mu mwuga"
+          },
+          "digitalMedia": {
+            "title": "Media ya Digital",
+            "description": "Wiga uburyo bwo kuvugana neza kuri Internet"
+          },
+          "interpersonal": {
+            "title": "Ubumenyi bwo Kuvugana",
+            "description": "Gukora ubumenyi bwo kuvugana neza"
+          }
+        }
+      },
+      "cta": {
+        "title": "Witeguye Kongera Ubumenyi bwawe bwo Kuvugana?",
+        "description": "Winjire mu porogaramu yacu yo kuvugana kandi wongere ubumenyi bwawe bwo kuvugana",
+        "button": "Iyandikishe Ubu"
+      }
+    },
+    "mentorship": {
+      "hero": {
+        "title": "Porogaramu ya Mentorship",
+        "description": "Huzwa n'abayoboramikorere bafite ubumenyi bazo kuyobora mu rugendo rwawe rwa karire"
+      },
+      "overview": {
+        "title": "Icyerekezo cya Porogaramu",
+        "description": "Porogaramu yacu ya mentorship ihuza abagore n'abakora bafite ubumenyi bazo kuyobora mu rugendo rwawe rwo gutera imbere mu karire. Binyuze mu nama zihariye n'ibikorwa by'itsinda, uzafata ubumenyi bw'ingenzi no guhuza umuryango wa professional.",
+        "features": {
+          "personalized": {
+            "title": "Inama Zihariye",
+            "description": "Mentorship ya one-on-one yateguwe kugirango ikurikire intego zawe"
+          },
+          "expertise": {
+            "title": "Ubumenyi mu Nganda",
+            "description": "Wige kuva ku bafite ubumenyi mu nganda bafite ubumenyi mu kazi"
+          },
+          "network": {
+            "title": "Umuryango wa Professional",
+            "description": "Huzwa n'abayoboramikorere n'abarwana nawe mu nganda zawe"
+          }
+        }
+      },
+      "details": {
+        "title": "Ibisobanuro bya Porogaramu",
+        "duration": "Igihe",
+        "schedule": "Igenamiterere",
+        "location": "Ahantu",
+        "prerequisites": "Ibikenewe",
+        "durationValue": "Amezi 6",
+        "scheduleValue": "Inama zihariye buri wa kabiri, inama z'itsinda buri kwezi",
+        "locationValue": "Hybrid (Kuri Interineti & Mu Nzu)",
+        "prerequisites": "Ibikenewe"
+      },
+      "curriculum": {
+        "title": "Modire za Masomo",
+        "modules": {
+          "oneOnOne": {
+            "title": "Mentorship ya One-on-One",
+            "description": "Inama zihariye no gutegura karire.",
+            "topics": [
+              "Gutegura Karire",
+              "Gutera Imbere mu Bumenyi",
+              "Gushyiraho Intego",
+              "Gutera Imbere mu Professional",
+              "Ubumenyi mu Nganda"
+            ]
+          },
+          "group": {
+            "title": "Mentorship y'Itsinda",
+            "description": "Kwiga hamwe n'inkunga y'abarwana.",
+            "topics": [
+              "Kwiga Hamwe",
+              "Ibiganiro by'Itsinda",
+              "Inyigisho z'Ingenzi",
+              "Gusobanukirwa Ibibazo",
+              "Gukora Hamwe"
+            ]
+          },
+          "industry": {
+            "title": "Ubumenyi mu Nganda",
+            "description": "Menya ibyerekeye imikino myiza n'amahirwe.",
+            "topics": [
+              "Imikino myiza mu Isoko",
+              "Inzira za Karire",
+              "Igenamiterere ry'Inganda",
+              "Ikoranabuhanga Rishya",
+              "Isoko ry'Akazi"
+            ]
+          },
+          "leadership": {
+            "title": "Gutera Imbere mu Buyobozi",
+            "description": "Fata ubumenyi bw'ingenzi mu buyobozi no mu kuyobora.",
+            "topics": [
+              "Gutora Ibyemezo",
+              "Kuyobora Itsinda",
+              "Kuvugana",
+              "Gutera Imbere mu Bwenge",
+              "Gusobanukirwa Ibibazo"
+            ]
+          }
+        }
+      },
+      "booking": {
+        "loginRequired": "Nyamuneka winjire kugirango urebe iseanshi ya mentorship",
+        "noMentors": "Nta bayoboramikorere bari kuri ubu",
+        "success": "Iseanshi ya mentorship yafashwe neza",
+        "error": "Kutashobora gufasha iseanshi ya mentorship"
+      },
+      "cta": {
+        "title": "Witeguye Gutangiza Urugendo Rwawe?",
+        "description": "Fasha iseanshi yawe ya mbere ya mentorship uyu munsi",
+        "button": "Fasha Ubu"
+      }
+    },
+    "techSkills": {
+      "hero": {
+        "title": "Porogaramu ya Ubumenyi bwa Tekinoroji",
+        "description": "Menya ubumenyi bw'ingenzi bwa tekinoroji bakenewe mu kinyejana cya digital"
+      },
+      "overview": {
+        "title": "Icyerekezo cya Porogaramu",
+        "description": "Porogaramu yacu ya ubumenyi bwa tekinoroji itanga amahugurwa y'ingenzi mu ikoranabuhanga. Binyuze mu mikino n'ibikorwa by'ingenzi, uzafata ubumenyi bwa tekinoroji bkenewe mu kazi ka digital.",
+        "features": {
+          "practical": {
+            "title": "Amahugurwa Y'ingenzi",
+            "description": "Ubumenyi mu mikino n'ibikorwa by'ingenzi"
+          },
+          "expert": {
+            "title": "Abarezi Bafite Ubumenyi",
+            "description": "Wige kuva ku bafite ubumenyi mu nganda"
+          },
+          "certification": {
+            "title": "Impamyabumenyi",
+            "description": "Fata impamyabumenyi z'ingenzi mu nganda"
+          }
+        }
+      },
+      "details": {
+        "title": "Ibisobanuro bya Porogaramu",
+        "duration": "Igihe",
+        "schedule": "Igenamiterere",
+        "location": "Ahantu",
+        "prerequisites": "Ibikenewe",
+        "durationValue": "Ibihe 12",
+        "scheduleValue": "Iseanshi 3 buri cyumweru, amasaha 2 buri seanshi",
+        "locationValue": "Hybrid (Kuri Interineti & Mu Nzu)",
+        "prerequisitesValue": "Ubumenyi bw'ibanze bw'ikoranabuhanga bikenewe"
+      },
+      "curriculum": {
+        "title": "Modire za Masomo",
+        "modules": {
+          "basics": {
+            "title": "Ubumenyi bw'ibanze bwa Digital",
+            "description": "Menya ubumenyi bw'ibanze bwa digital n'ibikoresho.",
+            "topics": [
+              "Ubumenyi bw'ibanze bwa Computer",
+              "Sisteme zo Gukora",
+              "Kuyobora Dosye",
+              "Ubwishingizi kuri Interineti",
+              "Ubumenyi bwa Digital"
+            ]
+          },
+          "webDev": {
+            "title": "Gukora Web",
+            "description": "Menya uko wakora no gukora web.",
+            "topics": [
+              "HTML & CSS",
+              "Ubumenyi bw'ibanze bwa JavaScript",
+              "Gutegura Web",
+              "Gutegura Web",
+              "Gutera Web"
+            ]
+          },
+          "data": {
+            "title": "Gukurikiranwa kwa Data",
+            "description": "Fata ubumenyi mu kuyobora no gusobanukirwa data.",
+            "topics": [
+              "Excel & Spreadsheets",
+              "Kwerekana Data",
+              "Statistiki z'ibanze",
+              "Gusukura Data",
+              "Ibikoresho byo Kwerekana"
+            ]
+          },
+          "cybersecurity": {
+            "title": "Ubwishingizi kuri Interineti",
+            "description": "Menya uko wakora ubwishingizi bw'ingenzi.",
+            "topics": [
+              "Ubwishingizi bwa Password",
+              "Ubwishingizi kuri Interineti",
+              "Kugendera kuri Interineti",
+              "Kurinda Data",
+              "Ibikoresho by'Ubwishingizi"
+            ]
+          }
+        }
+      },
+      "cta": {
+        "title": "Witeguye Gutera Imbere mu Bumenyi bwawe bwa Tekinoroji?",
+        "description": "Wiyunge n'porogaramu yacu utangize urugendo rwawe rwa tekinoroji uyu munsi",
+        "button": "Iyandikishe Ubu"
       }
     }
   },
@@ -479,14 +603,60 @@
       "description": "Jya mu muryango wacu w'abagore mu tekinoloji",
       "events": "Ibikorwa",
       "forum": "Forum",
-      "join": "Jya mu Muryango"
+      "join": "Jya mu Muryango",
+      "features": {
+        "networking": {
+          "title": "Guhuza Abantu",
+          "description": "Huzwa n'abandi banyiga mu tekinoloji no gufasha umuryango"
+        },
+        "support": {
+          "title": "Inkunga",
+          "description": "Fata inkunga n'ubufasha kuva ku bagize b'umuryango"
+        },
+        "opportunities": {
+          "title": "Amahirwe",
+          "description": "Menya amahirwe y'akazi n'ubufasha mu tekinoloji"
+        }
+      }
     },
     "learning": {
       "title": "Ibikoresho by'Inyigisho",
       "description": "Fata ibikoresho by'inyigisho",
       "materials": "Ibikoresho",
       "tutorials": "Inyigisho",
-      "guides": "Inzira"
+      "guides": "Inzira",
+      "categories": {
+        "beginner": {
+          "title": "Utangira",
+          "description": "Ibikoresho by'ibanze byo kwiga tekinoloji"
+        },
+        "intermediate": {
+          "title": "Hagati",
+          "description": "Ibikoresho byo kwiga ubumenyi bw'ingenzi"
+        },
+        "advanced": {
+          "title": "Ingenzi",
+          "description": "Ibikoresho byo kwiga ubumenyi bw'ingenzi cyane"
+        }
+      },
+      "resources": {
+        "videos": {
+          "title": "Video za Tutorial",
+          "description": "Video zihariye zo kwiga tekinoloji"
+        },
+        "documents": {
+          "title": "Inyandiko",
+          "description": "Inyandiko n'amabwiriza y'ingenzi"
+        },
+        "exercises": {
+          "title": "Ibikorwa",
+          "description": "Ibikorwa byo kwiga no gukora"
+        },
+        "quizzes": {
+          "title": "Ibizamini",
+          "description": "Ibizamini byo gusuzuma ubumenyi bwawe"
+        }
+      }
     },
     "hero": {
       "title": "Ibikoresho",
@@ -566,7 +736,35 @@
     "author": "Umwanditsi",
     "date": "Itariki",
     "share": "Sangira",
-    "related": "Bihuzwe"
+    "related": "Bihuzwe",
+    "hero": {
+      "title": "Blog",
+      "titleHighlight": "Yacu",
+      "description": "Ubumenyi, inkuru, n'uburyo bwo gutera imbere bwa umuryango wacu"
+    },
+    "posts": {
+      "readMore": "Soma Byinshi",
+      "date": "Itariki",
+      "author": "Umwanditsi",
+      "items": {
+        "breakingBarriers": {
+          "title": "Gufunga Ibyuho: Abagore mu Tekinoroji",
+          "excerpt": "Gusura ibibazo n'impinduka z'abagore mu nganda za tekinoroji."
+        },
+        "futureWomen": {
+          "title": "Ejo Hazaza h'Abagore mu STEM",
+          "excerpt": "Uko dukora kugirango dongere abagore mu nganda za STEM."
+        },
+        "supportiveCommunity": {
+          "title": "Gukora Umuryango W'inkunga wa Tekinoroji",
+          "excerpt": "Akamaro k'umuryango mu gufasha abagore gutsinda mu tekinoroji."
+        },
+        "codingBootcamp": {
+          "title": "Inkuru Z'impinduka za Coding Bootcamp",
+          "excerpt": "Inkuru z'impinduka z'abagore bahindutseho umwuga wabo binyuze mu coding."
+        }
+      }
+    }
   },
   "contact": {
     "title": "Twandikire",
@@ -815,7 +1013,50 @@
     "forum": "Forum",
     "groups": "Amatsinda",
     "discussions": "Ibiganiro",
-    "members": "Abanyamuryango"
+    "members": "Abanyamuryango",
+    "hero": {
+      "title": "Umuryango Wacu",
+      "description": "Jya mu muryango wacu w'abagore mu tekinoloji"
+    },
+    "features": {
+      "mentorship": {
+        "title": "Porogaramu ya Mentorship",
+        "description": "Huzwa n'abafite ubumenyi mu nganda za tekinoloji kugirango bafashe no gutanga inkunga"
+      },
+      "studyGroups": {
+        "title": "Amatsinda Y'Inyigisho",
+        "description": "Jya mu matsinda y'inyigisho yo kwiga no gukora code hamwe n'abarwana"
+      },
+      "jobBoard": {
+        "title": "Ikibaho cy'Akazi",
+        "description": "Fata amahirwe y'akazi yihariye atera imbere kuva ku makampani yacu"
+      },
+      "forums": {
+        "title": "Foramu za Discussion",
+        "description": "Jya mu biganiro by'ingenzi n'abagize b'umuryango"
+      }
+    },
+    "events": {
+      "title": "Ibikorwa Bizaza",
+      "description": "Jya mu bikorwa by'umuryango by'ingenzi",
+      "monthlyMeetup": {
+        "title": "Inama ya Buri Kwezi",
+        "description": "Jya mu nama yacu ya buri kwezi ifite abavugizi b'ingenzi n'amahirwe yo guhuza abantu"
+      },
+      "codingWorkshop": {
+        "title": "Mahugurwa yo Gukora Code",
+        "description": "Mahugurwa y'ingenzi yo gukora code yerekeye ubumenyi bw'ibanze bwo gukora web"
+      },
+      "careerFair": {
+        "title": "Ikibaho cy'Akazi",
+        "description": "Huzwa n'amakampani ya tekinoloji kandi urebe amahirwe y'akazi"
+      }
+    },
+    "join": {
+      "title": "Jya mu Muryango Wacu",
+      "description": "Jya mu muryango wacu w'abagore mu tekinoloji. Huzwa, wige, kandi utere imbere hamwe",
+      "button": "Iyandikishe Ubu"
+    }
   },
   "courses": {
     "title": "Amasomo",
@@ -1097,6 +1338,58 @@
       "title": "Be Inkingi y'Intsinzi Zacu",
       "description": "Duhuzwe n'umuryango wacu w'abagore bafite ubumenyi, utangire urugendo rwawe rwo gutera imbere.",
       "button": "Reba Porogaramu"
+    }
+  },
+  "learningResources": {
+    "hero": {
+      "title": "Ibikoresho by'Inyigisho",
+      "description": "Fata ibikoresho by'inyigisho byihuse"
+    },
+    "categories": {
+      "beginner": {
+        "title": "Utangira",
+        "description": "Ibikoresho by'ingenzi byo kwiga ubumenyi bw'ibanze"
+      },
+      "intermediate": {
+        "title": "Hagati",
+        "description": "Ibikoresho byo kwiga ubumenyi buhagije"
+      },
+      "advanced": {
+        "title": "Ingenzi",
+        "description": "Ibikoresho byo kwiga ubumenyi bw'ingenzi"
+      }
+    },
+    "resources": {
+      "videos": {
+        "title": "Video za Tutorial",
+        "description": "Video zihuse zo kwiga ubumenyi bw'ibanze"
+      },
+      "documents": {
+        "title": "Inyandiko",
+        "description": "Inyandiko zihuse zo kwiga ubumenyi bw'ibanze"
+      },
+      "exercises": {
+        "title": "Ibikorwa",
+        "description": "Ibikorwa byo kwiga ubumenyi buhagije"
+      },
+      "quizzes": {
+        "title": "Ibizamini",
+        "description": "Ibizamini byo kwiga ubumenyi buhagije"
+      },
+      "projects": {
+        "title": "Ibikorwa",
+        "description": "Ibikorwa byo kwiga ubumenyi bw'ingenzi"
+      },
+      "caseStudies": {
+        "title": "Ubushakashatsi",
+        "description": "Ubushakashatsi bwo kwiga ubumenyi bw'ingenzi"
+      },
+      "viewMore": "Reba Ibisobanuro"
+    },
+    "cta": {
+      "title": "Tangiza Kwiga Ubu",
+      "description": "Tangiza kwiga ubumenyi bw'ibanze bwo gukora web",
+      "button": "Tangiza Ubu"
     }
   }
 } 

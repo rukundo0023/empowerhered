@@ -80,7 +80,7 @@ const Home = () => {
                   to="/contact"
                   className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-gray-200 text-center"
                 >
-                  {t('home.hero.contactUs')}
+                  {t('contactUs')}
                 </Link>
               </div>
 

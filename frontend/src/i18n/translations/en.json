@@ -54,45 +54,45 @@
     },
     "featuredCourses": {
       "title": "Featured Courses",
-      "subtitle": "Start Your Journey Today",
-      "description": "Choose from our carefully designed courses to accelerate your tech career",
+      "subtitle": "Start Your Learning Journey",
+      "description": "Explore our most popular courses designed to help you succeed",
       "learnMore": "Learn More",
       "courses": {
         "computerBasics": {
-          "title": "Computer Basics & Hardware",
-          "description": "Learn the fundamentals of computer hardware and maintenance",
+          "title": "Computer Basics",
+          "description": "Learn essential computer skills for beginners",
           "level": "Beginner",
-          "duration": "6 weeks",
-          "students": "80 students"
+          "duration": "8 weeks",
+          "students": "100+ students"
         },
         "internetSkills": {
-          "title": "Internet & Email Skills",
-          "description": "Master essential internet navigation and email communication",
+          "title": "Internet Skills",
+          "description": "Master web browsing and online communication",
           "level": "Beginner",
-          "duration": "4 weeks",
-          "students": "100 students"
+          "duration": "6 weeks",
+          "students": "80+ students"
         },
         "microsoftWord": {
           "title": "Microsoft Word",
-          "description": "Become proficient in Microsoft Word for professional documents",
-          "level": "Beginner",
-          "duration": "3 weeks",
-          "students": "50 students"
+          "description": "Create professional documents with Word",
+          "level": "Intermediate",
+          "duration": "4 weeks",
+          "students": "120+ students"
         }
       }
     },
     "whyChooseUs": {
       "title": "Why Choose Us",
       "subtitle": "Your Path to Success",
-      "description": "We provide everything you need to succeed in the tech industry",
+      "description": "We provide comprehensive support to help you achieve your goals",
       "features": {
         "expertLearning": {
-          "title": "Expert-Led Learning",
+          "title": "Expert Learning",
           "description": "Learn from industry professionals with years of experience"
         },
         "mentorship": {
           "title": "Mentorship",
-          "description": "Get personalized guidance from experienced mentors"
+          "description": "Get guidance from experienced mentors in your field"
         },
         "careerSupport": {
           "title": "Career Support",
@@ -565,102 +565,291 @@
     "mentorship": {
       "hero": {
         "title": "Mentorship Program",
-        "description": "Connect with experienced mentors who will guide you through your professional journey"
+        "description": "Connect with experienced mentors to guide your career journey"
       },
       "overview": {
         "title": "Program Overview",
-        "description": "Our mentorship program pairs you with experienced professionals who provide guidance, support, and insights to help you achieve your career goals. Through one-on-one and group mentoring sessions, you'll gain valuable knowledge and build a strong professional network.",
+        "description": "Our mentorship program pairs you with experienced professionals who will guide you through your career development journey. Through personalized sessions and group activities, you'll gain valuable insights and build a strong professional network.",
         "features": {
           "personalized": {
             "title": "Personalized Guidance",
-            "description": "Get tailored advice and support based on your specific goals and challenges"
+            "description": "One-on-one mentoring tailored to your goals"
           },
           "expertise": {
             "title": "Industry Expertise",
-            "description": "Learn from mentors with extensive experience in your target industry"
+            "description": "Learn from professionals with real-world experience"
           },
           "network": {
-            "title": "Network Building",
-            "description": "Connect with professionals and expand your professional network"
+            "title": "Professional Network",
+            "description": "Connect with mentors and peers in your field"
           }
         }
       },
       "details": {
         "title": "Program Details",
-        "duration": {
-          "title": "Duration",
-          "value": "6 months with optional extension"
-        },
-        "schedule": {
-          "title": "Schedule",
-          "value": "Bi-weekly one-on-one sessions and monthly group meetings"
-        },
-        "location": {
-          "title": "Location",
-          "value": "Hybrid (In-person and virtual options available)"
-        },
-        "prerequisites": {
-          "title": "Prerequisites",
-          "value": "Open to all program participants with clear career goals"
+        "duration": "Duration",
+        "schedule": "Schedule",
+        "location": "Location",
+        "prerequisites": "Prerequisites"
+      },
+      "curriculum": {
+        "title": "Curriculum Modules",
+        "modules": {
+          "oneOnOne": {
+            "title": "One-on-One Mentorship",
+            "description": "Personalized guidance and career planning sessions.",
+            "topics": [
+              "Career Planning",
+              "Skill Development",
+              "Goal Setting",
+              "Professional Growth",
+              "Industry Insights"
+            ]
+          },
+          "group": {
+            "title": "Group Mentoring",
+            "description": "Collaborative learning and peer support sessions.",
+            "topics": [
+              "Peer Learning",
+              "Group Discussions",
+              "Case Studies",
+              "Problem Solving",
+              "Team Building"
+            ]
+          },
+          "industry": {
+            "title": "Industry Insights",
+            "description": "Learn about current trends and opportunities.",
+            "topics": [
+              "Market Trends",
+              "Career Paths",
+              "Industry Standards",
+              "Emerging Technologies",
+              "Job Market"
+            ]
+          },
+          "leadership": {
+            "title": "Leadership Development",
+            "description": "Build essential leadership and management skills.",
+            "topics": [
+              "Decision Making",
+              "Team Management",
+              "Communication",
+              "Strategic Thinking",
+              "Problem Solving"
+            ]
+          }
         }
       },
-      "modules": {
-        "title": "Program Modules",
-        "oneOnOne": {
-          "title": "One-on-One Mentoring",
-          "description": "Personalized guidance and support from experienced professionals",
-          "topics": [
-            "Career path planning",
-            "Skill development",
-            "Professional networking",
-            "Work-life balance",
-            "Personal growth"
-          ]
-        },
-        "group": {
-          "title": "Group Mentoring",
-          "description": "Collaborative learning and peer support in a group setting",
-          "topics": [
-            "Group discussions",
-            "Peer learning",
-            "Team projects",
-            "Shared experiences",
-            "Collective problem-solving"
-          ]
-        },
-        "industry": {
-          "title": "Industry Insights",
-          "description": "Deep dive into specific industries and career paths",
-          "topics": [
-            "Industry trends",
-            "Career opportunities",
-            "Required skills",
-            "Professional development",
-            "Industry networking"
-          ]
-        },
-        "leadership": {
-          "title": "Leadership Development",
-          "description": "Building leadership skills and confidence",
-          "topics": [
-            "Decision making",
-            "Team management",
-            "Communication skills",
-            "Strategic thinking",
-            "Personal branding"
-          ]
-        },
-        "career": {
-          "title": "Career Transition",
-          "description": "Support for career changes and advancement",
-          "topics": [
-            "Resume building",
-            "Interview preparation",
-            "Salary negotiation",
-            "Career pivoting",
-            "Professional growth"
-          ]
+      "booking": {
+        "loginRequired": "Please login to book a mentorship session",
+        "noMentors": "No mentors available at the moment",
+        "success": "Mentorship session booked successfully",
+        "error": "Failed to book mentorship session"
+      },
+      "cta": {
+        "title": "Ready to Start Your Journey?",
+        "description": "Book your first mentorship session today",
+        "button": "Book Now"
+      }
+    },
+    "techSkills": {
+      "hero": {
+        "title": "Tech Skills Program",
+        "description": "Learn essential tech skills needed in the digital age"
+      },
+      "overview": {
+        "title": "Program Overview",
+        "description": "Our tech skills program provides hands-on training in essential digital technologies. Through practical exercises and real-world projects, you'll develop the skills needed to succeed in today's digital workplace.",
+        "features": {
+          "practical": {
+            "title": "Practical Training",
+            "description": "Hands-on experience with real-world projects"
+          },
+          "expert": {
+            "title": "Expert Instructors",
+            "description": "Learn from industry professionals"
+          },
+          "certification": {
+            "title": "Certification",
+            "description": "Earn recognized industry certifications"
+          }
         }
+      },
+      "details": {
+        "title": "Program Details",
+        "duration": "Duration",
+        "schedule": "Schedule",
+        "location": "Location",
+        "prerequisites": "Prerequisites"
+      },
+      "curriculum": {
+        "title": "Curriculum Modules",
+        "modules": {
+          "basics": {
+            "title": "Digital Basics",
+            "description": "Master fundamental digital skills and tools.",
+            "topics": [
+              "Computer Fundamentals",
+              "Operating Systems",
+              "File Management",
+              "Internet Safety",
+              "Digital Literacy"
+            ]
+          },
+          "webDev": {
+            "title": "Web Development",
+            "description": "Learn to build and maintain websites.",
+            "topics": [
+              "HTML & CSS",
+              "JavaScript Basics",
+              "Web Design",
+              "Responsive Layout",
+              "Web Hosting"
+            ]
+          },
+          "data": {
+            "title": "Data Analysis",
+            "description": "Develop skills in data handling and analysis.",
+            "topics": [
+              "Excel & Spreadsheets",
+              "Data Visualization",
+              "Basic Statistics",
+              "Data Cleaning",
+              "Reporting Tools"
+            ]
+          },
+          "cybersecurity": {
+            "title": "Cybersecurity",
+            "description": "Learn essential security practices.",
+            "topics": [
+              "Password Security",
+              "Online Privacy",
+              "Safe Browsing",
+              "Data Protection",
+              "Security Tools"
+            ]
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to Build Your Tech Skills?",
+        "description": "Join our program and start your tech journey today",
+        "button": "Apply Now"
+      }
+    },
+    "workshops": {
+      "hero": {
+        "title": "Workshops",
+        "description": "Hands-on learning sessions on various technology topics"
+      },
+      "overview": {
+        "title": "Program Overview",
+        "description": "Our workshops provide hands-on learning experiences on various technology topics",
+        "features": {
+          "handsOn": {
+            "title": "Hands-on Learning",
+            "description": "Learn through practical exercises and real-world projects"
+          },
+          "expert": {
+            "title": "Expert Instructors",
+            "description": "Learn from industry professionals and experienced instructors"
+          },
+          "networking": {
+            "title": "Networking",
+            "description": "Connect with peers and industry professionals"
+          }
+        }
+      },
+      "details": {
+        "title": "Program Details",
+        "duration": "Duration",
+        "schedule": "Schedule",
+        "location": "Location",
+        "prerequisites": "Prerequisites"
+      },
+      "upcoming": {
+        "title": "Upcoming Workshops",
+        "workshops": {
+          "webDev": {
+            "title": "Web Development Basics",
+            "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript"
+          },
+          "data": {
+            "title": "Data Analysis Workshop",
+            "description": "Master data analysis tools and techniques for better decision making"
+          },
+          "cybersecurity": {
+            "title": "Cybersecurity Essentials",
+            "description": "Learn essential cybersecurity practices to protect your digital assets"
+          },
+          "leadership": {
+            "title": "Tech Leadership",
+            "description": "Develop leadership skills in technology management and team building"
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to Learn?",
+        "description": "Join our upcoming workshops and enhance your skills",
+        "button": "Register Now"
+      }
+    },
+    "communication": {
+      "hero": {
+        "title": "Communication Skills",
+        "description": "Master effective communication in the digital age"
+      },
+      "overview": {
+        "title": "Program Overview",
+        "description": "Our communication program helps you develop essential communication skills for professional success",
+        "features": {
+          "presentation": {
+            "title": "Presentation Skills",
+            "description": "Learn to deliver effective presentations"
+          },
+          "writing": {
+            "title": "Business Writing",
+            "description": "Master professional writing skills"
+          },
+          "digital": {
+            "title": "Digital Communication",
+            "description": "Learn effective online communication"
+          }
+        }
+      },
+      "details": {
+        "title": "Program Details",
+        "duration": "Duration",
+        "schedule": "Schedule",
+        "location": "Location",
+        "prerequisites": "Prerequisites"
+      },
+      "curriculum": {
+        "title": "Curriculum",
+        "modules": {
+          "publicSpeaking": {
+            "title": "Public Speaking",
+            "description": "Develop confidence in public speaking"
+          },
+          "businessWriting": {
+            "title": "Business Writing",
+            "description": "Master professional writing techniques"
+          },
+          "digitalMedia": {
+            "title": "Digital Media",
+            "description": "Learn effective digital communication"
+          },
+          "interpersonal": {
+            "title": "Interpersonal Skills",
+            "description": "Develop strong interpersonal communication"
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to Improve Your Communication?",
+        "description": "Join our communication program and enhance your professional skills",
+        "button": "Enroll Now"
       }
     }
   },
@@ -759,7 +948,35 @@
     "author": "Author",
     "date": "Date",
     "share": "Share",
-    "related": "Related Posts"
+    "related": "Related Posts",
+    "hero": {
+      "title": "Our",
+      "titleHighlight": "Blog",
+      "description": "Insights, stories, and updates from our community"
+    },
+    "posts": {
+      "readMore": "Read More",
+      "date": "Date",
+      "author": "Author",
+      "items": {
+        "breakingBarriers": {
+          "title": "Breaking Barriers: Women in Tech",
+          "excerpt": "Exploring the challenges and triumphs of women in the technology industry."
+        },
+        "futureWomen": {
+          "title": "The Future of Women in STEM",
+          "excerpt": "How we're working to increase female representation in STEM fields."
+        },
+        "supportiveCommunity": {
+          "title": "Building a Supportive Tech Community",
+          "excerpt": "The importance of community in fostering women's success in tech."
+        },
+        "codingBootcamp": {
+          "title": "Coding Bootcamp Success Stories",
+          "excerpt": "Real stories from women who transformed their careers through coding."
+        }
+      }
+    }
   },
   "contact": {
     "title": "Contact Us",
@@ -1288,5 +1505,58 @@
       "description": "Join our community of empowered women and start your journey to success.",
       "button": "Explore Programs"
     }
-  }
+  },
+  "learningResources": {
+    "hero": {
+      "title": "Learning Resources",
+      "description": "Access our comprehensive learning materials"
+    },
+    "categories": {
+      "beginner": {
+        "title": "Beginner",
+        "description": "Essential resources for learning basic concepts"
+      },
+      "intermediate": {
+        "title": "Intermediate",
+        "description": "Resources for building on your foundation"
+      },
+      "advanced": {
+        "title": "Advanced",
+        "description": "Resources for mastering complex topics"
+      }
+    },
+    "resources": {
+      "videos": {
+        "title": "Tutorial Videos",
+        "description": "Step-by-step video guides for beginners"
+      },
+      "documents": {
+        "title": "Documents",
+        "description": "Comprehensive written guides and tutorials"
+      },
+      "exercises": {
+        "title": "Exercises",
+        "description": "Practice exercises to reinforce your learning"
+      },
+      "quizzes": {
+        "title": "Quizzes",
+        "description": "Test your knowledge with interactive quizzes"
+      },
+      "projects": {
+        "title": "Projects",
+        "description": "Hands-on projects to apply your skills"
+      },
+      "caseStudies": {
+        "title": "Case Studies",
+        "description": "Real-world examples and success stories"
+      },
+      "viewMore": "View Details"
+    },
+    "cta": {
+      "title": "Start Learning Today",
+      "description": "Begin your journey into web development",
+      "button": "Get Started"
+    }
+  },
+  "contactUs": "Contact Us"
 } 
