@@ -49,7 +49,7 @@ const About = () => {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="space-y-6"
+              className="bg-white p-8 rounded-2xl shadow-lg h-full flex flex-col justify-between"
             >
               <h2 className="text-3xl font-bold text-gray-900">{t('about.story.title')}</h2>
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -63,7 +63,7 @@ const About = () => {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-white p-8 rounded-2xl shadow-lg"
+              className="bg-white p-8 rounded-2xl shadow-lg h-full flex flex-col justify-between"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('about.whatWeDo.title')}</h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">

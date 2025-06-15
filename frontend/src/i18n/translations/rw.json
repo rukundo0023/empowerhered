@@ -146,30 +146,66 @@
     },
     "successStories": {
       "title": "Inkuru Z'Intsinzi",
-      "subtitle": "Inzira Z'Abanyeshuri Bacu B'Intsinzi",
-      "description": "Soma iby'ingenzi byakozwe n'abanyamuryango bacu",
+      "subtitle": "Inzira Z'Abanyeshuri Bacu",
+      "description": "Soma ibyagezweho by'umuryango wacu",
       "stories": [
         {
           "name": "Marie Uwase",
           "role": "Umukora wa Software",
-          "quote": "EmpowerHerEd yampaye ubumenyi n'umwete bwo gukurikira umwuga wanjye wo mu tekinoroji. Porogaramu yo gufasha abakobwa yari ifite agaciro cyane mu kumfasha gukurikiza inganda.",
-          "achievement": "Ubu akora mu kambani ya tekinoroji ya mbere mu Rwanda"
+          "quote": "EmpowerHerEd yampaye ubumenyi n'ubwishingizi bwo gukurikira akazi kawe mu tekinoroji. Porogaramu ya mentorship yari ngombwa cyane mu kumfasha gukurikira inganda.",
+          "achievement": "Ubu akora mu kampani ya tekinoroji ya mbere mu Rwanda"
         },
         {
           "name": "Grace Mukamana",
-          "role": "Umwanzuro wa Data",
-          "quote": "Amahugurwa yuzuye n'umuryango wafasha byampaye ubumenyi bwo guhinduka uva mu myuga itandukanye ngiye mu tekinoroji. Ubu nkoresha ubumenyi bwanjye gufasha abantu.",
-          "achievement": "Yahindutse umwuga wa tekinoroji"
+          "role": "Umukora wa Data",
+          "quote": "Amahugurwa yuzuye n'umuryango wafasha byampaye ubumenyi bwo guhinduka mu tekinoroji. Ubu nkoresha ubumenyi bwanjye gukora impinduka.",
+          "achievement": "Yahindutse umukora wa tekinoroji"
         },
         {
           "name": "Sarah Mutoni",
-          "role": "Umwubatsi wa UX",
-          "quote": "Proje z'ingenzi n'ubunararibonye bwakuye mu EmpowerHerEd byari ngombwa mu kubona akazi kaanjye ka mbere mu tekinoroji. Inkunga y'umuryango yari nziza cyane.",
-          "achievement": "Akomatanya proje z'ingenzi z'abakiriya"
+          "role": "Umukora wa UX",
+          "quote": "Imirimo n'ubumenyi nafashe EmpowerHerEd byari ngombwa mu kumfasha gufata akazi ka mbere ka tekinoroji. Umuryango wafasha wari mwiza cyane.",
+          "achievement": "Ubu ari umuyobozi w'imirimo ya design"
+        },
+        {
+          "name": "Claire Uwimana",
+          "role": "Umukora wa Frontend",
+          "quote": "Ubumenyi bwo gukora code n'ubuyobozi nafashe EmpowerHerEd byampaye ubumenyi bw'ingenzi mu gukora web. Ubu nkora ibisubizo bya digital.",
+          "achievement": "Gukora porogaramu za web nshya"
+        },
+        {
+          "name": "Joyce Mukeshimana",
+          "role": "Umukora wa Backend",
+          "quote": "Inzira ya EmpowerHerEd n'umuryango wafasha byampaye ubwishingizi bwo gukurikira backend development. Umuryango ni mwiza cyane.",
+          "achievement": "Gukora sisteme za backend"
+        },
+        {
+          "name": "Esther Nyiraneza",
+          "role": "Umukora wa Full Stack",
+          "quote": "Amasomo yuzuye n'imirimo ya EmpowerHerEd byampaye ubumenyi bwo gukora imirimo ya development. Ubu nkora mu mirimo ya full-stack.",
+          "achievement": "Umuberezi w'itsinda rya full-stack"
+        },
+        {
+          "name": "Alice Uwamahoro",
+          "role": "Umukora wa Mobile App",
+          "quote": "Inzira ya mobile development ya EmpowerHerEd yari ngombwa mu gutangiza karire yanjye mu gukora porogaramu. Ubuyobozi bwari ngombwa cyane.",
+          "achievement": "Gukora porogaramu za mobile"
+        },
+        {
+          "name": "Beatrice Mutoni",
+          "role": "Umukora wa DevOps",
+          "quote": "EmpowerHerEd yampaye ubumenyi bwo gukora DevOps. Ubumenyi n'ubufatanye byari ngombwa mu guhinduka karire.",
+          "achievement": "Gukora CI/CD pipelines"
+        },
+        {
+          "name": "Diane Uwase",
+          "role": "Umuberezi wa Porogaramu",
+          "quote": "Ubumenyi bwo kuyobora n'ubuyobozi bwa porogaramu nafashe EmpowerHerEd byari ngombwa mu gutera imbere karire. Umuryango wafasha ni mwiza cyane.",
+          "achievement": "Umuberezi w'itsinda rya porogaramu"
         }
       ],
-      "readMore": "Soma Izindi Nkuru",
-      "viewAll": "Reba Inkuru Zose Z'Intsinzi"
+      "readMore": "Soma Inkuru Zinshi",
+      "viewAll": "Reba Inkuru Zose"
     },
     "cta": {
       "title": "Tangiza Urugendo Rwawe",
@@ -508,8 +544,8 @@
         "prerequisites": "Ibikenewe",
         "durationValue": "Amezi 6",
         "scheduleValue": "Inama zihariye buri wa kabiri, inama z'itsinda buri kwezi",
-        "locationValue": "Hybrid (Kuri Interineti & Mu Nzu)",
-        "prerequisites": "Ibikenewe"
+        "locationValue": "Hybrid (Kuri Interineti & Mu Nzu)"
+      
       },
       "curriculum": {
         "title": "Modire za Masomo",
@@ -663,68 +699,6 @@
     }
   },
   "resources": {
-    "title": "Ibikoresho",
-    "description": "Ibikoresho by'inyigisho",
-    "community": {
-      "title": "Umuryango",
-      "description": "Jya mu muryango wacu w'abagore mu tekinoloji",
-      "events": "Ibikorwa",
-      "forum": "Forum",
-      "join": "Jya mu Muryango",
-      "features": {
-        "networking": {
-          "title": "Guhuza Abantu",
-          "description": "Huzwa n'abandi banyiga mu tekinoloji no gufasha umuryango"
-        },
-        "support": {
-          "title": "Inkunga",
-          "description": "Fata inkunga n'ubufasha kuva ku bagize b'umuryango"
-        },
-        "opportunities": {
-          "title": "Amahirwe",
-          "description": "Menya amahirwe y'akazi n'ubufasha mu tekinoloji"
-        }
-      }
-    },
-    "learning": {
-      "title": "Ibikoresho by'Inyigisho",
-      "description": "Fata ibikoresho by'inyigisho",
-      "materials": "Ibikoresho",
-      "tutorials": "Inyigisho",
-      "guides": "Inzira",
-      "categories": {
-        "beginner": {
-          "title": "Utangira",
-          "description": "Ibikoresho by'ibanze byo kwiga tekinoloji"
-        },
-        "intermediate": {
-          "title": "Hagati",
-          "description": "Ibikoresho byo kwiga ubumenyi bw'ingenzi"
-        },
-        "advanced": {
-          "title": "Ingenzi",
-          "description": "Ibikoresho byo kwiga ubumenyi bw'ingenzi cyane"
-        }
-      },
-      "resources": {
-        "videos": {
-          "title": "Video za Tutorial",
-          "description": "Video zihariye zo kwiga tekinoloji"
-        },
-        "documents": {
-          "title": "Inyandiko",
-          "description": "Inyandiko n'amabwiriza y'ingenzi"
-        },
-        "exercises": {
-          "title": "Ibikorwa",
-          "description": "Ibikorwa byo kwiga no gukora"
-        },
-        "quizzes": {
-          "title": "Ibizamini",
-          "description": "Ibizamini byo gusuzuma ubumenyi bwawe"
-        }
-      }
-    },
     "hero": {
       "title": "Ibikoresho",
       "description": "Fata ibikoresho byacu byose, amabwiriza, n'ibikoresho"
@@ -790,6 +764,44 @@
           "Template za Inyandiko"
         ]
       }
+    }
+  },
+  "CareerResources": {
+    "title": "Ibikoresho By'Akazi",
+    "Resume & Interview Prep": {
+      "title": "Resume no gutegura interview",
+      "items": [
+        "Kwandika resume",
+        "Gutegura Interview",
+        "Uko wakwitegura Ibibazo byomuri Interview"
+      ]
+    },
+    "Job Search Resources": {
+      "title": "Ibikoresho byo gushaka akazi",
+      "items": [
+        "kurekomanda akazi",
+        "Amayeri yokumeyana ",
+        "kuvugana Imishahara"
+      ]
+    }
+  },
+   
+  "communityResources": {
+    "title": "Ibikoresho By'Umuryango",
+    "carrer advices": {
+      "title": "Inama kumwuga",
+      "items": [
+        "kwandika resime",
+        "kwitegura interview",
+        "Uko wakwitwara muri Interview"
+      ]
+    },
+    "Nertworking": {
+      "title": "Kumenyana nabahanga",
+      "items": [
+        "Amayeri yokumenyana nabahanga",
+        "kuvugana Imishahara"
+      ]
     }
   },
   "blog": {
@@ -976,7 +988,6 @@
       },
       "createAccount": "Iyandikishe",
       "creatingAccount": "Iyandikishe...",
-      "success": "Konte yawe yaremwe neza!",
       "error": "Ntibyemewe kwakira konte",
       "alreadyHaveAccount": "Ufite konte?",
       "login": "Injira",
@@ -1076,7 +1087,6 @@
   },
   "community": {
     "title": "Umuryango",
-    "events": "Ibikorwa",
     "forum": "Forum",
     "groups": "Amatsinda",
     "discussions": "Ibiganiro",
@@ -1411,47 +1421,8 @@
     "hero": {
       "title": "Ibikoresho Byo Kwiga",
       "description": "Fata ibikoresho byuzuye byo kwiga kugirango uterambe imbere mu karire kawe ka tekinoroji"
-    },
-    "categories": {
-      "beginner": {
-        "title": "Urwego Rwa Ntanga",
-        "description": "Tangiza urugendo rwawe ukoresheje ibitekerezo by'ingenzi n'ubumenyi bw'ibanze"
-      },
-      "intermediate": {
-        "title": "Urwego Rwo Hagati",
-        "description": "Kora ubumenyi bwawe binyuze mu mitwe y'ingenzi"
-      },
-      "advanced": {
-        "title": "Urwego Rw'Ingenzi",
-        "description": "Menya ibitekerezo by'ingenzi n'ubumenyi bwihariye"
-      }
-    },
-    "resources": {
-      "videos": {
-        "title": "Amasomo ya Video",
-        "description": "Amasomo ya video y'ingenzi yo kwiga"
-      },
-      "documents": {
-        "title": "Amadokumenti",
-        "description": "Amadokumenti yuzuye n'ubumenyi"
-      },
-      "exercises": {
-        "title": "Myitozo",
-        "description": "Myitozo yo kongera ubumenyi bwawe"
-      },
-      "quizzes": {
-        "title": "Ibizamini",
-        "description": "Gerageza ubumenyi bwawe binyuze mu bizamini"
-      },
-      "projects": {
-        "title": "Proje",
-        "description": "Koresha ubumenyi bwawe mu proje z'ingenzi"
-      },
-      "caseStudies": {
-        "title": "Inkuru",
-        "description": "Wiga binyuze mu nkuru z'ingenzi"
-      }
-    },
+    },  
+      
     "courses": {
       "title": "Amasomo Y'ingenzi",
       "description": "Amasomo yateguwe neza yo gufasha kwiga ubumenyi bw'ingenzi bwa computer",

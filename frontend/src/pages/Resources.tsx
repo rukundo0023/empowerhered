@@ -168,15 +168,14 @@ const Resources = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Microsoft Word</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('resources.learningMaterials.microsoftWord.title')}</h3>
           <p className="text-gray-600 mb-4">
-            Learn how to create, format, and edit documents professionally using Microsoft Word.
+            {t('resources.learningMaterials.microsoftWord.description')} 
           </p>
           <ul className="space-y-2 text-sm text-gray-600">
-            <li>• Document Creation & Editing</li>
-            <li>• Formatting Text & Paragraphs</li>
-            <li>• Inserting Tables & Images</li>
-            <li>• Saving & Printing Documents</li>
+            {t('resources.learningMaterials.microsoftWord.items', { returnObjects: true }).map((item, index) => (
+              <li key={index}>• {item}</li>
+            ))}
           </ul>
         </div>
       </motion.div>
@@ -184,69 +183,11 @@ const Resources = () => {
     </div>
   </div>
 </section>
-      {/* Tools & Software Section */}
-      <section className="py-16 bg-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 className="text-3xl font-bold text-gray-900 mb-8">Tools & Software</h2>
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      
-      {/* Computer Basics & Hardware Tools */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-gray-50 rounded-lg p-6"
-      >
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Computer Basics & Hardware</h3>
-        <ul className="space-y-3 text-sm text-gray-600">
-          <li>• Operating System (Windows/Linux)</li>
-          <li>• File Explorer</li>
-          <li>• Device Manager</li>
-          <li>• Task Manager</li>
-        </ul>
-      </motion.div>
-
-      {/* Internet & Email Skills Tools */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-gray-50 rounded-lg p-6"
-      >
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Internet & Email Skills</h3>
-        <ul className="space-y-3 text-sm text-gray-600">
-          <li>• Web Browsers (Chrome, Firefox)</li>
-          <li>• Search Engines (Google, Bing)</li>
-          <li>• Email Clients (Gmail, Outlook)</li>
-          <li>• Video Conferencing (Zoom, Google Meet)</li>
-        </ul>
-      </motion.div>
-
-      {/* Microsoft Word Tools */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-gray-50 rounded-lg p-6"
-      >
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Microsoft Word</h3>
-        <ul className="space-y-3 text-sm text-gray-600">
-          <li>• Microsoft Word</li>
-          <li>• Microsoft Office Suite</li>
-          <li>• Google Docs</li>
-          <li>• LibreOffice Writer</li>
-        </ul>
-      </motion.div>
-
-    </div>
-  </div>
-</section>
-
 
       {/* Career Resources Section */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Career Resources</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">{t('resources.careerResources.title')}</h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
             {/* Resume & Interview Prep */}
             <motion.div
@@ -256,26 +197,16 @@ const Resources = () => {
               className="bg-white rounded-lg shadow-lg overflow-hidden"
             >
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Resume & Interview Prep</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('resources.careerResources.resume.title')}</h3>
                 <ul className="space-y-4 text-gray-600">
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Resume writing guides and templates</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Technical interview preparation</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Behavioral interview questions</span>
-                  </li>
+                  {t('resources.careerResources.resume.items', { returnObjects: true }).map((item, index) => (
+                    <li key={index} className="flex items-start">
+                      <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </motion.div>
@@ -314,8 +245,74 @@ const Resources = () => {
           </div>
         </div>
       </section>
+
+      {/* community resources section */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Community Resources</h2>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {/* Career Advice */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-lg shadow-lg overflow-hidden"
+            >
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Career Advices</h3>
+                <ul className="space-y-4 text-gray-600">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />  
+                    </svg>                  
+                    <span>Build a Strong Portfolio</span>
+                  </li>
+                  <li className="flex items-start">  
+                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Network with Purpose</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span> Keep Learning and Adapting</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Networking */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-white rounded-lg shadow-lg overflow-hidden"
+            >
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Networking</h3>
+                <ul className="space-y-4 text-gray-600">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Networking strategies</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Salary negotiation guides</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
     </div>
-  )
-}
+  </div>
+</section>
+</div>
+);
+};
 
 export default Resources

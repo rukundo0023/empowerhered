@@ -85,20 +85,20 @@ const Communication = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.duration')}</h3>
-              <p>{t('programs.communication.details.durationValue')}</p>
+              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.modules.Duration.title')}</h3>
+              <p>{t('programs.communication.details.modules.Duration.description')}</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.schedule')}</h3>
-              <p>{t('programs.communication.details.scheduleValue')}</p>
+              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.modules.Schedule.title')}</h3>
+              <p>{t('programs.communication.details.modules.Schedule.description')}</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.location')}</h3>
-              <p>{t('programs.communication.details.locationValue')}</p>
+              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.modules.Location.title')}</h3>
+              <p>{t('programs.communication.details.modules.Location.description')}</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.prerequisites')}</h3>
-              <p>{t('programs.communication.details.prerequisitesValue')}</p>
+              <h3 className="text-lg font-semibold mb-2">{t('programs.communication.details.modules.Prerequisites.title')}</h3>
+              <p>{t('programs.communication.details.modules.Prerequisites.description')}</p>
             </div>
           </div>
         </div>

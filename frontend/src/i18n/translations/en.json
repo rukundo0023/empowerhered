@@ -252,6 +252,42 @@
           "role": "UX Designer",
           "quote": "The practical projects and real-world experience I gained through EmpowerHerEd were crucial in landing my first tech job. The community support was incredible.",
           "achievement": "Leading design projects for major clients"
+        },
+        {
+          "name": "Claire Uwimana",
+          "role": "Frontend Developer",
+          "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in web development. I'm now creating impactful digital solutions.",
+          "achievement": "Developing innovative web applications"
+        },
+        {
+          "name": "Joyce Mukeshimana",
+          "role": "Backend Developer",
+          "quote": "EmpowerHerEd's structured learning path and supportive environment gave me the confidence to pursue backend development. The community is truly inspiring.",
+          "achievement": "Building scalable backend systems"
+        },
+        {
+          "name": "Esther Nyiraneza",
+          "role": "Full Stack Developer",
+          "quote": "The comprehensive curriculum and practical projects at EmpowerHerEd prepared me for real-world development challenges. I'm now working on exciting full-stack projects.",
+          "achievement": "Leading full-stack development teams"
+        },
+        {
+          "name": "Alice Uwamahoro",
+          "role": "Mobile App Developer",
+          "quote": "The mobile development track at EmpowerHerEd was exactly what I needed to start my career in app development. The mentorship was invaluable.",
+          "achievement": "Creating popular mobile applications"
+        },
+        {
+          "name": "Beatrice Mutoni",
+          "role": "DevOps Engineer",
+          "quote": "EmpowerHerEd helped me discover my passion for DevOps. The practical experience and industry connections were crucial for my career transition.",
+          "achievement": "Implementing efficient CI/CD pipelines"
+        },
+        {
+          "name": "Diane Uwase",
+          "role": "Product Manager",
+          "quote": "The leadership and product management skills I gained at EmpowerHerEd have been instrumental in my career growth. The community support is unmatched.",
+          "achievement": "Leading successful product teams"
         }
       ],
       "readMore": "Read More Stories",
@@ -657,9 +693,15 @@
       "details": {
         "title": "Program Details",
         "duration": "Duration",
+        "durationValue": "2-4 hours per session",
         "schedule": "Schedule",
+        "scheduleValue": "Weekly sessions with flexible timing options",
         "location": "Location",
-        "prerequisites": "Prerequisites"
+        "locationValue": "Hybrid (In-person and virtual options available)",
+        "prerequisites": "Prerequisites",
+        "prerequisitesValue": "Open to all program participants"
+
+
       },
       "curriculum": {
         "title": "Curriculum Modules",
@@ -748,9 +790,14 @@
       "details": {
         "title": "Program Details",
         "duration": "Duration",
+        "durationValue": "2-4 hours per workshop",
         "schedule": "Schedule",
+        "scheduleValue": "Weekly sessions with flexible timing options",
         "location": "Location",
-        "prerequisites": "Prerequisites"
+        "locationValue": "Hybrid (In-person and virtual options available)",
+        "prerequisites": "Prerequisites",
+        "prerequisitesValue": "Open to all program participants"
+
       },
       "curriculum": {
         "title": "Curriculum Modules",
@@ -833,28 +880,37 @@
       "details": {
         "title": "Program Details",
         "duration": "Duration",
+        "durationValue": "2-4 hours per workshop",
         "schedule": "Schedule",
+        "scheduleValue": "Weekly sessions with flexible timing options",
         "location": "Location",
-        "prerequisites": "Prerequisites"
+        "locationValue": "Hybrid (In-person and virtual options available)",
+        "prerequisites": "Prerequisites",
+        "prerequisitesValue": "Open to all program participants"
       },
       "upcoming": {
         "title": "Upcoming Workshops",
         "workshops": {
           "webDev": {
             "title": "Web Development Basics",
-            "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript"
+            "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript",
+            "date": "Upcoming"
+
           },
           "data": {
             "title": "Data Analysis Workshop",
-            "description": "Master data analysis tools and techniques for better decision making"
+            "description": "Master data analysis tools and techniques for better decision making",
+            "date": "Upcoming"
           },
           "cybersecurity": {
             "title": "Cybersecurity Essentials",
-            "description": "Learn essential cybersecurity practices to protect your digital assets"
+            "description": "Learn essential cybersecurity practices to protect your digital assets",
+            "date": "Upcoming"
           },
           "leadership": {
             "title": "Tech Leadership",
-            "description": "Develop leadership skills in technology management and team building"
+            "description": "Develop leadership skills in technology management and team building",
+            "date": "Upcoming"
           }
         }
       },
@@ -889,10 +945,24 @@
       },
       "details": {
         "title": "Program Details",
-        "duration": "Duration",
-        "schedule": "Schedule",
-        "location": "Location",
-        "prerequisites": "Prerequisites"
+        "modules": {
+          "Duration": {
+            "title": "Duration",
+            "description": "3 months"
+          },
+          "Schedule": {
+            "title": "Schedule",
+            "description": "Online sessions"
+          },
+          "Location": {
+            "title": "Location",
+            "description": "Online"
+          },
+          "Prerequisites": {
+            "title": "Prerequisites",
+            "description": "No prior experience required"
+          }
+        }
       },
       "curriculum": {
         "title": "Curriculum",
@@ -982,28 +1052,55 @@
       },
       "microsoftWord": {
         "title": "Microsoft Word",
-        "description": "Master document creation and formatting with Microsoft Word",
+        "description": "Learn how to create, format, and edit documents professionally using Microsoft Word.",
         "items": [
-          "Basic Document Creation",
-          "Formatting & Styles",
-          "Tables & Graphics",
-          "Document Templates"
+          "Document Creation & Editing",
+          "Formatting Text & Paragraphs",
+          "Inserting Tables & Images",
+          "saving & printing documents"
         ]
       }
     },
+    "careerResources": {
+      "title": "Career Resources",
+      "resume": {
+        "title": "Resume & Interview Prep",
+        "items": [
+          "Resume Writing Tips",
+          "Cover Letters",
+          "Interview Prep"
+        ]
+      },
+      "jobSearch": {
+        "title": "Job Search Resources",
+        "items": [
+          "Job Search Recommendations",
+          "Nertworking Strategies",
+          "Salary Negotiation Guides"
+        ]
+      }
+    }, 
     "community": {
-      "title": "Community",
-      "description": "Join our supportive community of women in tech",
-      "events": "Events",
-      "forum": "Forum",
-      "join": "Join Community"
+      "title": "Community Resources",
+      "careerSupport": {
+        "title": "Career Support",
+        "items": [
+          "Build a Strong Portfolio",
+          "Network with Purpose",
+          "Keep Learning and Adapting"
+        ]
+      }
     },
-    "learning": {
-      "title": "Learning Resources",
-      "description": "Access curated learning resources",
-      "materials": "Materials",
-      "tutorials": "Tutorials",
-      "guides": "Guides"
+    "Nertworking": {
+      "title": "Networking",
+      "description": "Connect with like-minded professionals and build a strong professional network",
+      "items": [
+        "Industry Meetups",
+        "Career Fairs",
+        "Professional Workshops",
+        "Community Events",
+        "Networking Groups"
+      ]
     }
   },
   "blog": {
@@ -1286,7 +1383,6 @@
   },
   "community": {
     "title": "Community",
-    "events": "Events",
     "forum": "Forum",
     "groups": "Groups",
     "discussions": "Discussions",
@@ -1551,6 +1647,7 @@
     "verifiability": "Verifiability",
     "validatability": "Validatability"
   },
+  
   "successStories": {
     "hero": {
       "title": "Success Stories",
@@ -1574,6 +1671,42 @@
         "role": "UX Designer",
         "quote": "The practical projects and real-world experience were crucial in landing my first tech job.",
         "story": "Leading design projects for major clients"
+      },
+      "claire": {
+        "name": "Claire Uwimana",
+        "role": "Frontend Developer",
+        "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in web development.",
+        "story": "Developing innovative web applications"
+      },
+      "joyce": {
+        "name": "Joyce Mukeshimana",
+        "role": "Backend Developer",
+        "quote": "EmpowerHerEd's structured learning path and supportive environment gave me the confidence to pursue backend development.",
+        "story": "Building scalable backend systems"
+      },
+      "esther": {
+        "name": "Esther Nyiraneza",
+        "role": "Full Stack Developer",
+        "quote": "The comprehensive curriculum and practical projects at EmpowerHerEd prepared me for real-world development challenges.",
+        "story": "Leading full-stack development teams"
+      },
+      "alice": {
+        "name": "Alice Uwamahoro",
+        "role": "Mobile App Developer",
+        "quote": "The mobile development track at EmpowerHerEd was exactly what I needed to start my career in app development.",
+        "story": "Creating popular mobile applications"
+      },
+      "beatrice": {
+        "name": "Beatrice Mutoni",
+        "role": "DevOps Engineer",
+        "quote": "EmpowerHerEd helped me discover my passion for DevOps.",
+        "story": "Implementing efficient CI/CD pipelines"
+      },
+      "diane": {
+        "name": "Diane Mutoni",
+        "role": "Data Scientist",
+        "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in data science.",
+        "story": "Developing advanced data analysis models"
       }
     },
     "cta": {
@@ -1659,4 +1792,6 @@
     }
   },
   "contactUs": "Contact Us"
-} 
+}
+
+

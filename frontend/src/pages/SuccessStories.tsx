@@ -78,7 +78,7 @@ const SuccessStories = () => {
       quote: t('successStories.stories.diane.quote'),
       story: t('successStories.stories.diane.story')
     }
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,7 +148,7 @@ const SuccessStories = () => {
               {t('successStories.cta.title')}
             </h2>
             <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
-              {t('successStories.cta.description')}
+               {t('successStories.cta.description')}
             </p>
             <div className="mt-8">
               <a

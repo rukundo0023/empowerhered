@@ -38,7 +38,11 @@ i18n
       transEmptyNodeValue: '',
       transSupportBasicHtmlNodes: true,
       transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p']
-    }
+    },
+    returnObjects: true,
+    returnNull: false,
+    defaultNS: 'translation',
+    ns: ['translation']
   });
 
 // Debug log after initialization
