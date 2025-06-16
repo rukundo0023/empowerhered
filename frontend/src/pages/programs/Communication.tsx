@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import Newsletter from "../../components/Newsletter";
 import assets from "../../assets/assets";
+import { NavLink } from "react-router-dom";
 
 const Communication = () => {
   const { t } = useTranslation();
@@ -157,9 +158,11 @@ const Communication = () => {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               {t('programs.communication.cta.description')}
             </p>
+            <NavLink to='/resources/learning'>
             <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
               {t('programs.communication.cta.button')}
             </button>
+            </NavLink>
           </div>
         </div>
       </section>

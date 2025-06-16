@@ -4,25 +4,36 @@ const bookingSchema = mongoose.Schema(
   {
     mentor: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: 'User',
+      default: null
     },
     mentee: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
     },
-    date: {
-      type: Date,
-      required: true,
-    },
-    time: {
+    menteeName: {
       type: String,
       required: true,
     },
+    menteeEmail: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: Date,
+      required: false,
+      default: Date.now,
+    },
+    time: {
+      type: String,
+      required: false,
+      default: 'To be scheduled',
+    },
     duration: {
       type: Number,
-      required: true,
+      required: false,
       default: 60, // duration in minutes
     },
     status: {
@@ -32,7 +43,8 @@ const bookingSchema = mongoose.Schema(
     },
     topic: {
       type: String,
-      required: true,
+      required: false,
+      default: 'Initial Mentorship Session',
     },
     notes: {
       type: String,
@@ -53,6 +65,14 @@ const bookingSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Add pre-save middleware to ensure mentor is null if not provided
+bookingSchema.pre('save', function(next) {
+  if (!this.mentor) {
+    this.mentor = null;
+  }
+  next();
+});
 
 const Booking = mongoose.model('Booking', bookingSchema);
 

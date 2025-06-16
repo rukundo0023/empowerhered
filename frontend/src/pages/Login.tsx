@@ -236,7 +236,8 @@ const Login = () => {
               theme="filled_blue"
               text="signin_with"
               shape="rectangular"
-              width={400}
+              width={"sm: 200, md: 400, lg: 400, xl: 400"}
+              
             />
           </div>
         </div>

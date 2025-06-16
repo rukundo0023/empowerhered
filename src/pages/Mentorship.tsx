@@ -9,11 +9,27 @@ import { AxiosError } from "axios"
 import { useAuth } from "../../context/AuthContext"
 import { useCallback, useState, useRef, useEffect } from "react"
 
+interface Mentor {
+  _id: string;
+  name: string;
+  expertise: string;
+}
+
+interface BookingData {
+  mentee: string;
+  name: string;
+  email: string;
+  topic: string;
+  duration: number;
+  status: string;
+  mentor: string | null;
+}
+
 const Mentorship = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { user, isAuthenticated } = useAuth()
-  const [availableMentors, setAvailableMentors] = useState([])
+  const [availableMentors, setAvailableMentors] = useState<Mentor[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isBooking, setIsBooking] = useState(false)
   const bookingInProgress = useRef(false)
@@ -31,7 +47,7 @@ const Mentorship = () => {
   const fetchAvailableMentors = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await api.get('/mentors/available')
+      const response = await api.get<Mentor[]>('/mentors/available')
       setAvailableMentors(response.data)
     } catch (error) {
       console.error('Error fetching mentors:', error)
@@ -57,7 +73,8 @@ const Mentorship = () => {
     }
 
     bookingInProgress.current = true;
-    const loadingToast = toast.loading(t('programs.mentorship.booking.loading'));
+    setIsBooking(true);
+    loadingToastRef.current = toast.loading(t('programs.mentorship.booking.loading'));
 
     try {
       // Log user object to verify data
@@ -73,7 +90,7 @@ const Mentorship = () => {
       }
 
       // Create booking request with mentee details only
-      const bookingData = {
+      const bookingData: BookingData = {
         mentee: user._id,
         name: user.name,
         email: user.email,
@@ -86,7 +103,9 @@ const Mentorship = () => {
       console.log('Sending booking request:', bookingData);
       const response = await api.post('/mentors/bookings', bookingData);
 
-      toast.dismiss(loadingToast);
+      if (loadingToastRef.current) {
+        toast.dismiss(loadingToastRef.current);
+      }
       toast.success(t('programs.mentorship.booking.success'));
       navigate('/profile', { 
         state: { 
@@ -96,7 +115,9 @@ const Mentorship = () => {
       });
     } catch (error) {
       console.error('Error booking mentorship:', error);
-      toast.dismiss(loadingToast);
+      if (loadingToastRef.current) {
+        toast.dismiss(loadingToastRef.current);
+      }
       
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
@@ -110,6 +131,7 @@ const Mentorship = () => {
       }
     } finally {
       bookingInProgress.current = false;
+      setIsBooking(false);
     }
   };
 
@@ -152,7 +174,7 @@ const Mentorship = () => {
           </div>
         ) : availableMentors.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {availableMentors.map((mentor) => (
+            {availableMentors.map((mentor: Mentor) => (
               <motion.div
                 key={mentor._id}
                 initial={{ opacity: 0, y: 20 }}
@@ -162,7 +184,7 @@ const Mentorship = () => {
                 <h3 className="text-xl font-semibold mb-2">{mentor.name}</h3>
                 <p className="text-gray-600 mb-4">{mentor.expertise}</p>
                 <button
-                  onClick={() => handleBookNow()}
+                  onClick={handleBookNow}
                   disabled={isBooking}
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >

@@ -237,7 +237,7 @@ const Home = () => {
           </div>
           <div className="text-center mt-12">
             <Link
-              to="/stories"
+              to="/success-stories"
               className="inline-block px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               {t('home.successStories.viewAll')}

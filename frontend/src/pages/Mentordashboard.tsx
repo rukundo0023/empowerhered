@@ -1,11 +1,10 @@
-import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
-import { useNavigate, useLocation } from "react-router-dom"
-import api from "../api/axios"
-import { toast } from "react-toastify"
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../api/axios';
 
 interface Mentee {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   progress: number;
@@ -13,40 +12,51 @@ interface Mentee {
 }
 
 interface Meeting {
-  _id: string;
+  id: string;
   menteeName: string;
   date: string;
-  time: string;
-  topic: string;
   status: 'scheduled' | 'completed' | 'cancelled';
+  notes?: string;
+}
+
+interface Booking {
+  _id: string;
+  menteeName: string;
+  menteeEmail: string;
+  topic: string;
+  date: string;
+  duration: number;
 }
 
 const Mentordashboard = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [mentees, setMentees] = useState<Mentee[]>([])
-  const [upcomingMeetings, setUpcomingMeetings] = useState<Meeting[]>([])
-  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mentees, setMentees] = useState<Mentee[]>([]);
+  const [upcomingMeetings, setUpcomingMeetings] = useState<Meeting[]>([]);
+  const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check for booking information in location state
-    const bookingInfo = location.state?.bookingInfo
-    const message = location.state?.message
+    const bookingInfo = location.state?.bookingInfo;
+    const message = location.state?.message;
 
     if (message) {
-      toast.success(message)
+      toast.success(message);
       // Clear the state after showing the message
-      window.history.replaceState({}, document.title)
+      window.history.replaceState({}, document.title);
     }
 
     const fetchMentorData = async () => {
       try {
-        const [menteesRes, meetingsRes] = await Promise.all([
+        const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
           api.get<Mentee[]>('/mentors/mentees'),
-          api.get<Meeting[]>('/mentors/meetings')
+          api.get<Meeting[]>('/mentors/meetings'),
+          api.get<Booking[]>('/mentors/bookings')
         ]);
         setMentees(menteesRes.data);
         setUpcomingMeetings(meetingsRes.data);
+        setPendingBookings(bookingsRes.data);
       } catch (error) {
         console.error('Error fetching mentor data:', error);
         toast.error('Failed to load mentor data');
@@ -70,6 +80,44 @@ const Mentordashboard = () => {
     navigate(`/mentor/meeting/${meetingId}`);
   };
 
+  const handleAcceptBooking = async (bookingId: string) => {
+    try {
+      await api.put(`/mentors/bookings/${bookingId}/accept`);
+      toast.success('Booking accepted successfully');
+      // Refresh the data
+      const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
+        api.get<Mentee[]>('/mentors/mentees'),
+        api.get<Meeting[]>('/mentors/meetings'),
+        api.get<Booking[]>('/mentors/bookings')
+      ]);
+      setMentees(menteesRes.data);
+      setUpcomingMeetings(meetingsRes.data);
+      setPendingBookings(bookingsRes.data);
+    } catch (error) {
+      console.error('Error accepting booking:', error);
+      toast.error('Failed to accept booking');
+    }
+  };
+
+  const handleRejectBooking = async (bookingId: string) => {
+    try {
+      await api.put(`/mentors/bookings/${bookingId}/reject`);
+      toast.success('Booking rejected successfully');
+      // Refresh the data
+      const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
+        api.get<Mentee[]>('/mentors/mentees'),
+        api.get<Meeting[]>('/mentors/meetings'),
+        api.get<Booking[]>('/mentors/bookings')
+      ]);
+      setMentees(menteesRes.data);
+      setUpcomingMeetings(meetingsRes.data);
+      setPendingBookings(bookingsRes.data);
+    } catch (error) {
+      console.error('Error rejecting booking:', error);
+      toast.error('Failed to reject booking');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -91,49 +139,112 @@ const Mentordashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
+            {/* Pending Bookings Section */}
+            <section className="bg-white rounded-lg shadow p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Pending Bookings</h2>
+              <div className="space-y-4">
+                {pendingBookings.length > 0 ? (
+                  pendingBookings.map((booking) => (
+                    <div key={booking._id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{booking.menteeName}</h3>
+                          <p className="text-sm text-gray-600">{booking.menteeEmail}</p>
+                          <p className="text-sm text-gray-600 mt-2">Topic: {booking.topic}</p>
+                          <p className="text-sm text-gray-600">Duration: {booking.duration} minutes</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleAcceptBooking(booking._id)}
+                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => handleRejectBooking(booking._id)}
+                            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-600">No pending bookings</p>
+                )}
+              </div>
+            </section>
+
             {/* Mentees Section */}
             <section className="bg-white rounded-lg shadow p-6 mb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">My Mentees</h2>
               <div className="space-y-6">
                 {mentees.length > 0 ? (
                   mentees.map((mentee) => (
-                  <motion.div
-                      key={mentee._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="font-medium text-gray-900">{mentee.name}</h3>
-                          <p className="text-sm text-gray-500">{mentee.email}</p>
+                    <div key={mentee.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{mentee.name}</h3>
+                          <p className="text-sm text-gray-600">{mentee.email}</p>
+                          <p className="text-sm text-gray-600 mt-2">
+                            Progress: {mentee.progress}%
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Last Meeting: {mentee.lastMeeting}
+                          </p>
+                        </div>
+                        <div className="space-x-2">
+                          <button
+                            onClick={() => handleScheduleMeeting(mentee.id)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                          >
+                            Schedule Meeting
+                          </button>
+                          <button
+                            onClick={() => handleViewProgress(mentee.id)}
+                            className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
+                          >
+                            View Progress
+                          </button>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-gray-500">Progress</p>
-                        <p className="font-medium text-gray-700">{mentee.progress}%</p>
-                      </div>
                     </div>
-                    <div className="flex justify-between text-sm text-gray-500">
-                        <p>Last Meeting: {mentee.lastMeeting || 'No meetings yet'}</p>
-                    </div>
-                    <div className="mt-4 flex space-x-4">
-                        <button 
-                          onClick={() => handleScheduleMeeting(mentee._id)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
-                        >
-                        Schedule Meeting
-                      </button>
-                        <button 
-                          onClick={() => handleViewProgress(mentee._id)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
-                        >
-                        View Progress
-                      </button>
-                    </div>
-                  </motion.div>
                   ))
                 ) : (
-                  <p className="text-gray-500 text-center">No mentees found</p>
+                  <p className="text-gray-600">No mentees yet</p>
+                )}
+              </div>
+            </section>
+
+            {/* Upcoming Meetings Section */}
+            <section className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Upcoming Meetings</h2>
+              <div className="space-y-4">
+                {upcomingMeetings.length > 0 ? (
+                  upcomingMeetings.map((meeting) => (
+                    <div key={meeting.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{meeting.menteeName}</h3>
+                          <p className="text-sm text-gray-600">
+                            Date: {new Date(meeting.date).toLocaleDateString()}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Status: {meeting.status}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleViewMeetingDetails(meeting.id)}
+                          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-600">No upcoming meetings</p>
                 )}
               </div>
             </section>
@@ -141,60 +252,28 @@ const Mentordashboard = () => {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Upcoming Meetings */}
-            <section className="bg-white rounded-lg shadow p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Upcoming Meetings</h2>
-              <div className="space-y-4">
-                {upcomingMeetings.length > 0 ? (
-                  upcomingMeetings.map((meeting) => (
-                  <motion.div
-                      key={meeting._id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="border rounded-lg p-4"
-                  >
-                      <h3 className="font-medium text-gray-900">{meeting.menteeName}</h3>
-                    <p className="text-sm text-gray-500">{meeting.topic}</p>
-                    <div className="mt-2 text-sm text-gray-500">
-                        <p>{new Date(meeting.date).toLocaleDateString()} at {meeting.time}</p>
-                    </div>
-                      <button 
-                        onClick={() => handleViewMeetingDetails(meeting._id)}
-                        className="mt-2 text-sm text-blue-600 hover:text-blue-800"
-                      >
-                      View Details
-                    </button>
-                  </motion.div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-center">No upcoming meetings</p>
-                )}
-              </div>
-            </section>
-
-            {/* Quick Actions */}
-            <section className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
               <div className="space-y-4">
-                <button 
+                <button
                   onClick={() => navigate('/mentor/schedule')}
-                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                 >
                   Schedule New Meeting
                 </button>
-                <button 
-                  onClick={() => navigate('/resources/learning')}
-                  className="w-full bg-white text-gray-700 border border-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                <button
+                  onClick={() => navigate('/mentor/profile')}
+                  className="w-full bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
                 >
-                  View Resources
+                  Update Profile
                 </button>
               </div>
-            </section>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Mentordashboard
+export default Mentordashboard;
