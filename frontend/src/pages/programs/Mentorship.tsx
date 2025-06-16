@@ -6,74 +6,121 @@ import api from "../../api/axios"
 import { useTranslation } from "react-i18next"
 import Newsletter from "../../components/Newsletter"
 import { AxiosError } from "axios"
+import { useAuth } from "../../context/AuthContext"
+import { useCallback, useState, useRef, useEffect } from "react"
 
 const Mentorship = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const [isBooking, setIsBooking] = useState(false)
+  const bookingInProgress = useRef(false)
+  const loadingToastRef = useRef<number | null>(null)
   
-  const handleBookNow = async () => {
+  // Cleanup function to dismiss any active toasts when component unmounts
+  useEffect(() => {
+    return () => {
+      if (loadingToastRef.current) {
+        toast.dismiss(loadingToastRef.current)
+      }
+    }
+  }, [])
+
+  const handleBookNow = useCallback(async () => {
+    // Prevent multiple simultaneous booking attempts using ref
+    if (bookingInProgress.current || isBooking) return
+
     try {
-      // Get current user info from localStorage or your auth context
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+      bookingInProgress.current = true
+      setIsBooking(true)
       
-      if (!userInfo._id) {
+      // Check if user is logged in
+      if (!user) {
         toast.error(t('programs.mentorship.booking.loginRequired'))
+        // Store the current path to redirect back after login
+        localStorage.setItem('redirectPath', '/programs/mentorship')
         navigate('/login')
         return
       }
 
-      // First, get available mentors
-      const mentorsResponse = await api.get('/mentors/available')
-      const availableMentors = mentorsResponse.data
+      // Show loading toast and store its ID
+      loadingToastRef.current = toast.loading(t('programs.mentorship.booking.loading'))
 
-      if (!availableMentors || availableMentors.length === 0) {
-        toast.error(t('programs.mentorship.booking.noMentors'))
-        return
-      }
+      try {
+        // First, get available mentors
+        const mentorsResponse = await api.get('/mentors/available')
+        const availableMentors = mentorsResponse.data
 
-      // Select the first available mentor (you can implement mentor selection later)
-      const selectedMentor = availableMentors[0]
-      
-      // Create booking request
-      const bookingData = {
-        mentor: selectedMentor._id,
-        mentee: userInfo._id,
-        name: userInfo.name,
-        email: userInfo.email,
-        status: 'pending',
-        date: new Date().toISOString(),
-        topic: 'Initial Mentorship Session',
-        duration: 60
-      }
-
-      // Send booking request to backend
-      const response = await api.post('/mentors/bookings', bookingData)
-      
-      // Show success message
-      toast.success(t('programs.mentorship.booking.success'))
-      
-      // Navigate to mentor dashboard
-      navigate('/mentorDashboard', { 
-        state: { 
-          bookingInfo: response.data,
-          message: t('programs.mentorship.booking.success')
+        if (!availableMentors || availableMentors.length === 0) {
+          if (loadingToastRef.current) {
+            toast.dismiss(loadingToastRef.current)
+            loadingToastRef.current = null
+          }
+          toast.error(t('programs.mentorship.booking.noMentors'))
+          return
         }
-      })
-    } catch (error) {
-      console.error('Error booking mentorship:', error)
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'))
-      } else {
-        toast.error(t('programs.mentorship.booking.error'))
+
+        // Select the first available mentor (you can implement mentor selection later)
+        const selectedMentor = availableMentors[0]
+        
+        // Create booking request
+        const bookingData = {
+          mentor: selectedMentor._id,
+          mentee: user._id,
+          name: user.name,
+          email: user.email,
+          status: 'pending',
+          date: new Date().toISOString(),
+          topic: 'Initial Mentorship Session',
+          duration: 60
+        }
+
+        // Send booking request to backend
+        const response = await api.post('/mentors/bookings', bookingData)
+        
+        // Dismiss loading toast and show success message
+        if (loadingToastRef.current) {
+          toast.dismiss(loadingToastRef.current)
+          loadingToastRef.current = null
+        }
+        toast.success(t('programs.mentorship.booking.success'))
+        
+        // Navigate to mentor dashboard
+        navigate('/mentorDashboard', { 
+          state: { 
+            bookingInfo: response.data,
+            message: t('programs.mentorship.booking.success')
+          }
+        })
+      } catch (error) {
+        if (loadingToastRef.current) {
+          toast.dismiss(loadingToastRef.current)
+          loadingToastRef.current = null
+        }
+        console.error('Error booking mentorship:', error)
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            toast.error(t('programs.mentorship.booking.loginRequired'))
+            localStorage.setItem('redirectPath', '/programs/mentorship')
+            navigate('/login')
+          } else {
+            toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'))
+          }
+        } else {
+          toast.error(t('programs.mentorship.booking.error'))
+        }
       }
+    } finally {
+      bookingInProgress.current = false
+      setIsBooking(false)
     }
-  }
+  }, [user, navigate, t, isBooking])
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative pt-28"
-        style={{ backgroundImage: `url(${assets.blogbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        style={{ backgroundImage: `url(${assets.mentorshipbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -81,10 +128,10 @@ const Mentorship = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
               {t('programs.mentorship.hero.title')}
             </h1>
-            <p className="text-xl text-black max-w-3xl mx-auto">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               {t('programs.mentorship.hero.description')}
             </p>
           </motion.div>
@@ -222,9 +269,12 @@ const Mentorship = () => {
             </p>
             <button 
               onClick={handleBookNow}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              disabled={isBooking}
+              className={`bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors ${
+                isBooking ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+              }`}
             >
-              {t('programs.mentorship.cta.button')}
+              {isBooking ? t('programs.mentorship.booking.loading') : t('programs.mentorship.cta.button')}
             </button>
           </div>
         </div>

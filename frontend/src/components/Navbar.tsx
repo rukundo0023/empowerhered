@@ -221,18 +221,6 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Add Mentor Dashboard link for mentor users */}
-            {isAuthenticated && user?.role === 'mentor' && (
-              <NavLink
-                to="/mentor/dashboard"
-                className={({ isActive }) =>
-                  isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-blue-600"
-                }
-              >
-                {t('nav.mentorDashboard')}
-              </NavLink>
-            )}
-
             <NavLink
               to="/success-stories"
               className={`${
@@ -347,6 +335,15 @@ const Navbar = () => {
                         {t('nav.adminDashboard')}
                       </Link>
                     )}
+                    {user?.role === 'mentor' && (
+                      <Link
+                        to="/mentorDashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        {t('nav.mentorDashboard')}
+                      </Link>
+                    )}
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -355,7 +352,10 @@ const Navbar = () => {
                       {t('nav.settings')}
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        handleLogout();
+                        setIsProfileOpen(false);
+                      }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       {t('nav.logout')}
@@ -532,18 +532,8 @@ const Navbar = () => {
                 {t('nav.contact')}
               </NavLink>
               
-              {/* Add Mentor Dashboard link for mentor users in mobile menu */}
-              {isAuthenticated && user?.role === 'mentor' && (
-                <NavLink
-                  to="/mentor/dashboard"
-                  className="block w-full py-2 px-3 rounded-md hover:bg-gray-50"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('nav.mentorDashboard')}
-                </NavLink>
-              )}
-
-              {isAuthenticated ? (
+              {/* Mobile Profile Menu */}
+              {isAuthenticated && (
                 <div className="border-t mt-4 pt-4">
                   <div className="flex items-center space-x-2 mb-4 px-3">
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
@@ -591,23 +581,6 @@ const Navbar = () => {
                   >
                     {t('nav.logout')}
                   </button>
-                </div>
-              ) : (
-                <div className="border-t mt-4 pt-4">
-                  <Link
-                    to="/login"
-                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {t('nav.login')}
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="block py-2 px-3 rounded-md hover:bg-gray-50"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {t('nav.signup')}
-                  </Link>
                 </div>
               )}
             </div>

@@ -92,9 +92,29 @@ userSchema.pre('save', async function (next) {
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
   try {
-    return await bcrypt.compare(enteredPassword, this.password);
+    console.log('Attempting password comparison');
+    console.log('User password exists:', !!this.password);
+    console.log('Entered password exists:', !!enteredPassword);
+    
+    if (!this.password) {
+      console.error('No password hash found for user');
+      return false;
+    }
+    
+    if (!enteredPassword) {
+      console.error('No password provided for comparison');
+      return false;
+    }
+
+    const isMatch = await bcrypt.compare(enteredPassword, this.password);
+    console.log('Password comparison result:', isMatch);
+    return isMatch;
   } catch (error) {
-    console.error('Password comparison error:', error);
+    console.error('Password comparison error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     return false;
   }
 };

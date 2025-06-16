@@ -85,7 +85,7 @@ const Resources = () => {
                 {t('resources.categories.communityResources.description')}
               </p>
               <ul className="space-y-3">
-                {t('resources.categories.communityResources.items', { returnObjects: true }).map((item, index) => (
+                {t('resources.categories.communityResources.items', { returnObjects: true }) .map((item, index) => (
                   <li key={index} className="flex items-center text-gray-700">
                     <svg className="w-5 h-5 text-gray-700 mt-1 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

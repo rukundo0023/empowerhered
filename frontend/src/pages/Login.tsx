@@ -63,7 +63,12 @@ const Login = () => {
       }
     } catch (error: any) {
       console.error("Login component - Login error:", error)
-      toast.error(error.response?.data?.message || t('auth.login.error'))
+      // Show the specific error message from the backend
+      const errorMessage = error.message || t('auth.login.error')
+      toast.error(errorMessage)
+      
+      // Clear password field on error
+      setPassword('')
     } finally {
       setIsLoading(false)
     }
@@ -71,31 +76,41 @@ const Login = () => {
 
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
-      const token = credentialResponse.credential
-      if (!token) throw new Error("No token found")
+      console.log("Google login response:", credentialResponse);
+      const token = credentialResponse.credential;
+      
+      if (!token) {
+        console.error("No token received from Google");
+        throw new Error("No token found");
+      }
 
-      const decoded = jwtDecode<DecodedToken>(token)
-      console.log("Decoded Google token:", decoded)
+      const decoded = jwtDecode<DecodedToken>(token);
+      console.log("Decoded Google token:", decoded);
 
-      await loginWithGoogle(token)
-
-      toast.success(t('auth.login.success'))
+      await loginWithGoogle(token);
+      toast.success(t('auth.login.success'));
 
       // Navigate based on user role saved in localStorage
-      const userData = JSON.parse(localStorage.getItem("user") || "{}")
-      const role = userData.role
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      const role = userData.role;
+      
       if (role === "admin") {
-        navigate("/admin", { replace: true })
+        navigate("/admin", { replace: true });
       } else if (role === "mentor") {
-        navigate("/mentorDashboard", { replace: true })
+        navigate("/mentorDashboard", { replace: true });
       } else {
-        navigate("/dashboard", { replace: true })
+        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
-      console.error("Google login error:", error)
-      toast.error(t('auth.login.error'))
+      console.error("Google login error:", error);
+      toast.error(t('auth.login.error'));
     }
-  }
+  };
+
+  const handleGoogleLoginError = () => {
+    console.error("Google login failed");
+    toast.error(t('auth.login.error'));
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -201,17 +216,29 @@ const Login = () => {
           </div>
         </form>
 
-        <div>
-          <h2 className="mt-6 text-center text-xl font-sm text-gray-900 mb-3">
-            <span className="font-bold">{t('auth.login.or')}</span> {t('auth.login.loginWithGoogle')}
-          </h2>
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">
+                {t('auth.login.or')}
+              </span>
+            </div>
+          </div>
 
-          <GoogleLogin
-            onSuccess={handleGoogleLoginSuccess}
-            onError={() => {
-              toast.error(t('auth.login.error'))
-            }}
-          />
+          <div className="mt-6 ">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginError}
+              useOneTap
+              theme="filled_blue"
+              text="signin_with"
+              shape="rectangular"
+              width={400}
+            />
+          </div>
         </div>
 
         <div className="text-center">

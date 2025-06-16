@@ -600,7 +600,8 @@
         "loginRequired": "Nyamuneka winjire kugirango urebe iseanshi ya mentorship",
         "noMentors": "Nta bayoboramikorere bari kuri ubu",
         "success": "Iseanshi ya mentorship yafashwe neza",
-        "error": "Kutashobora gufasha iseanshi ya mentorship"
+        "error": "Kutashobora gufasha iseanshi ya mentorship",
+        "loading": "Dore ko dukora booking yawe..."
       },
       "cta": {
         "title": "Witeguye Gutangiza Urugendo Rwawe?",

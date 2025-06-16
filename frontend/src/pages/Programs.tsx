@@ -65,7 +65,7 @@ const Programs = () => {
               className="text-center"
             >
               <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-800">
-                <span className="text-black mr-3">{t('programs.hero.title')}</span>
+                <span className="text-blue-600 mr-3">{t('programs.hero.title')}</span>
               </h1>
               <p className="text-lg text-neutral-700 mb-8">
                 {t('programs.hero.description')}

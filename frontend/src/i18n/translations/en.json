@@ -700,8 +700,6 @@
         "locationValue": "Hybrid (In-person and virtual options available)",
         "prerequisites": "Prerequisites",
         "prerequisitesValue": "Open to all program participants"
-
-
       },
       "curriculum": {
         "title": "Curriculum Modules",
@@ -756,7 +754,8 @@
         "loginRequired": "Please login to book a mentorship session",
         "noMentors": "No mentors available at the moment",
         "success": "Mentorship session booked successfully",
-        "error": "Failed to book mentorship session"
+        "error": "Failed to book mentorship session",
+        "loading": "Processing your booking request..."
       },
       "cta": {
         "title": "Ready to Start Your Journey?",
@@ -797,7 +796,6 @@
         "locationValue": "Hybrid (In-person and virtual options available)",
         "prerequisites": "Prerequisites",
         "prerequisitesValue": "Open to all program participants"
-
       },
       "curriculum": {
         "title": "Curriculum Modules",
@@ -895,7 +893,6 @@
             "title": "Web Development Basics",
             "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript",
             "date": "Upcoming"
-
           },
           "data": {
             "title": "Data Analysis Workshop",

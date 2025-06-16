@@ -183,7 +183,7 @@ const Mentordashboard = () => {
                   Schedule New Meeting
                 </button>
                 <button 
-                  onClick={() => navigate('/mentor/resources')}
+                  onClick={() => navigate('/resources/learning')}
                   className="w-full bg-white text-gray-700 border border-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   View Resources

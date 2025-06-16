@@ -51,19 +51,25 @@ api.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(new Error('Network error. Please check your connection.'));
     }
-    
-    // Handle specific token errors
-    if (error.response.status === 401) {
-      const errorMessage = error.response.data?.message || '';
-      if (errorMessage.includes('token') || errorMessage.includes('Token')) {
-        console.log('Token error detected, clearing user data');
-        localStorage.removeItem('user');
-        // Don't redirect here, let the components handle it
-      }
-    }
 
-    const errorMessage = error.response?.data?.message || 'An error occurred';
-    return Promise.reject(new Error(errorMessage));
+    // Handle specific error cases
+    const status = error.response.status;
+    const message = error.response.data?.message || 'An error occurred';
+
+    switch (status) {
+      case 401:
+        // Clear user data on authentication errors
+        localStorage.removeItem('user');
+        return Promise.reject(new Error(message));
+      case 403:
+        return Promise.reject(new Error('You do not have permission to perform this action.'));
+      case 404:
+        return Promise.reject(new Error('The requested resource was not found.'));
+      case 500:
+        return Promise.reject(new Error('Server error. Please try again later.'));
+      default:
+        return Promise.reject(new Error(message));
+    }
   }
 );
 

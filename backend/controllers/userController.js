@@ -3,14 +3,8 @@ import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import { AUTHORIZED_USERS } from '../config/authorizedUsers.js';
 import bcrypt from 'bcrypt';
-import { client } from '../config/googleClient.js';
-
-// Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-};
+import client from '../config/googleOAuth.js';
+import generateToken from '../utils/generateToken.js';
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -75,55 +69,85 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    console.log('Login attempt with:', { email: req.body.email });
+    
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    res.status(400);
-    throw new Error('Please provide email and password');
-  }
-
-  // Find user and explicitly select password
-  const user = await User.findOne({ email }).select('+password');
-  
-  if (!user) {
-    res.status(401);
-    throw new Error('Invalid email or password');
-  }
-
-  // Match password using the model's method
-  const isMatch = await user.matchPassword(password);
-  
-  if (!isMatch) {
-    res.status(401);
-    throw new Error('Invalid email or password');
-  }
-
-  // Check if user is admin
-  if (email === AUTHORIZED_USERS.superAdmin.email) {
-    console.log('Authorized admin login attempt:', { email, currentRole: user.role });
-    // Update role to admin if it's not already
-    if (user.role !== 'admin') {
-      user.role = 'admin';
-      await user.save();
-      console.log('Updated user role to admin:', { email, newRole: user.role });
+    if (!email || !password) {
+      console.log('Missing credentials:', { hasEmail: !!email, hasPassword: !!password });
+      res.status(400);
+      throw new Error('Please provide email and password');
     }
+
+    // Find user and explicitly select password
+    console.log('Finding user in database...');
+    const user = await User.findOne({ email }).select('+password');
+    
+    if (!user) {
+      console.log('User not found:', { email });
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+
+    console.log('User found, checking password...');
+    if (!user.password) {
+      console.log('No password found for user:', { email });
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+
+    // Match password using the model's method
+    console.log('Verifying password...');
+    const isMatch = await user.matchPassword(password);
+    
+    if (!isMatch) {
+      console.log('Password mismatch for user:', { email });
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+
+    console.log('Password verified, checking admin status...');
+    // Check if user is admin
+    if (email === AUTHORIZED_USERS.superAdmin.email) {
+      console.log('Authorized admin login attempt:', { email, currentRole: user.role });
+      // Update role to admin if it's not already
+      if (user.role !== 'admin') {
+        user.role = 'admin';
+        await user.save();
+        console.log('Updated user role to admin:', { email, newRole: user.role });
+      }
+    }
+
+    console.log('Generating token...');
+    // Generate token and send response
+    const token = generateToken(user._id);
+    
+    const responseData = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      gender: user.gender,
+      token
+    };
+
+    console.log('Login successful:', { 
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+      hasToken: !!token
+    });
+    
+    res.json(responseData);
+  } catch (error) {
+    console.error('Login error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    throw error;
   }
-
-  // Generate token and send response
-  const token = generateToken(user._id);
-  
-  const responseData = {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    gender: user.gender,
-    token
-  };
-
-  console.log('Login response:', { ...responseData, token: '***' });
-  
-  res.json(responseData);
 });
 
 // @desc    Get current user
@@ -205,31 +229,51 @@ export const googleLogin = asyncHandler(async (req, res) => {
   }
 
   try {
+    console.log('Verifying Google token...');
     // Verify the Google token
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID
+      audience: process.env.GOOGLE_CLIENT_ID,
+      // Add these options to ensure proper verification
+      ignoreExpiration: false,
+      clockTolerance: 10
     });
 
     const payload = ticket.getPayload();
+    console.log('Token verified, payload:', {
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture,
+      sub: payload.sub
+    });
+    
     const { email, name, picture } = payload;
+
+    if (!email) {
+      throw new Error('Email not found in Google token');
+    }
 
     // Check if user exists
     let user = await User.findOne({ email });
+    console.log('User lookup result:', user ? 'Found' : 'Not found');
 
     if (!user) {
+      console.log('Creating new user...');
       // Create new user if doesn't exist
       user = await User.create({
         name,
         email,
         password: Math.random().toString(36).slice(-8), // Generate random password
         profilePicture: picture,
-        isGoogleUser: true
+        isGoogleUser: true,
+        role: 'student' // Set default role
       });
+      console.log('New user created:', user._id);
     }
 
     // Generate JWT token
-    const token = generateToken(user._id);
+    const jwtToken = generateToken(user._id);
+    console.log('JWT token generated for user:', user._id);
 
     res.json({
       _id: user._id,
@@ -237,9 +281,14 @@ export const googleLogin = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       profilePicture: user.profilePicture,
-      token
+      token: jwtToken
     });
   } catch (error) {
+    console.error('Google login error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     res.status(401);
     throw new Error('Invalid Google token');
   }
