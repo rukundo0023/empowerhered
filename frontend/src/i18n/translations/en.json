@@ -237,57 +237,48 @@
       "stories": [
         {
           "name": "Marie Uwase",
-          "role": "Software Developer",
-          "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech. The mentorship program was particularly valuable in helping me navigate the industry.",
-          "achievement": "Now working at a leading tech company in Rwanda"
+          "quote":  "Thanks to EmpowHerEd, I learned basic computer and communication skills that helped me get a job as a data entry clerk. Now I confidently manage digital records and communicate clearly with my team.",
+          "achievement": " Gained employment as a data entry clerk through newly acquired digital skills."
         },
         {
           "name": "Grace Mukamana",
-          "role": "Data Analyst",
-          "quote": "The comprehensive training and supportive community helped me transition from a different field into technology. I'm now using my skills to make a real impact.",
-          "achievement": "Successfully transitioned to tech career"
+          "quote": "EmpowHerEd gave me the skills to start my own online business. Learning to send professional emails and use social media helped me reach customers and grow my sales every month.",
+          "achievement": "Launched and grew an online business using communication and computer skills."
         },
         {
           "name": "Sarah Mutoni",
-          "role": "UX Designer",
-          "quote": "The practical projects and real-world experience I gained through EmpowerHerEd were crucial in landing my first tech job. The community support was incredible.",
-          "achievement": "Leading design projects for major clients"
+          "quote": "Before EmpowHerEd, I struggled to help my children with school and communicate with their teachers. Now, I can join virtual meetings and send emails easily.",
+          "achievement": " Improved parental engagement through virtual communication tools."
         },
         {
           "name": "Claire Uwimana",
-          "role": "Frontend Developer",
-          "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in web development. I'm now creating impactful digital solutions.",
-          "achievement": "Developing innovative web applications"
+          "quote": "After completing the EmpowHerEd training, I was promoted at work to administrative assistant. I learned how to organize schedules, prepare documents, and communicate effectively using digital tools.",
+          "achievement": "Earned promotion to administrative assistant thanks to improved skills."
         },
         {
           "name": "Joyce Mukeshimana",
-          "role": "Backend Developer",
-          "quote": "EmpowerHerEd's structured learning path and supportive environment gave me the confidence to pursue backend development. The community is truly inspiring.",
-          "achievement": "Building scalable backend systems"
+          "quote": "Volunteering as a community outreach coordinator was made possible because EmpowHerEd taught me how to communicate professionally. Now I confidently connect with leaders and organize events that make a difference.",
+          "achievement": "Became a community outreach coordinator using professional communication skills."
         },
         {
           "name": "Esther Nyiraneza",
-          "role": "Full Stack Developer",
-          "quote": "The comprehensive curriculum and practical projects at EmpowerHerEd prepared me for real-world development challenges. I'm now working on exciting full-stack projects.",
-          "achievement": "Leading full-stack development teams"
+          "quote": "I never imagined I could work in IT support. Thanks to EmpowHerEd, I learned the basics of troubleshooting and professional communication, and now I help my coworkers solve their tech problems every day.",
+          "achievement": "Started working in IT support with foundational tech and communication skills."
         },
         {
           "name": "Alice Uwamahoro",
-          "role": "Mobile App Developer",
-          "quote": "The mobile development track at EmpowerHerEd was exactly what I needed to start my career in app development. The mentorship was invaluable.",
-          "achievement": "Creating popular mobile applications"
+          "quote": "EmpowHerEd helped me build my resume and practice interviews. Because of the program, I landed my first job in customer service and gained confidence to face new challenges.",
+          "achievement": "Secured first job in customer service through enhanced communication and job skills."
         },
         {
           "name": "Beatrice Mutoni",
-          "role": "DevOps Engineer",
-          "quote": "EmpowerHerEd helped me discover my passion for DevOps. The practical experience and industry connections were crucial for my career transition.",
-          "achievement": "Implementing efficient CI/CD pipelines"
+          "quote": "With the skills from EmpowHerEd, I completed an online course in digital marketing. This opened new career paths for me and helped me expand my professional network.",
+          "achievement": "Completed digital marketing course and expanded professional opportunities."
         },
         {
           "name": "Diane Uwase",
-          "role": "Product Manager",
-          "quote": "The leadership and product management skills I gained at EmpowerHerEd have been instrumental in my career growth. The community support is unmatched.",
-          "achievement": "Leading successful product teams"
+          "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family’s finances and how to communicate confidently with banks and service providers.",
+          "achievement": "Improved family financial management and communication with institutions."
         }
       ],
       "readMore": "Read More Stories",
@@ -859,7 +850,7 @@
       },
       "overview": {
         "title": "Program Overview",
-        "description": "Our workshops provide hands-on learning experiences on various technology topics",
+        "description": "Our workshops provide hands-on learning experiences on various basic computer skills",
         "features": {
           "handsOn": {
             "title": "Hands-on Learning",
@@ -890,23 +881,23 @@
         "title": "Upcoming Workshops",
         "workshops": {
           "webDev": {
-            "title": "Web Development Basics",
-            "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript",
+            "title": "Basic Computer Skills",
+            "description": "Learn how to use a computer, navigate the internet, and manage files effectively.",
             "date": "Upcoming"
           },
           "data": {
-            "title": "Data Analysis Workshop",
-            "description": "Master data analysis tools and techniques for better decision making",
+            "title": "Email & Online Communication",
+            "description": "Master using email, messaging apps, and other digital tools for professional communication.",
             "date": "Upcoming"
           },
           "cybersecurity": {
-            "title": "Cybersecurity Essentials",
-            "description": "Learn essential cybersecurity practices to protect your digital assets",
+            "title": "Digital Safety & Awareness",
+            "description": "Understand how to stay safe online and protect your personal information.",
             "date": "Upcoming"
           },
           "leadership": {
-            "title": "Tech Leadership",
-            "description": "Develop leadership skills in technology management and team building",
+            "title": "Confidence in Tech Spaces",
+            "description": "Build your confidence to engage with technology and collaborate effectively with others.",
             "date": "Upcoming"
           }
         }
@@ -1653,57 +1644,48 @@
     "stories": {
       "marie": {
         "name": "Marie Uwase",
-        "role": "Software Developer",
-        "quote": "EmpowerHerEd gave me the skills and confidence to pursue my dream career in tech.",
-        "story": "Now working at a leading tech company in Rwanda"
+        "quote": "Thanks to EmpowHerEd, I learned basic computer and communication skills that helped me get a job as a data entry clerk. Now I confidently manage digital records and communicate clearly with my team.",
+        "story": "Gained employment as a data entry clerk through newly acquired digital skills."
       },
       "grace": {
         "name": "Grace Mukamana",
-        "role": "Data Analyst",
-        "quote": "The comprehensive training and supportive community helped me transition into technology.",
-        "story": "Successfully transitioned to tech career"
+        "quote": "EmpowHerEd gave me the skills to start my own online business. Learning to send professional emails and use social media helped me reach customers and grow my sales every month.",
+        "story": "Launched and grew an online business using communication and computer skills."
       },
       "sarah": {
         "name": "Sarah Mutoni",
-        "role": "UX Designer",
-        "quote": "The practical projects and real-world experience were crucial in landing my first tech job.",
-        "story": "Leading design projects for major clients"
+        "quote": "Before EmpowHerEd, I struggled to help my children with school and communicate with their teachers. Now, I can join virtual meetings and send emails easily.",
+        "story": " Improved parental engagement through virtual communication tools."
       },
       "claire": {
         "name": "Claire Uwimana",
-        "role": "Frontend Developer",
-        "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in web development.",
-        "story": "Developing innovative web applications"
+        "quote": "After completing the EmpowHerEd training, I was promoted at work to administrative assistant. I learned how to organize schedules, prepare documents, and communicate effectively using digital tools.",
+        "story": "Earned promotion to administrative assistant thanks to improved skills."
       },
       "joyce": {
         "name": "Joyce Mukeshimana",
-        "role": "Backend Developer",
-        "quote": "EmpowerHerEd's structured learning path and supportive environment gave me the confidence to pursue backend development.",
-        "story": "Building scalable backend systems"
+        "quote": "Volunteering as a community outreach coordinator was made possible because EmpowHerEd taught me how to communicate professionally. Now I confidently connect with leaders and organize events that make a difference.",
+        "story": " Became a community outreach coordinator using professional communication skills."
       },
       "esther": {
         "name": "Esther Nyiraneza",
-        "role": "Full Stack Developer",
-        "quote": "The comprehensive curriculum and practical projects at EmpowerHerEd prepared me for real-world development challenges.",
-        "story": "Leading full-stack development teams"
+        "quote": "I never imagined I could work in IT support. Thanks to EmpowHerEd, I learned the basics of troubleshooting and professional communication, and now I help my coworkers solve their tech problems every day.",
+        "story": " Started working in IT support with foundational tech and communication skills."
       },
       "alice": {
         "name": "Alice Uwamahoro",
-        "role": "Mobile App Developer",
-        "quote": "The mobile development track at EmpowerHerEd was exactly what I needed to start my career in app development.",
-        "story": "Creating popular mobile applications"
+        "quote": "EmpowHerEd helped me build my resume and practice interviews. Because of the program, I landed my first job in customer service and gained confidence to face new challenges.",
+        "story": "Secured first job in customer service through enhanced communication and job skills."
       },
       "beatrice": {
         "name": "Beatrice Mutoni",
-        "role": "DevOps Engineer",
-        "quote": "EmpowerHerEd helped me discover my passion for DevOps.",
-        "story": "Implementing efficient CI/CD pipelines"
+        "quote": "With the skills from EmpowHerEd, I completed an online course in digital marketing. This opened new career paths for me and helped me expand my professional network.",
+        "story": "Completed digital marketing course and expanded professional opportunities."
       },
       "diane": {
         "name": "Diane Mutoni",
-        "role": "Data Scientist",
-        "quote": "The hands-on coding experience and mentorship at EmpowerHerEd helped me build a strong foundation in data science.",
-        "story": "Developing advanced data analysis models"
+        "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family’s finances and how to communicate confidently with banks and service providers.",
+        "story": "Improved family financial management and communication with institutions."
       }
     },
     "cta": {

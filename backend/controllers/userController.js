@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { AUTHORIZED_USERS } from '../config/authorizedUsers.js';
 import bcrypt from 'bcrypt';
 import { client } from '../config/googleClient.js';
+import { sendWelcomeEmail } from '../utils/SendWelcomeEmail.js';
 
 // Generate JWT
 const generateToken = (id) => {
@@ -47,6 +48,13 @@ const registerUser = asyncHandler(async (req, res) => {
     role,
     gender,
   });
+   
+  try {
+    await sendWelcomeEmail({ email: user.email, name: user.name });
+  } catch (error) {
+    console.error('Error sending welcome email:', error);
+  }
+
 
   console.log('Created user:', {
     name: user.name,

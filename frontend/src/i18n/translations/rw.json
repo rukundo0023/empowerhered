@@ -151,57 +151,48 @@
       "stories": [
         {
           "name": "Marie Uwase",
-          "role": "Umukora wa Software",
-          "quote": "EmpowerHerEd yampaye ubumenyi n'ubwishingizi bwo gukurikira akazi kawe mu tekinoroji. Porogaramu ya mentorship yari ngombwa cyane mu kumfasha gukurikira inganda.",
-          "achievement": "Ubu akora mu kampani ya tekinoroji ya mbere mu Rwanda"
+          "quote": "Kubera EmpowHerEd, nize ubumenyi bw`ibanze ku mashini no gutumanaho byanyeretse uko nshobora kubona akazi nka data entry clerk. Ubu nshobora gucunga inyandiko za digital no kuvugana neza n`itsinda ryanjye.",
+          "achievement": " Yabonye akazi ka data entry clerk kubera ubumenyi bwo gukoresha mudasobwa no gutumanaho."
         },
         {
           "name": "Grace Mukamana",
-          "role": "Umukora wa Data",
-          "quote": "Amahugurwa yuzuye n'umuryango wafasha byampaye ubumenyi bwo guhinduka mu tekinoroji. Ubu nkoresha ubumenyi bwanjye gukora impinduka.",
-          "achievement": "Yahindutse umukora wa tekinoroji"
+          "quote": "EmpowHerEd yampaye ubumenyi bwo gutangiza ubucuruzi bwo kuri internet. Kwiga uko twoherereza emails z`umwuga no gukoresha imbuga nkoranyambaga byamfashije kugera ku bakiriya no kuzamura ubucuruzi.",
+          "achievement": "Natangije kandi azamura ubucuruzi bwo kuri internet akoresheje ubumenyi bwo gutumanaho no gukoresha mudasobwa."
         },
         {
           "name": "Sarah Mutoni",
-          "role": "Umukora wa UX",
-          "quote": "Imirimo n'ubumenyi nafashe EmpowerHerEd byari ngombwa mu kumfasha gufata akazi ka mbere ka tekinoroji. Umuryango wafasha wari mwiza cyane.",
-          "achievement": "Ubu ari umuyobozi w'imirimo ya design"
+          "quote": "Mbere ya EmpowHerEd, nagorwaga no gufasha abana banjye mu masomo no kuvugana n`abarimu. Ubu nshobora kwinjira mu nama zo kuri internet no kohereza emails byoroshye.",
+          "achievement": "Nateje imbere uburyo bwo gukurikirana amashuri y`abana banjye no kuvugana n`abarimu hifashishijwe ikoranabuhanga."
         },
         {
           "name": "Claire Uwimana",
-          "role": "Umukora wa Frontend",
-          "quote": "Ubumenyi bwo gukora code n'ubuyobozi nafashe EmpowerHerEd byampaye ubumenyi bw'ingenzi mu gukora web. Ubu nkora ibisubizo bya digital.",
-          "achievement": "Gukora porogaramu za web nshya"
+          "quote": "Nyuma yo kurangiza amahugurwa ya EmpowHerEd, nahise nshyirwa mu kazi ka administrative assistant. Nize gutegura gahunda, gukora inyandiko, no gutumanaho neza ukoresheje ibikoresho bya digital.",
+          "achievement": "Nungutse akazi ka administrative assistant kubera ubumenyi bwatejwe imbere."
         },
         {
           "name": "Joyce Mukeshimana",
-          "role": "Umukora wa Backend",
-          "quote": "Inzira ya EmpowerHerEd n'umuryango wafasha byampaye ubwishingizi bwo gukurikira backend development. Umuryango ni mwiza cyane.",
-          "achievement": "Gukora sisteme za backend"
+          "quote": "Kubera amahugurwa ya EmpowHerEd, nabashije kuba umuyobozi w`abakorerabushake mu muryango. Ubu ntinya kuvugana n`abayobozi no gutegura ibikorwa bifitiye akamaro abaturage.",
+          "achievement": "Nabaye umuyobozi w`abakorerabushake ashingiye ku bumenyi bwo gutumanaho mu buryo bw`umwuga."
         },
         {
           "name": "Esther Nyiraneza",
-          "role": "Umukora wa Full Stack",
-          "quote": "Amasomo yuzuye n'imirimo ya EmpowerHerEd byampaye ubumenyi bwo gukora imirimo ya development. Ubu nkora mu mirimo ya full-stack.",
-          "achievement": "Umuberezi w'itsinda rya full-stack"
+          "quote": "Ntabwo nari nzi ko nshobora gukora mu byo gufasha abantu mu by`ikoranabuhanga. Kubera EmpowHerEd, nize gutunganya ibibazo bya mudasobwa no gutumanaho, ubu mfasha bagenzi banjye gukemura ibibazo bya tekinike.",
+          "achievement": "Natangiye gukora mu gice cya IT support akoresheje ubumenyi bw`ibanze."
         },
         {
           "name": "Alice Uwamahoro",
-          "role": "Umukora wa Mobile App",
-          "quote": "Inzira ya mobile development ya EmpowerHerEd yari ngombwa mu gutangiza karire yanjye mu gukora porogaramu. Ubuyobozi bwari ngombwa cyane.",
-          "achievement": "Gukora porogaramu za mobile"
+          "quote": "EmpowHerEd yampaye uburyo bwo gukora CV no kwitoza ibiganiro by`akazi. Kubera aya mahugurwa, nabonye akazi kanjye ka mbere mu bijyanye na customer service, kandi nakuze icyizere.",
+          "achievement": "Nabonye akazi ka mbere mu bucuruzi bwo kwakira abakiriya kubera ubumenyi bwiza bwo gutumanaho."
         },
         {
           "name": "Beatrice Mutoni",
-          "role": "Umukora wa DevOps",
-          "quote": "EmpowerHerEd yampaye ubumenyi bwo gukora DevOps. Ubumenyi n'ubufatanye byari ngombwa mu guhinduka karire.",
-          "achievement": "Gukora CI/CD pipelines"
+          "quote": "Kubera ubumenyi nabonye muri EmpowHerEd, narangije amasomo yo ku murongo ku bijyanye na digital marketing. Ibi byanteye amahirwe mashya mu kazi no kugura inshuti nshya mu kazi.",
+          "achievement": "Narangije amasomo ya digital marketing, bituma agira amahirwe mashya mu kazi."
         },
         {
           "name": "Diane Uwase",
-          "role": "Umuberezi wa Porogaramu",
-          "quote": "Ubumenyi bwo kuyobora n'ubuyobozi bwa porogaramu nafashe EmpowerHerEd byari ngombwa mu gutera imbere karire. Umuryango wafasha ni mwiza cyane.",
-          "achievement": "Umuberezi w'itsinda rya porogaramu"
+          "quote": "EmpowHerEd yanyeretse uko nakoresha spreadsheets gucunga amafaranga y`umuryango wanjye no kuvugana neza n`amabanki n`abatanga serivisi.",
+          "achievement": " Nateje imbere imicungire y`imari y`umuryango no kuvugana neza n`ibigo."
         }
       ],
       "readMore": "Soma Inkuru Zinshi",
@@ -425,23 +416,22 @@
         "title": "Amahugurwa Azaza",
         "workshops": {
           "webDev": {
-            "title": "Ubumenyi bw'ibanze bwo Gukora Web",
-            "description": "Menya ubumenyi bw'ibanze bwo gukora web harimo HTML, CSS, na JavaScript",
-            "date": "Ukwezi Gutaha"
+            "title": "Ubumenyi bw`Ibanze mu Mikoreshereze ya Mudasobwa",
+            "description": "Menya gukoresha mudasobwa, gushakisha kuri interineti, no gucunga neza amadosiye."
           },
           "data": {
-            "title": "Mahugurwa yo Gukurikiranwa kwa Data",
-            "description": "Menya ibikoresho n'uburyo bwo gukurikiranwa kwa data kugirango utore ibyemezo byiza",
+            "title": "Imikoreshereze y`Imeri n`Itumanaho ryo kuri Murandasi",
+            "description": "Menya gukoresha neza imeri, porogaramu z`itumanaho, n`izindi nyikoresho z`itumanaho ryo kuri murandasi mu buryo bw`umwuga.",
             "date": "Mu Bihe 2"
           },
           "cybersecurity": {
-            "title": "Ubwishingizi kuri Interineti",
-            "description": "Menya uburyo bw'ingenzi bwo kurinda ibikoresho byawe bya digital",
+            "title": "Umutekano wo kuri Murandasi",
+            "description": "Sobanukirwa uburyo bwo kwirinda mu ikoranabuhanga no kurinda amakuru yawe bwite.",
             "date": "Mu Bihe 3"
           },
           "leadership": {
-            "title": "Ubuyobozi mu Tekinoroji",
-            "description": "Fata ubumenyi bw'ingenzi mu kuyobora tekinoroji no gukora itsinda",
+            "title": "Kwiyizera mu Isi y`Ikoranabuhanga",
+            "description": "Wiyubakemo icyizere cyo gukorana n’ikoranabuhanga no gufatanya neza n’abandi mu bikorwa byaryo.",
             "date": "Mu Bihe 4"
           }
         }
@@ -1359,57 +1349,48 @@
     "stories": {
       "marie": {
         "name": "Marie Uwimana",
-        "role": "Umukora wa Software",
-        "quote": "EmpowerHerEd yampaye ubumenyi no kwizera ngo nkore umwuga wanjye wa tekinoroji. Ubufasha n'inkunga byari ngombwa cyane.",
-        "story": "Nyuma yo kurangiza amasomo ya kode, nafashe akazi nka mukora wa software mu kambani ya tekinoroji. Ubumenyi n'imyitozo byampaye byari ngombwa cyane mu kazi kanjye."
+        "quote": "Kubera EmpowHerEd, nize ubumenyi bw`ibanze ku mashini no gutumanaho byanyeretse uko nshobora kubona akazi nka data entry clerk. Ubu nshobora gucunga inyandiko za digital no kuvugana neza n`itsinda ryanjye.",
+        "story": "Nabonye akazi kokwinziza amakuru muri sisiteme kubera ubumenyi bwo gukoresha mudasobwa no gutumanaho."
       },
       "grace": {
         "name": "Grace Mukamana",
-        "role": "Umwishingizi",
-        "quote": "Porogaramu yo gutera imbere y'ubucuruzi yampaye ubumenyi bwo guhindura igitekerezo kanjye gato kikaba umucuruzi mwiza.",
-        "story": "Nkoresheje ubumenyi bwakuye mu masomo ya EmpowerHerEd, nashinze isosiyete yanjye ya fashion, nkora abandi bagore mu karere kanjye."
+        "quote": "EmpowHerEd yampaye ubumenyi bwo gutangiza ubucuruzi bwo kuri internet. Kwiga uko twoherereza emails z`umwuga no gukoresha imbuga nkoranyambaga byamfashije kugera ku bakiriya no kuzamura ubucuruzi.",
+        "story": "Natangije kandi nzamura ubucuruzi bwo kuri internet akoresheje ubumenyi bwo gutumanaho no gukoresha mudasobwa."
       },
       "sarah": {
         "name": "Sarah Niyonsenga",
-        "role": "Umuyobozi w'Umuryango",
-        "quote": "Amasomo yo kuyobora yampaye ubumenyi bwo guhindura ubuzima bw'umuryango wanjye.",
-        "story": "Nkoresheje ubumenyi bwakuye mu masomo yo kuyobora, nshinzwe gahunda zifasha abagore no gutera imbere mu karere kanjye."
+        "quote": "Mbere ya EmpowHerEd, nari ngorwa no gufasha abana banjye mu masomo no kuvugana n`abarimu. Ubu nshobora kwinjira mu nama zo kuri internet no kohereza emails byoroshye.",
+        "story": "Nateje imbere uburyo bwo gukurikirana amashuri y`abana be no kuvugana n`abarimu hifashishijwe ikoranabuhanga."
       },
       "claire": {
         "name": "Claire Uwase",
-        "role": "Umwishingizi wa Data",
-        "quote": "Porogaramu yo gusuzuma data yampaye amahirwe mashya.",
-        "story": "Nyuma yo kurangiza amasomo ya data, nafashe akazi mu ishami ry'ubushakashatsi, nkora gahunda zifasha abaturage."
+        "quote": "Nyuma yo kurangiza amahugurwa ya EmpowHerEd, nahise nshyirwa mu kazi ka administrative assistant. Nize gutegura gahunda, gukora inyandiko, no gutumanaho neza ukoresheje ibikoresho bya digital.",
+        "story": "Nungutse akazi ka administrative assistant kubera ubumenyi bwatejwe imbere."
       },
       "joyce": {
         "name": "Joyce Mutoni",
-        "role": "Umwishingizi wa Tekinoroji",
-        "quote": "Ubumenyi bwa tekinoroji n'ubucuruzi byari ngombwa cyane kuri njye.",
-        "story": "Nashinze porogaramu ya mobile ifasha aborozi kugurisha ibyabo, nkoresheje ubumenyi bwakuye mu masomo ya EmpowerHerEd."
+        "quote": "Kubera amahugurwa ya EmpowHerEd, nabashije kuba umuyobozi w`abakorerabushake mu muryango. Ubu ntinya kuvugana n`abayobozi no gutegura ibikorwa bifitiye akamaro abaturage.",
+        "story": "Nabaye umuyobozi w`abakorerabushake ashingiye ku bumenyi bwo gutumanaho mu buryo bw`umwuga."
       },
       "esther": {
         "name": "Esther Mukamana",
-        "role": "Umwishingizi wa Marketing ya Digital",
-        "quote": "Porogaramu ya digital yampaye ubumenyi bwo guhindura umwuga wanjye.",
-        "story": "Nahinduye umwuga wanjye wo kuri marketing ya digital, nfasha amasosiyete gutera imbere kuri interineti."
+        "quote": "Ntabwo nari nzi ko nshobora gukora mu byo gufasha abantu mu by`ikoranabuhanga. Kubera EmpowHerEd, nize gutunganya ibibazo bya mudasobwa no gutumanaho, ubu mfasha bagenzi banjye gukemura ibibazo bya tekinike.",
+        "story": "Yatangiye gukora mu gice cya IT support akoresheje ubumenyi bw`ibanze."
       },
       "alice": {
         "name": "Alice Uwamahoro",
-        "role": "Umwishingizi wa UX/UI",
-        "quote": "Porogaramu ya design yampaye ubumenyi bwo guhuza ubuhanga n'ubumenyi.",
-        "story": "Nshinzwe gahunda za design mu kambani ya tekinoroji, nkora porogaramu zifasha abaturage."
+        "quote": "EmpowHerEd yampaye uburyo bwo gukora CV no kwitoza ibiganiro by`akazi. Kubera aya mahugurwa, nabonye akazi kanjye ka mbere mu bijyanye na customer service, kandi nakuze icyizere.",
+        "story": "Nabonye akazi ka mbere mu bucuruzi bwo kwakira abakiriya kubera ubumenyi bwiza bwo gutumanaho."
       },
       "beatrice": {
         "name": "Beatrice Nyirahabimana",
-        "role": "Umwishingizi wa Cybersecurity",
-        "quote": "Amasomo ya cybersecurity yampaye amahirwe yo kwinjira mu kazi nta nubwo nari nzi.",
-        "story": "Nyuma yo kurangiza amasomo, nafashe akazi mu ishami ry'ubwishingizi, nfasha gukingira amakuru y'abakiriya."
+        "quote": "Kubera ubumenyi nabonye muri EmpowHerEd, narangije amasomo yo ku murongo ku bijyanye na digital marketing. Ibi byanteye amahirwe mashya mu kazi no kugura inshuti nshya mu kazi.",
+        "story": "Narangije amasomo ya digital marketing, bituma agira amahirwe mashya mu kazi."
       },
       "diane": {
         "name": "Diane Uwase",
-        "role": "Umwishingizi wa AI",
-        "quote": "Porogaramu ya tekinoroji yampaye ubumenyi bwo gukora AI.",
-        "story": "Nkora gahunda za AI zifasha aborozi kugera ku birebana n'ibihe, nkora impinduka mu buzima bwabo."
+        "quote": "EmpowHerEd yanyeretse uko nakoresha spreadsheets gucunga amafaranga y`umuryango wanjye no kuvugana neza n`amabanki n`abatanga serivisi.",
+        "story": "Yateje imbere imicungire y`imari y`umuryango no kuvugana neza n`ibigo."
       }
     },
     "cta": {

@@ -3,6 +3,7 @@ import User from '../models/userModel.js';
 import Meeting from '../models/meetingModel.js';
 import Mentorship from '../models/mentorshipModel.js';
 import Booking from '../models/bookingModel.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 // @desc    Get mentor's mentees
 // @route   GET /api/mentors/mentees
@@ -277,6 +278,7 @@ const createBookingRequest = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Accept a booking request
 // @route   PUT /api/mentors/bookings/:id/accept
 // @access  Private/Mentor
@@ -320,6 +322,23 @@ const acceptBooking = asyncHandler(async (req, res) => {
     booking.mentor = mentorId;
     booking.status = 'confirmed';
     await booking.save();
+
+    try {
+    await sendEmail({
+      to: booking.menteeEmail,
+      subject: 'Your booking has been accepted!',
+      html: `<p>Hi ${booking.menteeName},</p>
+             <p>Your booking for the mentorship session on ${booking.date} has been accepted.</p>
+             <p>Looking forward to a great session!</p>`
+    });
+
+    res.json({ message: 'Booking accepted successfully, and confirmation email sent.' });
+  } catch (error) {
+    console.error('Failed to send confirmation email:', error);
+    // Still respond success, but maybe add a warning
+    res.json({ message: 'Booking accepted, but failed to send email.' });
+  }
+
 
     // Create new mentorship relationship if one doesn't exist
     let mentorship;
@@ -411,4 +430,4 @@ export {
   getPendingBookings,
   acceptBooking,
   rejectBooking
-}; 
+};

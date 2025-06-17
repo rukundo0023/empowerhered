@@ -9,7 +9,6 @@ const SuccessStories = () => {
     {
       id: 1,
       name: t('successStories.stories.marie.name'),
-      role: t('successStories.stories.marie.role'),
       image: assets.profile,
       quote: t('successStories.stories.marie.quote'),
       story: t('successStories.stories.marie.story')
@@ -17,7 +16,6 @@ const SuccessStories = () => {
     {
       id: 2,
       name: t('successStories.stories.grace.name'),
-      role: t('successStories.stories.grace.role'),
       image: assets.profile,
       quote: t('successStories.stories.grace.quote'),
       story: t('successStories.stories.grace.story')
@@ -25,7 +23,6 @@ const SuccessStories = () => {
     {
       id: 3,
       name: t('successStories.stories.sarah.name'),
-      role: t('successStories.stories.sarah.role'),
       image: assets.profile,
       quote: t('successStories.stories.sarah.quote'),
       story: t('successStories.stories.sarah.story')
@@ -33,7 +30,6 @@ const SuccessStories = () => {
     {
       id: 4,
       name: t('successStories.stories.claire.name'),
-      role: t('successStories.stories.claire.role'),
       image: assets.profile,
       quote: t('successStories.stories.claire.quote'),
       story: t('successStories.stories.claire.story')
@@ -41,7 +37,6 @@ const SuccessStories = () => {
     {
       id: 5,
       name: t('successStories.stories.joyce.name'),
-      role: t('successStories.stories.joyce.role'),
       image: assets.profile,
       quote: t('successStories.stories.joyce.quote'),
       story: t('successStories.stories.joyce.story')
@@ -49,7 +44,6 @@ const SuccessStories = () => {
     {
       id: 6,
       name: t('successStories.stories.esther.name'),
-      role: t('successStories.stories.esther.role'),
       image: assets.profile,
       quote: t('successStories.stories.esther.quote'),
       story: t('successStories.stories.esther.story')
@@ -57,7 +51,6 @@ const SuccessStories = () => {
     {
       id: 7,
       name: t('successStories.stories.alice.name'),
-      role: t('successStories.stories.alice.role'),
       image: assets.profile,
       quote: t('successStories.stories.alice.quote'),
       story: t('successStories.stories.alice.story')
@@ -65,7 +58,6 @@ const SuccessStories = () => {
     {
       id: 8,
       name: t('successStories.stories.beatrice.name'),
-      role: t('successStories.stories.beatrice.role'),
       image: assets.profile,
       quote: t('successStories.stories.beatrice.quote'),
       story: t('successStories.stories.beatrice.story')
@@ -73,7 +65,6 @@ const SuccessStories = () => {
     {
       id: 9,
       name: t('successStories.stories.diane.name'),
-      role: t('successStories.stories.diane.role'),
       image: assets.profile,
       quote: t('successStories.stories.diane.quote'),
       story: t('successStories.stories.diane.story')
