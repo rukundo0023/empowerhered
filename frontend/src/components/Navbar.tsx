@@ -108,12 +108,16 @@ const Navbar = () => {
   }, []);
 
   // Function to get initials from user's name
-  const getUserInitials = (name: string) => {
-    if (!name) return 'U';
-    const parts = name.split(' ');
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  };
+  const getUserInitials = (name: string): string => {
+  if (!name || typeof name !== 'string') return 'U';
+
+  const parts = name.trim().split(' ').filter(Boolean);
+
+  if (parts.length === 0) return 'U';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+};
 
   // Clear timeout on component unmount
   useEffect(() => {
@@ -146,7 +150,7 @@ const Navbar = () => {
               to="/"
               className={`${
                 location.pathname === '/'
-                  ? 'border-primary text-gray-900'
+                  ? 'border-primary text-blue-600'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
               } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
@@ -156,7 +160,7 @@ const Navbar = () => {
               to="/about"
               className={`${
                 location.pathname === '/about'
-                  ? 'border-primary text-gray-900'
+                  ? 'border-primary text-blue-600'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
               } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
@@ -169,7 +173,7 @@ const Navbar = () => {
                 to="/programs"
                 className={`${
                   location.pathname === '/programs'
-                    ? 'border-primary text-gray-900'
+                    ? 'border-primary text-blue-600'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
@@ -198,7 +202,7 @@ const Navbar = () => {
                 to="/resources"
                 className={`${
                   location.pathname === '/resources'
-                    ? 'border-primary text-gray-900'
+                    ? 'border-primary text-blue-600'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
@@ -225,7 +229,7 @@ const Navbar = () => {
               to="/success-stories"
               className={`${
                 location.pathname === '/success-stories'
-                  ? 'border-primary text-gray-900'
+                  ? 'border-primary text-blue-600'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
               } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
@@ -236,7 +240,7 @@ const Navbar = () => {
               to="/contact"
               className={`${
                 location.pathname === '/contact'
-                  ? 'border-primary text-gray-900'
+                  ? 'border-primary text-blue-600'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
               } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
             >
@@ -311,7 +315,7 @@ const Navbar = () => {
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 focus:outline-none"
                 >
-                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-black font-semibold">
                     {getUserInitials(user?.name || '')}
                   </div>
                 </button>

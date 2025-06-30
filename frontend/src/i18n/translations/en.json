@@ -277,7 +277,7 @@
         },
         {
           "name": "Diane Uwase",
-          "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family’s finances and how to communicate confidently with banks and service providers.",
+          "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family's finances and how to communicate confidently with banks and service providers.",
           "achievement": "Improved family financial management and communication with institutions."
         }
       ],
@@ -305,11 +305,11 @@
     },
     "story": {
       "title": "Our Story",
-      "description1": "EmpowerHerEd was born from a simple but powerful idea: when women are educated and empowered, entire communities prosper. Founded by a passionate team of educators, mentors, and advocates, EmpowerHerEd exists to bridge the gender gap in education and opportunity.",
+      "description1": "EmpowerHerEd was born from a simple but powerful idea: when women are educated and empowered, entire communities prosper. Founded by a passionate student and a dedicated learner of technology called Rukundo Nshimiyimana, mentors, and advocates, EmpowerHerEd exists to bridge the gender gap in education and opportunity.",
       "description2": "Our platform is a safe, inclusive space where women and girls can learn, connect, and grow academically, professionally, and personally."
     },
     "whatWeDo": {
-      "title": "What We Do",
+      "title": "What We Do?",
       "description": "We offer curated educational content, mentorship programs, workshops, and career support to help women at every stage of their journey. From high school students to working professionals, we're here to uplift, equip, and empower.",
       "services": {
         "education": "Educational Content",
@@ -327,7 +327,7 @@
       "description": "A world where women are equally represented in technology and have the opportunity to shape the future of innovation."
     },
     "whyItMatters": {
-      "title": "Why It Matters",
+      "title": "Why It Matters?",
       "description": "Despite progress, millions of women around the world still face limited access to education and leadership roles. EmpowerHerEd is changing that by nurturing confidence, capability, and community.",
       "highlight": "Together, we are shaping a future where education is a right and not a privilege for every woman."
     },
@@ -448,7 +448,10 @@
           "Skill Development",
           "Professional Growth",
           "Industry Insights"
-        ]
+        ],
+        "cta": {
+          "selectMentorFirst": "Please select a mentor first."
+        }
       },
       "networking": {
         "title": "Networking Events",
@@ -751,7 +754,8 @@
       "cta": {
         "title": "Ready to Start Your Journey?",
         "description": "Book your first mentorship session today",
-        "button": "Book Now"
+        "button": "Book Now",
+        "selectMentorFirst": "Please select a mentor first."
       }
     },
     "techSkills": {
@@ -1684,7 +1688,7 @@
       },
       "diane": {
         "name": "Diane Mutoni",
-        "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family’s finances and how to communicate confidently with banks and service providers.",
+        "quote": "EmpowHerEd showed me how to use spreadsheets to manage my family's finances and how to communicate confidently with banks and service providers.",
         "story": "Improved family financial management and communication with institutions."
       }
     },

@@ -9,21 +9,31 @@ import { sendEmail } from '../utils/sendEmail.js';
 // @route   GET /api/mentors/mentees
 // @access  Private/Mentor
 const getMentees = asyncHandler(async (req, res) => {
-  const mentorships = await Mentorship.find({ mentor: req.user._id })
-    .populate('mentee', 'name email')
-    .populate('meetings');
+  try {
+    const mentorships = await Mentorship.find({ mentor: req.user._id })
+      .populate('mentee', 'name email')
+      .populate('meetings');
 
-  const mentees = mentorships.map(mentorship => ({
-    id: mentorship.mentee._id,
-    name: mentorship.mentee.name,
-    email: mentorship.mentee.email,
-    progress: mentorship.progress,
-    lastMeeting: mentorship.meetings.length > 0 
-      ? mentorship.meetings[mentorship.meetings.length - 1].date 
-      : 'No meetings yet'
-  }));
+    // Log the mentorships to see what is actually being returned
+    console.log('Mentorships:', mentorships);
 
-  res.json(mentees);
+    const mentees = mentorships
+      .filter(mentorship => mentorship.mentee && mentorship.mentee._id)
+      .map(mentorship => ({
+        id: mentorship.mentee._id,
+        name: mentorship.mentee.name,
+        email: mentorship.mentee.email,
+        progress: mentorship.progress,
+        lastMeeting: mentorship.meetings.length > 0 
+          ? mentorship.meetings[mentorship.meetings.length - 1].date 
+          : 'No meetings yet'
+      }));
+
+    res.json(mentees);
+  } catch (error) {
+    console.error('Error in getMentees:', error);
+    res.status(500).json({ message: 'Server error in getMentees', error: error.message });
+  }
 });
 
 // @desc    Get specific mentee details
@@ -179,9 +189,9 @@ const getMentorStats = asyncHandler(async (req, res) => {
 // @route   GET /api/mentors/available
 // @access  Public
 const getAvailableMentors = asyncHandler(async (req, res) => {
-  const mentors = await User.find({ 
+  const mentors = await User.find({
     role: 'mentor',
-    isAvailable: true 
+    isAvailable: true
   }).select('name email expertise bio');
 
   res.json(mentors);
@@ -191,93 +201,49 @@ const getAvailableMentors = asyncHandler(async (req, res) => {
 // @route   GET /api/mentors/bookings/pending
 // @access  Private/Mentor
 const getPendingBookings = asyncHandler(async (req, res) => {
-  try {
-    // Get all pending bookings that need mentor assignment
-    const pendingBookings = await Booking.find({ 
-      status: 'pending'
-    }).populate('mentee', 'name email');
+  const pendingBookings = await Booking.find({
+    status: 'pending'
+  }).populate('mentee', 'name email');
 
-    console.log('Retrieved pending bookings:', {
-      count: pendingBookings.length
-    });
-
-    res.status(200).json(pendingBookings);
-  } catch (error) {
-    console.error('Error fetching pending bookings:', error);
-    throw error;
-  }
+  res.status(200).json(pendingBookings);
 });
 
 // @desc    Create new booking request
 // @route   POST /api/mentors/bookings
 // @access  Public
 const createBookingRequest = asyncHandler(async (req, res) => {
-  console.log('Received booking request:', req.body);
-  
   const { mentee, name, email, topic, duration } = req.body;
 
-  // Validate required fields
   if (!mentee || !name || !email) {
-    console.log('Missing required fields:', { mentee, name, email });
     res.status(400);
     throw new Error('Mentee details are required');
   }
 
-  try {
-    // Verify mentee exists
-    const menteeExists = await User.findById(mentee);
-    if (!menteeExists) {
-      console.log('Mentee not found:', mentee);
-      res.status(404);
-      throw new Error('Mentee not found');
-    }
-
-    // Create new booking with pending status
-    const bookingData = {
-      mentee,
-      menteeName: name,
-      menteeEmail: email,
-      topic: topic || 'Initial Mentorship Session',
-      duration: duration || 60,
-      status: 'pending',
-      date: new Date(),
-      time: 'To be scheduled',
-      mentor: null // Explicitly set mentor to null
-    };
-
-    console.log('Creating booking with data:', bookingData);
-    
-    try {
-      const booking = await Booking.create(bookingData);
-      console.log('Booking created successfully:', booking);
-
-      res.status(201).json({
-        ...booking.toObject(),
-        message: 'Booking request created successfully. A mentor will be assigned soon.'
-      });
-    } catch (dbError) {
-      console.error('Database error creating booking:', {
-        error: dbError,
-        name: dbError.name,
-        message: dbError.message,
-        errors: dbError.errors
-      });
-      
-      if (dbError.name === 'ValidationError') {
-        res.status(400);
-        throw new Error(`Validation error: ${Object.values(dbError.errors).map(e => e.message).join(', ')}`);
-      }
-      throw dbError;
-    }
-  } catch (error) {
-    console.error('Error in createBookingRequest:', {
-      error: error.message,
-      stack: error.stack
-    });
-    throw error;
+  const menteeExists = await User.findById(mentee);
+  if (!menteeExists) {
+    res.status(404);
+    throw new Error('Mentee not found');
   }
-});
 
+  const bookingData = {
+    mentee,
+    menteeName: name,
+    menteeEmail: email,
+    topic: topic || 'Initial Mentorship Session',
+    duration: duration || 60,
+    status: 'pending',
+    date: new Date(),
+    time: 'To be scheduled',
+    mentor: null
+  };
+
+  const booking = await Booking.create(bookingData);
+
+  res.status(201).json({
+    ...booking.toObject(),
+    message: 'Booking request created successfully. A mentor will be assigned soon.'
+  });
+});
 
 // @desc    Accept a booking request
 // @route   PUT /api/mentors/bookings/:id/accept
@@ -286,44 +252,38 @@ const acceptBooking = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const mentorId = req.user._id;
 
-  try {
-    // Find the booking
-    const booking = await Booking.findById(id);
-    if (!booking) {
-      res.status(404);
-      throw new Error('Booking not found');
-    }
+  const booking = await Booking.findById(id);
+  if (!booking) {
+    res.status(404);
+    throw new Error('Booking not found');
+  }
 
-    // Check if booking is still pending
-    if (booking.status !== 'pending') {
+  if (booking.status !== 'pending') {
+    res.status(400);
+    throw new Error('Booking is no longer pending');
+  }
+
+  const existingMentorship = await Mentorship.findOne({
+    mentor: mentorId,
+    mentee: booking.mentee
+  });
+
+  if (existingMentorship) {
+    if (existingMentorship.status === 'cancelled') {
+      existingMentorship.status = 'active';
+      existingMentorship.startDate = new Date();
+      await existingMentorship.save();
+    } else {
       res.status(400);
-      throw new Error('Booking is no longer pending');
+      throw new Error('A mentorship already exists with this mentee');
     }
+  }
 
-    // Check if a mentorship already exists
-    const existingMentorship = await Mentorship.findOne({
-      mentor: mentorId,
-      mentee: booking.mentee
-    });
+  booking.mentor = mentorId;
+  booking.status = 'confirmed';
+  await booking.save();
 
-    if (existingMentorship) {
-      // If mentorship exists but is cancelled, reactivate it
-      if (existingMentorship.status === 'cancelled') {
-        existingMentorship.status = 'active';
-        existingMentorship.startDate = new Date();
-        await existingMentorship.save();
-      } else {
-        res.status(400);
-        throw new Error('A mentorship already exists with this mentee');
-      }
-    }
-
-    // Update booking with mentor info
-    booking.mentor = mentorId;
-    booking.status = 'confirmed';
-    await booking.save();
-
-    try {
+  try {
     await sendEmail({
       to: booking.menteeEmail,
       subject: 'Your booking has been accepted!',
@@ -331,49 +291,28 @@ const acceptBooking = asyncHandler(async (req, res) => {
              <p>Your booking for the mentorship session on ${booking.date} has been accepted.</p>
              <p>Looking forward to a great session!</p>`
     });
-
-    res.json({ message: 'Booking accepted successfully, and confirmation email sent.' });
   } catch (error) {
     console.error('Failed to send confirmation email:', error);
-    // Still respond success, but maybe add a warning
-    res.json({ message: 'Booking accepted, but failed to send email.' });
   }
 
-
-    // Create new mentorship relationship if one doesn't exist
-    let mentorship;
-    if (!existingMentorship) {
-      mentorship = await Mentorship.create({
-        mentor: mentorId,
-        mentee: booking.mentee,
-        status: 'active',
-        startDate: new Date(),
-        progress: 0
-      });
-    } else {
-      mentorship = existingMentorship;
-    }
-
-    console.log('Booking accepted successfully:', {
-      bookingId: booking._id,
-      mentorId,
-      menteeId: booking.mentee,
-      mentorshipId: mentorship._id
+  let mentorship;
+  if (!existingMentorship) {
+    mentorship = await Mentorship.create({
+      mentor: mentorId,
+      mentee: booking.mentee,
+      status: 'active',
+      startDate: new Date(),
+      progress: 0
     });
-
-    res.status(200).json({
-      ...booking.toObject(),
-      mentorshipId: mentorship._id,
-      message: 'Booking accepted successfully'
-    });
-  } catch (error) {
-    console.error('Error accepting booking:', error);
-    if (error.name === 'ValidationError') {
-      res.status(400);
-      throw new Error(`Validation error: ${Object.values(error.errors).map(e => e.message).join(', ')}`);
-    }
-    throw error;
+  } else {
+    mentorship = existingMentorship;
   }
+
+  res.status(200).json({
+    ...booking.toObject(),
+    mentorshipId: mentorship._id,
+    message: 'Booking accepted successfully'
+  });
 });
 
 // @desc    Reject a booking request
@@ -381,39 +320,25 @@ const acceptBooking = asyncHandler(async (req, res) => {
 // @access  Private/Mentor
 const rejectBooking = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const mentorId = req.user._id;
 
-  try {
-    // Find the booking
-    const booking = await Booking.findById(id);
-    if (!booking) {
-      res.status(404);
-      throw new Error('Booking not found');
-    }
-
-    // Check if booking is still pending
-    if (booking.status !== 'pending') {
-      res.status(400);
-      throw new Error('Booking is no longer pending');
-    }
-
-    // Update booking status to cancelled
-    booking.status = 'cancelled';
-    await booking.save();
-
-    console.log('Booking rejected successfully:', {
-      bookingId: booking._id,
-      mentorId
-    });
-
-    res.status(200).json({
-      ...booking.toObject(),
-      message: 'Booking rejected successfully'
-    });
-  } catch (error) {
-    console.error('Error rejecting booking:', error);
-    throw error;
+  const booking = await Booking.findById(id);
+  if (!booking) {
+    res.status(404);
+    throw new Error('Booking not found');
   }
+
+  if (booking.status !== 'pending') {
+    res.status(400);
+    throw new Error('Booking is no longer pending');
+  }
+
+  booking.status = 'cancelled';
+  await booking.save();
+
+  res.status(200).json({
+    ...booking.toObject(),
+    message: 'Booking rejected successfully'
+  });
 });
 
 export {

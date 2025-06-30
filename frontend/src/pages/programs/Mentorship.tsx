@@ -1,95 +1,96 @@
-import { motion } from "framer-motion"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import assets from "../../assets/assets"
-import api from "../../api/axios"
-import { useTranslation } from "react-i18next"
-import Newsletter from "../../components/Newsletter"
-import { AxiosError } from "axios"
-import { useAuth } from "../../context/AuthContext"
-import { useCallback, useState, useRef, useEffect } from "react"
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import assets from "../../assets/assets";
+import api from "../../api/axios";
+import { useTranslation } from "react-i18next";
+import Newsletter from "../../components/Newsletter";
+import { AxiosError } from "axios";
+import { useAuth } from "../../context/AuthContext";
+import { useCallback, useState, useRef, useEffect } from "react";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
+// Add Mentor type
+type Mentor = {
+  _id: string;
+  name: string;
+  expertise: string;
+  availability?: string[]; // ISO date strings
+};
 
 const Mentorship = () => {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-  const { user, isAuthenticated } = useAuth()
-  const [availableMentors, setAvailableMentors] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [isBooking, setIsBooking] = useState(false)
-  const bookingInProgress = useRef(false)
-  const loadingToastRef = useRef<number | null>(null)
-  
-  // Cleanup function to dismiss any active toasts when component unmounts
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const [availableMentors, setAvailableMentors] = useState<Mentor[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const bookingInProgress = useRef(false);
+  const loadingToastRef = useRef<number | null>(null);
+  const [selectedDates, setSelectedDates] = useState<{ [mentorId: string]: Date | null }>({});
+
   useEffect(() => {
     return () => {
       if (loadingToastRef.current) {
-        toast.dismiss(loadingToastRef.current)
+        toast.dismiss(loadingToastRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const fetchAvailableMentors = useCallback(async () => {
     try {
-      setIsLoading(true)
-      const response = await api.get('/mentors/available')
-      setAvailableMentors(response.data)
+      setIsLoading(true);
+      const response = await api.get('/mentors/available');
+      setAvailableMentors(response.data);
     } catch (error) {
-      console.error('Error fetching mentors:', error)
-      toast.error(t('mentorship.fetchMentorsError'))
+      console.error('Error fetching mentors:', error);
+      toast.error(t('mentorship.fetchMentorsError'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [t])
+  }, [t]);
 
   useEffect(() => {
-    fetchAvailableMentors()
-  }, [fetchAvailableMentors])
+    fetchAvailableMentors();
+  }, [fetchAvailableMentors]);
 
-  const handleBookNow = async () => {
+  const handleBookNow = async (mentorId: string, selectedDate: Date | null) => {
     if (!user) {
       toast.error(t('programs.mentorship.booking.loginRequired'));
       navigate('/login');
       return;
     }
 
-    if (bookingInProgress.current) {
+    if (!selectedDate) {
+      toast.error(t('programs.mentorship.booking.selectDate'));
       return;
     }
+
+    if (bookingInProgress.current) return;
 
     bookingInProgress.current = true;
     const loadingToast = toast.loading(t('programs.mentorship.booking.loading'));
 
     try {
-      // Log user object to verify data
-      console.log('Current user:', {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      });
+      if (!user._id) throw new Error('User ID is missing');
 
-      if (!user._id) {
-        throw new Error('User ID is missing');
-      }
-
-      // Create booking request with mentee details only
       const bookingData = {
         mentee: user._id,
         name: user.name,
         email: user.email,
         topic: 'Initial Mentorship Session',
+        date: selectedDate.toISOString(),
         duration: 60,
         status: 'pending',
-        mentor: null // Explicitly set mentor to null
+        mentor: mentorId
       };
 
-      console.log('Sending booking request:', bookingData);
       const response = await api.post('/mentors/bookings', bookingData);
 
       toast.dismiss(loadingToast);
       toast.success(t('programs.mentorship.booking.success'));
-      navigate('/profile', { 
-        state: { 
+      navigate('/profile', {
+        state: {
           bookingInfo: response.data,
           message: t('programs.mentorship.booking.success')
         }
@@ -97,7 +98,7 @@ const Mentorship = () => {
     } catch (error) {
       console.error('Error booking mentorship:', error);
       toast.dismiss(loadingToast);
-      
+
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
           toast.error(t('programs.mentorship.booking.loginRequired'));
@@ -117,7 +118,7 @@ const Mentorship = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative pt-28"
-        style={{ backgroundImage: `url(${assets.mentorshipbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        style={{ backgroundImage: `url(${assets.communicationbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -125,10 +126,10 @@ const Mentorship = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
               {t('programs.mentorship.hero.title')}
             </h1>
-            <p className="text-xl text-white max-w-3xl mx-auto">
+            <p className="text-xl text-black max-w-3xl mx-auto">
               {t('programs.mentorship.hero.description')}
             </p>
           </motion.div>
@@ -145,7 +146,7 @@ const Mentorship = () => {
             {t('programs.mentorship.overview.description')}
           </p>
         </div>
-        
+
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -161,13 +162,42 @@ const Mentorship = () => {
               >
                 <h3 className="text-xl font-semibold mb-2">{mentor.name}</h3>
                 <p className="text-gray-600 mb-4">{mentor.expertise}</p>
-                <button
-                  onClick={() => handleBookNow()}
-                  disabled={isBooking}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {isBooking ? t('programs.mentorship.booking') : t('programs.mentorship.bookNow')}
-                </button>
+
+                {mentor.availability && mentor.availability.length > 0 ? (
+                  <div className="mb-2">
+                    <span className="font-medium block mb-2">{t('programs.mentorship.availability')}:</span>
+                    <Calendar
+                      tileDisabled={({ date }) =>
+                        !mentor.availability?.some(slot => {
+                          const slotDate = new Date(slot);
+                          return (
+                            slotDate.getFullYear() === date.getFullYear() &&
+                            slotDate.getMonth() === date.getMonth() &&
+                            slotDate.getDate() === date.getDate()
+                          );
+                        })
+                      }
+                      onClickDay={date => setSelectedDates(prev => ({ ...prev, [mentor._id]: date }))}
+                      value={selectedDates[mentor._id] || null}
+                    />
+                    {selectedDates[mentor._id] && (
+                      <div className="mt-2 text-sm text-blue-700">
+                        {t('programs.mentorship.selectedDate')}: {selectedDates[mentor._id]?.toLocaleString()}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => handleBookNow(mentor._id, selectedDates[mentor._id])}
+                      className="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                      disabled={!selectedDates[mentor._id]}
+                    >
+                      {t('programs.mentorship.bookNow')}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="mb-2 text-sm text-gray-500">
+                    {t('programs.mentorship.noAvailability')}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -194,21 +224,28 @@ const Mentorship = () => {
             {t('programs.mentorship.cta.description')}
           </p>
           <button
-            onClick={handleBookNow}
-            disabled={isBooking}
-            className={`bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-700 transition-colors ${
-              isBooking ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            onClick={() => {
+              // Find the first selected mentor and date
+              const selectedMentorId = Object.keys(selectedDates).find(
+                (mentorId) => selectedDates[mentorId]
+              );
+              const selectedDate = selectedMentorId ? selectedDates[selectedMentorId] : null;
+              if (selectedMentorId && selectedDate) {
+                handleBookNow(selectedMentorId, selectedDate);
+              } else {
+                toast.info(t('programs.mentorship.cta.selectMentorFirst'));
+              }
+            }}
+            className={`bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-700 transition-colors`}
           >
-            {isBooking ? t('programs.mentorship.booking.loading') : t('programs.mentorship.cta.button')}
+            {t('programs.mentorship.cta.button')}
           </button>
         </div>
       </motion.div>
 
-      {/* Newsletter Section */}
       <Newsletter />
     </div>
-  )
-}
+  );
+};
 
-export default Mentorship; 
+export default Mentorship;

@@ -29,11 +29,20 @@ interface ApiError {
   }
 }
 
+const CATEGORY_OPTIONS = [
+  { label: 'All', value: '' },
+  { label: 'Technology', value: 'Technology' },
+  { label: 'Communication', value: 'Communication' },
+  { label: 'Personal Development', value: 'Personal Development' },
+  { label: 'Leadership', value: 'Leadership' },
+];
+
 const LearningResources = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const { t } = useTranslation()
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     fetchCourses()
@@ -133,6 +142,11 @@ const LearningResources = () => {
     }
   }
 
+  // Filter courses by selected category
+  const filteredCourses = selectedCategory
+    ? courses.filter((course) => course.category === selectedCategory)
+    : courses;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -155,6 +169,24 @@ const LearningResources = () => {
         </div>
       </div>
 
+      {/* Category Filter Section */}
+      <section className="bg-white py-8 shadow-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap gap-4 justify-center">
+          {CATEGORY_OPTIONS.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => setSelectedCategory(cat.value)}
+              className={`px-5 py-2 rounded-full border transition-all font-semibold text-sm
+                ${selectedCategory === cat.value
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+                  : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-blue-50 hover:text-blue-700'}`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
       {/* Courses Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -174,13 +206,13 @@ const LearningResources = () => {
             <div className="text-center">
               <p className="text-gray-600">{t('learningResources.courses.loading')}</p>
             </div>
-          ) : courses.length === 0 ? (
+          ) : filteredCourses.length === 0 ? (
             <div className="text-center">
-              <p className="text-gray-600">{t('learningResources.courses.noCourses')}</p>
+              <p className="text-gray-600">No courses found for this category.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {courses.map((course, index) => (
+              {filteredCourses.map((course, index) => (
                 <motion.div
                   key={course._id}
                   initial={{ opacity: 0, y: 20 }}
@@ -218,8 +250,8 @@ const LearningResources = () => {
                   </button>
                   {course.resources && course.resources.length > 0 && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Course Resources:</h4>
-                      <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">Course Materials:</h4>
+                      <div className="space-y-2 mb-2">
                         {course.resources.map((resource: any) => (
                           <button
                             key={resource._id}
@@ -229,6 +261,33 @@ const LearningResources = () => {
                             {resource.title} ({resource.type})
                           </button>
                         ))}
+                      </div>
+                      {/* Quiz Option */}
+                      <div className="mb-2">
+                        <h4 className="text-sm font-medium text-gray-900 mb-1">Quiz:</h4>
+                        <button
+                          className="w-full text-left px-3 py-2 text-sm text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md border border-green-200"
+                          // onClick: implement quiz logic or navigation
+                          disabled
+                        >
+                          Take Quiz (Coming Soon)
+                        </button>
+                      </div>
+                      {/* Final Assignment Option */}
+                      <div className="mb-2">
+                        <h4 className="text-sm font-medium text-gray-900 mb-1">Final Assignment:</h4>
+                        <button
+                          className="w-full text-left px-3 py-2 text-sm text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md border border-orange-200"
+                          // onClick: implement assignment logic or navigation
+                          disabled
+                        >
+                          Submit Final Assignment (Coming Soon)
+                        </button>
+                      </div>
+                      {/* Grades Section */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-900 mb-1">Grade:</h4>
+                        <span className="text-sm text-blue-700 font-semibold">N/A</span>
                       </div>
                     </div>
                   )}

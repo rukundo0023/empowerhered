@@ -28,7 +28,7 @@ interface Resource {
   title: string;
   description: string;
   type: 'Video' | 'Document' | 'Link' | 'Quiz' | 'Assignment';  // enum types
-  category: 'Technology' | 'Business' | 'Health' | 'Education' | 'Other'; // enum types
+  category: 'Technology' | 'Communication' | 'Business' | 'Education' | 'Other'; // enum types
   url?: string;      // optional, required only if type === 'Link'
   fileUrl?: string;  // optional, required if type is Document or Video
   courseId: string;  // references course ObjectId
@@ -115,6 +115,50 @@ const [newResource, setNewResource] = useState({
       toast.error(fallback);
     }
   };
+
+  // Gender and mentor stats
+  const [maleCount, setMaleCount] = useState(0);
+  const [femaleCount, setFemaleCount] = useState(0);
+  const [mentorCount, setMentorCount] = useState(0);
+  const [maleMentorProgress, setMaleMentorProgress] = useState<{ [userId: string]: number }>({});
+  const MAX_WOMEN = 160;
+  const MAX_MEN = 40;
+
+  // Calculate gender and mentor stats when users change
+  useEffect(() => {
+    let males = 0, females = 0, mentors = 0;
+    let maleMentorProgressObj: { [userId: string]: number } = {};
+    users.forEach(u => {
+      if (u.gender === 'male') males++;
+      if (u.gender === 'female') females++;
+      if (u.role === 'mentor') mentors++;
+    });
+    setMaleCount(males);
+    setFemaleCount(females);
+    setMentorCount(mentors);
+    // Track progress for male users (mentors)
+    studentProgress.forEach(sp => {
+      const user = users.find(u => u._id === sp.userId);
+      if (user && user.gender === 'male') {
+        if (!maleMentorProgressObj[user._id] || sp.progress > maleMentorProgressObj[user._id]) {
+          maleMentorProgressObj[user._id] = sp.progress;
+        }
+      }
+    });
+    setMaleMentorProgress(maleMentorProgressObj);
+  }, [users, studentProgress]);
+
+  // Notification for male user reaching 20%
+  useEffect(() => {
+    Object.entries(maleMentorProgress).forEach(([userId, progress]) => {
+      if (progress >= 20) {
+        const user = users.find(u => u._id === userId);
+        if (user && user.gender === 'male') {
+          toast.info(`Notification: Male user ${user.name} has reached 20% progress!`);
+        }
+      }
+    });
+  }, [maleMentorProgress, users]);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -366,6 +410,30 @@ const [newResource, setNewResource] = useState({
             </div>
           </div>
 
+          {/* Gender and Mentor Stats */}
+          <div className="flex flex-wrap gap-6 mb-6">
+            <div className={`bg-white rounded-lg shadow p-4 flex-1 min-w-[180px] ${femaleCount >= MAX_WOMEN ? 'border-2 border-red-500' : ''}`}> 
+              <div className="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                Women
+                <span className="text-xs text-gray-500">(max {MAX_WOMEN})</span>
+                {femaleCount >= MAX_WOMEN && <span title="Maximum reached" className="text-red-500 ml-1">&#9888;</span>}
+              </div>
+              <div className={`text-2xl font-bold ${femaleCount >= MAX_WOMEN ? 'text-red-600' : 'text-pink-600'}`}>{femaleCount}</div>
+            </div>
+            <div className={`bg-white rounded-lg shadow p-4 flex-1 min-w-[180px] ${maleCount >= MAX_MEN ? 'border-2 border-red-500' : ''}`}> 
+              <div className="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                Men
+                <span className="text-xs text-gray-500">(max {MAX_MEN})</span>
+                {maleCount >= MAX_MEN && <span title="Maximum reached" className="text-red-500 ml-1">&#9888;</span>}
+              </div>
+              <div className={`text-2xl font-bold ${maleCount >= MAX_MEN ? 'text-red-600' : 'text-blue-600'}`}>{maleCount}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4 flex-1 min-w-[180px]">
+              <div className="text-lg font-semibold text-gray-700">Mentors</div>
+              <div className="text-2xl font-bold text-green-600">{mentorCount}</div>
+            </div>
+          </div>
+
           {/* Tabs */}
           <div className="border-b border-gray-200 mb-6">
             <nav className="-mb-px flex space-x-8">
@@ -495,7 +563,7 @@ const [newResource, setNewResource] = useState({
                           <td className="px-6 py-4 whitespace-nowrap">{course.title}</td>
                           <td className="px-6 py-4">{course.description}</td>
                           <td className="px-6 py-4 whitespace-nowrap">{course.duration}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{course.level}</td>
+                          <td className="px-6 py-4 whitespace-nowrap  ">{course.level}</td>
                           <td className="px-6 py-4 whitespace-nowrap">{course.enrolledStudents}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
@@ -750,7 +818,7 @@ const [newResource, setNewResource] = useState({
   >
                     <option value="">Select category</option>
                     <option value="tech">Technology</option>
-                    <option value="business">Business</option>
+                    <option value="business">Communication</option>
                     <option value="personal-development">Personal Development</option>
                     <option value="leadership">Leadership</option>
   </select>
@@ -867,9 +935,9 @@ const [newResource, setNewResource] = useState({
                   >
                     <option value="">Select category</option>
                     <option value="Technology">Technology</option>
-                    <option value="Business">Business</option>
-                    <option value="Health">Health</option>
-                    <option value="Education">Education</option>
+                    <option value="Business">Communication</option>
+                    <option value="Health">Personal Development</option>
+                    <option value="Education">Leadership</option>
                     <option value="Other">Other</option>
                   </select>
             </div>

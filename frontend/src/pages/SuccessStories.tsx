@@ -4,6 +4,11 @@ import { useTranslation } from 'react-i18next'
 
 const SuccessStories = () => {
   const { t } = useTranslation();
+  const title = t('successStories.hero.title'); // Example: "Success stories that inspire"
+const words = title.split(' ');
+const lastWord = words.pop(); // Get the last word
+const firstPart = words.join(' '); // Get all words except the last
+
   
   const stories = [
     {
@@ -83,8 +88,8 @@ const SuccessStories = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl font-bold text-blue-600 sm:text-5xl md:text-6xl">
-              <span className="text-black">{t('successStories.hero.title')}</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+              {firstPart} <span className="text-blue-600">{lastWord}</span>
             </h1>
             <p className="mt-4 text-xl text-neutral-600 max-w-3xl mx-auto">
               {t('successStories.hero.description')}

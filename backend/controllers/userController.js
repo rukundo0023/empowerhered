@@ -27,6 +27,18 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
 
+  // Gender-based registration limits
+  const womenCount = await User.countDocuments({ gender: 'female' });
+  const menCount = await User.countDocuments({ gender: 'male' });
+  if (gender === 'female' && womenCount >= 160) {
+    res.status(400);
+    throw new Error('The maximum number of users has reached.');
+  }
+  if (gender === 'male' && menCount >= 40) {
+    res.status(400);
+    throw new Error('The maximum number of users has reached.');
+  }
+
   // Role-based authorization
   if (role === 'admin') {
     if (email !== AUTHORIZED_USERS.superAdmin.email) {

@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
       minlength: 6,
-      select: false
+      select: false,
     },
     role: {
       type: String,
@@ -29,10 +29,10 @@ const userSchema = mongoose.Schema(
     },
     isGoogleUser: {
       type: Boolean,
-      default: false
+      default: false,
     },
     profilePicture: {
-      type: String
+      type: String,
     },
     gender: {
       type: String,
@@ -67,6 +67,13 @@ const userSchema = mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
+    // --- NEW: Mentor availability field ---
+    availability: [
+      {
+        type: Date,
+      },
+    ],
   },
   {
     timestamps: true,
@@ -95,12 +102,12 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
     console.log('Attempting password comparison');
     console.log('User password exists:', !!this.password);
     console.log('Entered password exists:', !!enteredPassword);
-    
+
     if (!this.password) {
       console.error('No password hash found for user');
       return false;
     }
-    
+
     if (!enteredPassword) {
       console.error('No password provided for comparison');
       return false;
@@ -113,7 +120,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
     console.error('Password comparison error:', {
       message: error.message,
       stack: error.stack,
-      name: error.name
+      name: error.name,
     });
     return false;
   }
@@ -121,4 +128,4 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 const User = mongoose.model('User', userSchema);
 
-export default User; 
+export default User;

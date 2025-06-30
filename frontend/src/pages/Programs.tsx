@@ -5,6 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 const Programs = () => {
   const { t } = useTranslation();
+  const title = t('programs.hero.title'); // example: "Explore our programs"
+const words = title.split(' ');
+const lastWord = words.pop(); // removes and returns last word
+const firstPart = words.join(' '); // joins remaining words
   
   const programs = [
     {
@@ -64,8 +68,8 @@ const Programs = () => {
               transition={{ duration: 0.5 }}
               className="text-center"
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-700 to-gray-800">
-                <span className="text-blue-600 mr-3">{t('programs.hero.title')}</span>
+              <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 mb-4">
+                {firstPart} <span className="text-primary-500">{lastWord}</span>
               </h1>
               <p className="text-lg text-neutral-700 mb-8">
                 {t('programs.hero.description')}

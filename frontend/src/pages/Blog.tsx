@@ -49,8 +49,8 @@ const Blog = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              {t('blog.hero.title')} <span className="text-blue-600">{t('blog.hero.titleHighlight')}</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+              {t('blog.hero.title')} <span className="text-black">{t('blog.hero.titleHighlight')}</span>
             </h1>
             <p className="text-xl text-black max-w-3xl mx-auto">
               {t('blog.hero.description')}

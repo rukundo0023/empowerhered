@@ -67,7 +67,7 @@ const Community = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
               {t('community.hero.title')}
             </h1>
-            <p className="text-lg text-white max-w-2xl mx-auto">
+            <p className="text-lg text-black max-w-2xl mx-auto">
               {t('community.hero.description')}
             </p>
           </motion.div>

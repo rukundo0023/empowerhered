@@ -45,9 +45,9 @@
   "home": {
     "hero": {
       "title": "Gufasha Abagore Binyuze mu",
-      "titleHighlight": "mashuri ya Digital",
-      "description1": "EmpowerHerEd si ahantu ho kwiga gusa, ni inzira yo gufasha, kwigisha, no gufasha abakobwa bato mu Rwanda. Intego yacu ni ukugabanya ikibazo cy'uburinganire mu tekinoroji binyuze mu guha abagore ubumenyi, ibikoresho, n'umwete bakeneye kugirango bafate umwanya mu isi ya digital.",
-      "description2": "Jya mu muryango wa mbere wa amashuri ya digital mu Rwanda. Wige kuva ku bafite ubumenyi mu nganda, huzwa n'abayoboramikorere, no gutangiza umwuga wawe wa tekinoroji. Niba utangira gusa cyangwa ushaka kongera ubumenyi bwawe, turi hano kugirango dukuyobore.",
+      "titleHighlight": "burezi mu ikoranabuhanga",
+      "description1": "EmpowerHerEd si ahantu ho kwiga gusa, ni inzira yo gufasha, kwigisha, no gufasha abakobwa bato mu Rwanda. Intego yacu ni ukugabanya ikibazo cy'uburinganire mu ikoranabuhanga binyuze mu guha abagore ubumenyi, ibikoresho, n'umwete bakeneye kugirango bagire uruhare mu isi y'ikoranabuhanga.",
+      "description2": "Injira mu muryango wa mbere w'ishuri ry'ikoranabuhanga mu Rwanda, Wigire ku bafite ubumenyi mu ruganda rw'ikoranabuhanga, huzwa n'abayoboramikorere, no gutangiza umwuga wawe w'ikoranabuhanga. Niba utangira gusa cyangwa ushaka kongera ubumenyi bwawe, turi hano kugirango dukuyobore.",
       "explorePrograms": "Shakisha Porogaramu",
       "contactUs": "Twandikire"
     },
@@ -55,12 +55,12 @@
       "womenEmpowered": "Abagore Bafite Ubushobozi",
       "successRate": "Ingano y'Impinduka",
       "expertMentors": "Abayoboramikorere Bafite Ubumenyi",
-      "partnerCompanies": "Kampani Z'Abafatanyabikorwa"
+      "partnerCompanies": "Ibigo bya'Abafatanyabikorwa"
     },
     "featuredCourses": {
       "title": "Amasomo Y'ingenzi",
-      "subtitle": "Tangiza Urugendo Rwawe Uyu Munsi",
-      "description": "Hitamo mu masomo yacu yateguwe neza kugirango wihuse umwuga wawe wa tekinoroji",
+      "subtitle": "Tangira Urugendo Rwawe Uyu Munsi",
+      "description": "Hitamo mu masomo yacu yateguwe neza kugirango wihutishe umwuga wawe w'ikoranabuhanga mu Rwanda. Iyandikishe mu masomo yacu yateguwe neza kugirango wihutishe umwuga wawe w'ikoranabuhanga mu Rwanda.",
       "learnMore": "Menya Byinshi",
       "courses": {
         "computerBasics": {
@@ -88,20 +88,20 @@
     },
     "whyChooseUs": {
       "title": "Kubera iki dutora",
-      "subtitle": "Empowering Women in Tech",
-      "description": "Join our community of women in technology and start your journey to success",
+      "subtitle": "Gufasha abagore mu ikoranabuhanga",
+      "description": "Injira mumuryango wacu wabagore mu ikoranabuhanga utangire urugendo rw'insinzi.",
       "features": {
         "expertLearning": {
           "title": "Uburezi bw'Inzobere",
-          "description": "Learn from industry experts and experienced mentors"
+          "description": "Igira kubantu binzobere mu ikoranabuhanga n'abajyanama b'inararibonye"
         },
         "mentorship": {
           "title": "Ubufasha",
-          "description": "Get personalized guidance and support from experienced mentors"
+          "description": "Menya ubuyobozi n’inkunga bijyanye n’ibikenewe, uhabwe n’abajyanama b’inararibonye."
         },
         "careerSupport": {
           "title": "Ubufasha bw'Umwuga",
-          "description": "Access career resources and job opportunities in tech"
+          "description": "Tugufasha kubona ibikoresho bigufasha mu mwuga n’amahirwe y’akazi mu ikoranabuhanga."
         }
       }
     },
@@ -199,27 +199,33 @@
       "viewAll": "Reba Inkuru Zose"
     },
     "cta": {
-      "title": "Tangiza Urugendo Rwawe",
-      "description": "Jya mu muryango wacu utangize urugendo rwawe rwa tekinoroji uyu munsi",
-      "primaryButton": "Tangiza",
+      "title": "Tangira Urugendo Rwawe",
+      "description": "Jya mu muryango wacu utangire urugendo rwawe mu ikoranabuhanga uyu munsi",
+      "primaryButton": "Tangira",
       "secondaryButton": "Menya Byinshi",
-      "contactButton": "Twandikire"
+      "contactButton": "Twandikire",
+      "features": [
+        "Ubujyanama butangwa n’inzobere",
+        "Umuryango ugufasha kandi ugushyigikira",
+        "Ibikoresho byo kwiga",
+        "Ubufasha mu rugendo rw'umwuga"
+      ]
     }
   },
   "about": {
     "hero": {
-      "title": "Ibyerekeye",
+      "title": "Ibyowamenya kuri",
       "titleHighlight": "EmpowerHerEd",
-      "description": "Gufasha abagore binyuze mu ikoranabuhanga, amashuri, no gufasha umuryango."
+      "description": "Gufasha abagore binyuze mu ikoranabuhanga, uburezi, no gufasha umuryango."
     },
     "story": {
       "title": "Inkuru Yacu",
-      "description1": "EmpowerHerEd yavutse mu mutwe mugufi ariko ufite imbaraga: iyo abagore bafite amashuri kandi bafite imbaraga, umuryango wose urakura. Yashinzwe n'itsinda ry'abarezi, abayoborabugenewe, n'abafasha, EmpowerHerEd ikora kugirango irusheho kugabanya ikibazo cy'uburinganire mu mashuri no mu mahirwe.",
-      "description2": "Urupapuro rwacu ni ahantu hizewe, huzuye abantu bose aho abagore n'abakobwa bashobora kwiga, guhuza, no gukura mu mashuri, mu kazi, no mu buzima bwabo."
+      "description1": "EmpowerHerEd yabayeho biturutse kugitekerezo cyoroheje ariko gifite imbaraga: iyo abagore bahawe uburezi kandi bafite imbaraga, umuryango wose urakura. Yashinzwe n'umunyeshuri wirunduriye mu ikoranabuhanga witwa Rukukundo Nshimiyimana, abajyanama mubyuburezi, n'abaharanira inyungu zabandi, EmpowerHerEd ikora kugirango irusheho kugabanya ikibazo cy'uburinganire mu mashuri no mu mahirwe.",
+      "description2": "Urubuga rwacu ni ahantu hizewe, huzuye abantu bose aho abagore n'abakobwa bashobora kwiga, guhuza, no gukura mu mashuri, mu kazi, no mu buzima bwabo."
     },
     "whatWeDo": {
       "title": "Ibyo Dukora",
-      "description": "Dutanga ibirimo by'amashuri, gahunda z'ubuyobozi, amasomo, no gufasha umwuga kugirango dufasha abagore kuri buri kazi. Kuva ku banyeshuri ba sekondari kugeza ku bakozi, turi hano kugirango dukore, dutange, no gufasha.",
+      "description": "Dutanga ibikoresho bifasha kwiga, gahunda z'ubuyobozi, amasomo, no gufasha umwuga kugirango dufasha abagore kuri buri rwego rwose bariho kubijyanye nikoranabuhanga. Kuva ku banyeshuri bomumashuri yisumbuye kugeza ku bakozi, turi hano kugirango dukore, dutange, ndetse tunafashe.",
       "services": {
         "education": "Ibikoresho By'Amashuri",
         "mentorship": "Ubuyobozi",
@@ -229,32 +235,32 @@
     },
     "mission": {
       "title": "Intego Yacu",
-      "description": "Kugabanya ikibazo cy'uburinganire mu ikoranabuhanga binyuze mu gutanga abagore ubumenyi, ibikoresho, no gufasha bakeneye kugirango bafate umwanya mu kazi."
+      "description": "Kugabanya ikibazo cy'uburinganire mu ikoranabuhanga binyuze mu guha abagore ubumenyi, ibikoresho, nokubafasha mubyobakeneye kugirango babashe guhatana kusoko ry'umurimo."
     },
     "vision": {
       "title": "Icyerekezo Cyacu",
-      "description": "Isi aho abagore bafite umwanya ungana mu ikoranabuhanga kandi bafite amahirwe yo gukora imikino myiza."
+      "description": "Dushaka Isi aho abagore bafite umwanya ungana n'uwabagabo mu ikoranabuhanga kandi banafite amahirwe yoguhanga udushya."
     },
     "whyItMatters": {
-      "title": "Kuki Bikenewe",
-      "description": "Nubwo hari iterambere, miliyoni z'abagore mu isi ziharira amahirwe yo kwiga no kuyobora. EmpowerHerEd irimo guhindura ibyo binyuze mu gufasha kwizera, ubushobozi, no umuryango.",
-      "highlight": "Hamwe, dukora ejo hazaza aho amashuri ari uburenganzira kandi si ubwishingizi ku bagore bose."
+      "title": "Kuki Bikenewe?",
+      "description": "Nubwo hari iterambere, miliyoni z'abagore mu isi ntizigira amahirwe yo kwiga no kuyobora. EmpowerHerEd irimo guhindura ibyo binyuze mu gufasha abagore kwigirira icyizere,  ubushobozi, ndetse n'okubashyira mumiryango y'ikoranabuhanga.",
+      "highlight": "Dufatanyije, turi kubaka ejo hazaza aho uburezi ari uburenganzira aho kuba amahirwe ku mugore wese."
     },
     "values": {
       "title": "Indangamuco Zacu",
-      "subtitle": "Aya maherezo yacu atuyobora mu byose dukora kuri EmpowerHerEd",
+      "subtitle": "Izi ndangagaciro shingiro ni zo zituyobora muri buri kimwe dukora muri EmpowerHerEd.",
       "items": {
         "empowerment": {
           "title": "Gufasha",
-          "description": "Dizera ko gufasha abagore binyuze mu mashuri no mu bumenyi."
+          "description": "Twemera ko guha abagore imbaraga binyuze mu burezi no guteza imbere ubumenyi ari ingenzi."
         },
         "community": {
           "title": "Umuryango",
-          "description": "Gukora urusobe rw'abagore mu ikoranabuhanga bafasha abandi."
+          "description": "Turimo kubaka umuryango uhamye w’abagore mu ikoranabuhanga bafashanya kuzamurana no gushyigikirana."
         },
         "innovation": {
-          "title": "Gukora Imikino Myiza",
-          "description": "Gufasha ubwenge no gukora imikino myiza mu ikoranabuhanga binyuze mu nzira zitandukanye."
+          "title": "Udushya",
+          "description": "Guteza imbere ubuhanzi n'udushya mu ikoranabuhanga binyuze mu bitekerezo bitandukanye."
         }
       }
     },
@@ -274,11 +280,11 @@
     },
     "impact": {
       "title": "Impinduka Zacu",
-      "description": "Gufasha abagore mu tekinoroji",
+      "description": "Gufasha abagore mu ikoranabuhanga",
       "stats": {
         "womenEmpowered": "Abagore Bafite Ubushobozi",
         "jobPlacement": "Ingano y'Akazi",
-        "partnerCompanies": "Kampani Z'Abafatanyabikorwa",
+        "partnerCompanies": "Ibigo by'Abafatanyabikorwa",
         "graduates": "Abanyeshuri B'Intsinzi"
       }
     },
@@ -288,15 +294,15 @@
       "features": {
         "safeSpace": {
           "title": "Ahantu Heza",
-          "description": "Ahantu hizewe aho abagore bashobora kwiga, gukura, no guhuza batarimo gutera."
+          "description": "Ahantu hatekanye aho abagore bashobora kwiga, gukura, no guhura badahungabanyijwe n’ubwoba.."
         },
         "peerSupport": {
           "title": "Gufasha Abandi",
-          "description": "Huzwa n'abagore bafite ibitekerezo nk'ibyawe bazi inzira yawe n'ibibazo."
+          "description": "Hura n’abagore basangiye urugendo rwawe kandi basobanukiwe n’ibibazo uhura nabyo."
         },
         "networking": {
           "title": "Guhuza",
-          "description": "Kora ubufatanye n'abafite ubumenyi mu nganda n'abashobora kugufasha."
+          "description": "Girana umubano n’inzobere mu nganda n’abashobora kuba abakoresha."
         }
       }
     },
