@@ -207,7 +207,6 @@ const Signup = () => {
                 <option value="">{t('auth.signup.role.options.select')}</option>
                 <option value="student">{t('auth.signup.role.options.student')}</option>
                 <option value="mentor">{t('auth.signup.role.options.mentor')}</option>
-                <option value="admin">{t('auth.signup.role.options.admin')}</option>
                 <option value="instructor">Instructor</option>
               </select>
               {errors.role && <p className="text-sm text-red-600">{errors.role}</p>}

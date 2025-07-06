@@ -37,7 +37,6 @@ const Navbar = () => {
     { title: t('nav.home'), path: "/" },
     { title: t('nav.about'), path: "/about" },
     { title: t('nav.stories'), path: "/SuccessStories" },
-    { title: t('nav.courses'), path: "/courses" },
     { title: t('nav.contact'), path: "/contact" },
     { title: t('nav.programsDropdown.mentorship'), path: "/programs/mentorship" },
     { title: t('nav.programsDropdown.communication'), path: "/programs/Communication" },
@@ -238,16 +237,6 @@ const Navbar = () => {
                 {t('nav.stories')}
               </NavLink>
 
-              <NavLink
-                to="/courses"
-                className={`${
-                  location.pathname === '/courses'
-                    ? 'border-primary text-blue-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
-              >
-                {t('nav.courses')}
-              </NavLink>
               <NavLink
                 to="/contact"
                 className={`${
@@ -549,13 +538,6 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('nav.stories')}
-              </NavLink>
-              <NavLink 
-                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
-                to="/courses" 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t('nav.courses')}
               </NavLink>
               <NavLink 
                 className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
