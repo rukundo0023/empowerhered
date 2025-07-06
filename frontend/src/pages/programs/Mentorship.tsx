@@ -17,6 +17,8 @@ type Mentor = {
   name: string;
   expertise: string;
   availability?: string[]; // ISO date strings
+  isAvailable?: boolean; // Added for active indicator
+  profilePicture?: string; // Added for avatar
 };
 
 const Mentorship = () => {
@@ -158,10 +160,32 @@ const Mentorship = () => {
                 key={mentor._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-lg shadow-lg p-6 text-center"
+                whileHover={{ y: -6, boxShadow: '0 6px 24px rgba(0,0,0,0.14)' }}
+                className="relative flex flex-col items-center bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-xl shadow-lg p-4 transition-all duration-300 hover:shadow-xl hover:scale-[1.015] border border-blue-100"
+                style={{ minHeight: 320 }}
               >
-                <h3 className="text-xl font-semibold mb-2">{mentor.name}</h3>
-                <p className="text-gray-600 mb-4">{mentor.expertise}</p>
+                {/* Profile Picture and Active Indicator */}
+                <div className="relative mb-2">
+                  <img
+                    src={mentor.profilePicture || assets.profile}
+                    alt={mentor.name}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-white shadow ring-1 ring-blue-200"
+                  />
+                  {/* Active/Inactive Dot */}
+                  <span
+                    className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center shadow ${mentor.isAvailable !== false ? 'bg-green-500' : 'bg-red-400'}`}
+                    title={mentor.isAvailable !== false ? t('programs.mentorship.active') : t('programs.mentorship.inactive')}
+                  />
+                </div>
+                <h3 className="text-lg font-bold mb-1 flex items-center justify-center gap-2 text-gray-800">
+                  {mentor.name}
+                  <span className={`ml-2 text-xs font-semibold ${mentor.isAvailable !== false ? 'text-green-600' : 'text-red-500'}`}
+                    >
+                    {mentor.isAvailable !== false ? t('programs.mentorship.active') : t('programs.mentorship.inactive')}
+                  </span>
+                </h3>
+                <p className="text-sm text-blue-700 mb-3 font-medium tracking-wide">{mentor.expertise}</p>
+                <div className="w-full border-t border-blue-200 my-2" />
 
                 {mentor.availability && mentor.availability.length > 0 ? (
                   <div className="mb-2">

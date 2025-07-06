@@ -28,15 +28,16 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Gender-based registration limits
-  const womenCount = await User.countDocuments({ gender: 'female' });
+  const totalUsers = await User.countDocuments();
   const menCount = await User.countDocuments({ gender: 'male' });
-  if (gender === 'female' && womenCount >= 160) {
-    res.status(400);
-    throw new Error('The maximum number of users has reached.');
-  }
-  if (gender === 'male' && menCount >= 40) {
-    res.status(400);
-    throw new Error('The maximum number of users has reached.');
+  // If registering a male, check if adding one would exceed 20% of total users
+  if (gender === 'male') {
+    const projectedMen = menCount + 1;
+    const projectedTotal = totalUsers + 1;
+    if (projectedMen / projectedTotal > 0.2) {
+      res.status(400);
+      throw new Error('Registration denied: Men cannot exceed 20% of total users.');
+    }
   }
 
   // Role-based authorization
@@ -49,6 +50,11 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!AUTHORIZED_USERS.mentors.includes(email)) {
       res.status(403);
       throw new Error('Unauthorized mentor registration');
+    }
+  } else if (role === 'instructor') {
+    if (!AUTHORIZED_USERS.instructors.includes(email)) {
+      res.status(403);
+      throw new Error('Unauthorized instructor registration');
     }
   }
 

@@ -33,6 +33,9 @@ const Login = () => {
         } else if (user.role === "mentor") {
           console.log("Login component - Redirecting to mentor dashboard")
           navigate("/mentorDashboard", { replace: true })
+        } else if (user.role === "instructor") {
+          console.log("Login component - Redirecting to instructor dashboard")
+          navigate("/instructor-dashboard", { replace: true })
         } else {
           console.log("Login component - Redirecting to user dashboard")
           navigate("/dashboard", { replace: true })
@@ -98,6 +101,8 @@ const Login = () => {
         navigate("/admin", { replace: true });
       } else if (role === "mentor") {
         navigate("/mentorDashboard", { replace: true });
+      } else if (role === "instructor") {
+        navigate("/instructor-dashboard", { replace: true });
       } else {
         navigate("/dashboard", { replace: true });
       }

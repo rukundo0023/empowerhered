@@ -4,6 +4,7 @@
     "about": "Abo Turibo",
     "programs": "Porogaramu",
     "resources": "Ibikoresho",
+    "courses": "Amasomo",
     "blog": "Blog",
     "contact": "Twandikire",
     "login": "Injira",
@@ -13,6 +14,7 @@
     "logout": "Sohoka",
     "adminDashboard": "Dashboard y'Umuyobozi",
     "mentorDashboard": "Dashboard y'Umwarimu",
+    "instructorDashboard": "Dashboard y'Umwarimu",
     "stories": "Inkuru",
     "mentorship": "Ubujyanama",
     "communication": "Itumanaho",
@@ -26,9 +28,9 @@
     "terms": "Amabwiriza",
     "menu": "Ibikubiyemo",
     "programsDropdown": {
-      "mentorship": "Porogaramu ya Mentorship",
+      "mentorship": "Porogaramu y'ubujyanama",
       "communication": "Ubumenyi bwo Kuvugana",
-      "techSkills": "Ubumenyi bwa Tekinoroji",
+      "techSkills": "Ubumenyi bw'ikoranabuhanga",
       "workshops": "Amahugurwa"
     },
     "resourcesDropdown": {
@@ -127,7 +129,7 @@
       "title": "Porogaramu Zacu",
       "viewAll": "Reba Zose",
       "mentorship": {
-        "title": "Porogaramu ya Mentorship",
+        "title": "Porogaramu y'ubujyanama",
         "description": "Huzwa n'abayoboramikorere bafite ubumenyi bazo kuyobora mu rugendo rwawe rwa professional"
       },
       "leadership": {
@@ -511,7 +513,7 @@
     },
     "mentorship": {
       "hero": {
-        "title": "Porogaramu ya Mentorship",
+        "title": "Porogaramu y'Ubujyanama",
         "description": "Huzwa n'abayoboramikorere bafite ubumenyi bazo kuyobora mu rugendo rwawe rwa karire"
       },
       "overview": {
@@ -607,7 +609,7 @@
     },
     "techSkills": {
       "hero": {
-        "title": "Porogaramu ya Ubumenyi bwa Tekinoroji",
+        "title": "Porogaramu y'Ubumenyi bw'ikoranabuhanga",
         "description": "Menya ubumenyi bw'ingenzi bwa tekinoroji bakenewe mu kinyejana cya digital"
       },
       "overview": {

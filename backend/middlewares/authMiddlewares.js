@@ -77,3 +77,17 @@ export const mentor = (req, res, next) => {
   console.log('Mentor middleware - Access denied');
   return res.status(401).json({ message: 'Not authorized as a valid mentor' });
 };
+
+// Allow only authorized instructors
+export const instructor = (req, res, next) => {
+  const { role, email } = req.user;
+  console.log('Instructor middleware - Checking instructor access:', { role, email });
+
+  if (role === 'instructor' && AUTHORIZED_USERS.instructors.includes(email)) {
+    console.log('Instructor middleware - Access granted');
+    return next();
+  }
+
+  console.log('Instructor middleware - Access denied');
+  return res.status(401).json({ message: 'Not authorized as a valid instructor' });
+};

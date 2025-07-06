@@ -18,7 +18,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const searchTimeoutRef = useRef<NodeJS.Timeout>();
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const programsMenu = [
     { name: t('nav.programsDropdown.mentorship'), path: "/programs/mentorship" },
@@ -37,6 +37,7 @@ const Navbar = () => {
     { title: t('nav.home'), path: "/" },
     { title: t('nav.about'), path: "/about" },
     { title: t('nav.stories'), path: "/SuccessStories" },
+    { title: t('nav.courses'), path: "/courses" },
     { title: t('nav.contact'), path: "/contact" },
     { title: t('nav.programsDropdown.mentorship'), path: "/programs/mentorship" },
     { title: t('nav.programsDropdown.communication'), path: "/programs/Communication" },
@@ -144,109 +145,121 @@ const Navbar = () => {
             <img src={assets.empoweherlogo3} alt="Logo" className="h-8 w-auto" />
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex space-x-6 items-center">
-            <NavLink
-              to="/"
-              className={`${
-                location.pathname === '/'
-                  ? 'border-primary text-blue-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
-            >
-              {t('nav.home')}
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={`${
-                location.pathname === '/about'
-                  ? 'border-primary text-blue-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
-            >
-              {t('nav.about')}
-            </NavLink>
-
-            {/* Programs with Hover Menu */}
-            <div className="relative group">
+          {/* Desktop Nav - Only show when authenticated */}
+          {isAuthenticated && (
+            <div className="hidden md:flex space-x-6 items-center">
               <NavLink
-                to="/programs"
+                to="/"
                 className={`${
-                  location.pathname === '/programs'
+                  location.pathname === '/'
                     ? 'border-primary text-blue-600'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
-                {t('nav.programs')}
+                {t('nav.home')}
               </NavLink>
-              <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                {programsMenu.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `block px-4 py-2 text-sm ${
-                        isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
-                      }`
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
-              </div>
-            </div>
-
-            {/* Resources with Hover Menu */}
-            <div className="relative group">
               <NavLink
-                to="/resources"
+                to="/about"
                 className={`${
-                  location.pathname === '/resources'
+                  location.pathname === '/about'
                     ? 'border-primary text-blue-600'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
               >
-                {t('nav.resources')}
+                {t('nav.about')}
               </NavLink>
-              <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                {resourcesMenu.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `block px-4 py-2 text-sm ${
-                        isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
-                      }`
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
+
+              {/* Programs with Hover Menu */}
+              <div className="relative group">
+                <NavLink
+                  to="/programs"
+                  className={`${
+                    location.pathname === '/programs'
+                      ? 'border-primary text-blue-600'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
+                >
+                  {t('nav.programs')}
+                </NavLink>
+                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  {programsMenu.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 text-sm ${
+                          isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
               </div>
+
+              {/* Resources with Hover Menu */}
+              <div className="relative group">
+                <NavLink
+                  to="/resources"
+                  className={`${
+                    location.pathname === '/resources'
+                      ? 'border-primary text-blue-600'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
+                >
+                  {t('nav.resources')}
+                </NavLink>
+                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  {resourcesMenu.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 text-sm ${
+                          isActive ? "text-blue-600 bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+
+              <NavLink
+                to="/success-stories"
+                className={`${
+                  location.pathname === '/success-stories'
+                    ? 'border-primary text-blue-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
+              >
+                {t('nav.stories')}
+              </NavLink>
+
+              <NavLink
+                to="/courses"
+                className={`${
+                  location.pathname === '/courses'
+                    ? 'border-primary text-blue-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
+              >
+                {t('nav.courses')}
+              </NavLink>
+              <NavLink
+                to="/contact"
+                className={`${
+                  location.pathname === '/contact'
+                    ? 'border-primary text-blue-600'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
+              >
+                {t('nav.contact')}
+              </NavLink>
             </div>
-
-            <NavLink
-              to="/success-stories"
-              className={`${
-                location.pathname === '/success-stories'
-                  ? 'border-primary text-blue-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
-            >
-              {t('nav.stories')}
-            </NavLink>
-
-            <NavLink
-              to="/contact"
-              className={`${
-                location.pathname === '/contact'
-                  ? 'border-primary text-blue-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              } inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium`}
-            >
-              {t('nav.contact')}
-            </NavLink>
-          </div>
+          )}
 
           {/* Search & Auth Desktop */}
           <div className="hidden md:flex items-center space-x-4">
@@ -346,6 +359,15 @@ const Navbar = () => {
                         onClick={() => setIsProfileOpen(false)}
                       >
                         {t('nav.mentorDashboard')}
+                      </Link>
+                    )}
+                    {user?.role === 'instructor' && (
+                      <Link
+                        to="/instructor-dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        {t('nav.instructorDashboard')}
                       </Link>
                     )}
                     <Link
@@ -530,6 +552,13 @@ const Navbar = () => {
               </NavLink>
               <NavLink 
                 className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
+                to="/courses" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.courses')}
+              </NavLink>
+              <NavLink 
+                className="block w-full py-2 px-3 rounded-md hover:bg-gray-50" 
                 to="/contact" 
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -567,6 +596,15 @@ const Navbar = () => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {t('nav.mentorDashboard')}
+                    </Link>
+                  )}
+                  {user?.role === 'instructor' && (
+                    <Link
+                      to="/instructor-dashboard"
+                      className="block py-2 px-3 rounded-md hover:bg-gray-50"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t('nav.instructorDashboard')}
                     </Link>
                   )}
                   <Link

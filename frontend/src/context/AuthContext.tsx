@@ -15,6 +15,7 @@ interface AuthContextType {
   loginWithGoogle: (googleToken: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -39,11 +40,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return null
   })
 
+  const [loading, setLoading] = useState(true)
+
   // Verify token on mount and when user changes
   useEffect(() => {
     const verifyToken = async () => {
       if (!user?.token) {
         console.log("AuthContext - No token found, skipping verification")
+        setLoading(false)
         return
       }
 
@@ -67,10 +71,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(updatedUser)
           }
         }
+        setLoading(false)
       } catch (error) {
         console.error("AuthContext - Token verification failed:", error)
         localStorage.removeItem("user")
         setUser(null)
+        setLoading(false)
       }
     }
 
@@ -98,6 +104,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       localStorage.setItem("user", JSON.stringify(userData))
       setUser(userData)
+      setLoading(false)
     } catch (error) {
       console.error("AuthContext - Error saving user to localStorage:", error)
       throw new Error("Failed to save login data")
@@ -115,6 +122,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.setItem("user", JSON.stringify(userData))
       api.defaults.headers.common["Authorization"] = `Bearer ${userData.token}`
       setUser(userData)
+      setLoading(false)
     } catch (error) {
       console.error("AuthContext - Google login failed:", error)
       throw new Error("Google login failed")
@@ -129,6 +137,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       localStorage.removeItem("user")
       setUser(null)
+      setLoading(false)
     } catch (error) {
       console.error("AuthContext - Error removing user from localStorage:", error)
     }
@@ -142,6 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loginWithGoogle,
         logout,
         isAuthenticated: !!user,
+        loading,
       }}
     >
       {children}

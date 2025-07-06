@@ -4,6 +4,7 @@
     "about": "About",
     "programs": "Programs",
     "resources": "Resources",
+    "courses": "Courses",
     "blog": "Blog",
     "contact": "Contact",
     "login": "Login",
@@ -13,6 +14,7 @@
     "logout": "Logout",
     "adminDashboard": "Admin Dashboard",
     "mentorDashboard": "Mentor Dashboard",
+    "instructorDashboard": "Instructor Dashboard",
     "stories": "Stories",
     "mentorship": "Mentorship",
     "communication": "Communication",
@@ -669,81 +671,10 @@
       "overview": {
         "title": "Program Overview",
         "description": "Our mentorship program pairs you with experienced professionals who will guide you through your career development journey. Through personalized sessions and group activities, you'll gain valuable insights and build a strong professional network.",
-        "features": {
-          "personalized": {
-            "title": "Personalized Guidance",
-            "description": "One-on-one mentoring tailored to your goals"
-          },
-          "expertise": {
-            "title": "Industry Expertise",
-            "description": "Learn from professionals with real-world experience"
-          },
-          "network": {
-            "title": "Professional Network",
-            "description": "Connect with mentors and peers in your field"
-          }
-        }
-      },
-      "details": {
-        "title": "Program Details",
-        "duration": "Duration",
-        "durationValue": "2-4 hours per session",
-        "schedule": "Schedule",
-        "scheduleValue": "Weekly sessions with flexible timing options",
-        "location": "Location",
-        "locationValue": "Hybrid (In-person and virtual options available)",
-        "prerequisites": "Prerequisites",
-        "prerequisitesValue": "Open to all program participants"
-      },
-      "curriculum": {
-        "title": "Curriculum Modules",
-        "modules": {
-          "oneOnOne": {
-            "title": "One-on-One Mentorship",
-            "description": "Personalized guidance and career planning sessions.",
-            "topics": [
-              "Career Planning",
-              "Skill Development",
-              "Goal Setting",
-              "Professional Growth",
-              "Industry Insights"
-            ]
-          },
-          "group": {
-            "title": "Group Mentoring",
-            "description": "Collaborative learning and peer support sessions.",
-            "topics": [
-              "Peer Learning",
-              "Group Discussions",
-              "Case Studies",
-              "Problem Solving",
-              "Team Building"
-            ]
-          },
-          "industry": {
-            "title": "Industry Insights",
-            "description": "Learn about current trends and opportunities.",
-            "topics": [
-              "Market Trends",
-              "Career Paths",
-              "Industry Standards",
-              "Emerging Technologies",
-              "Job Market"
-            ]
-          },
-          "leadership": {
-            "title": "Leadership Development",
-            "description": "Build essential leadership and management skills.",
-            "topics": [
-              "Decision Making",
-              "Team Management",
-              "Communication",
-              "Strategic Thinking",
-              "Problem Solving"
-            ]
-          }
-        }
-      },
+        "Mutoni": "Mutoni",
+        "active": "You are currently in an active mentorship program.",
+        "noAvailability": "No mentors are currently available."
+        },
       "booking": {
         "loginRequired": "Please login to book a mentorship session",
         "noMentors": "No mentors available at the moment",

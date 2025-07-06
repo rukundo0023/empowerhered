@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleProvider } from "./providers/GoogleOAuthProvider";
@@ -36,6 +35,8 @@ import Courses from "./pages/Courses";
 import MentorDashboard from "./pages/Mentordashboard";
 import MentorSchedule from './pages/MentorSchedule';
 import MentorMeetingDetails from './pages/MentorMeetingDetails';
+import InstructorRoute from "./components/InstructorRoute";
+import InstructorDashboard from './pages/InstructorDashboard';
 
 function App() {
   return (
@@ -46,24 +47,24 @@ function App() {
             <Navbar />
             <main className="flex-1 w-full">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/programs" element={<Programs />} />
-                <Route path="/programs/mentorship" element={<Mentorship />} />
-                <Route path="/programs/communication" element={<Communication />} />
-                <Route path="/programs/tech-skills" element={<TechSkills />} />
-                <Route path="/programs/workshops" element={<Workshops />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/resources/community" element={<Community />} />
-                <Route path="/resources/learning" element={<LearningResources />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/success-stories" element={<SuccessStories />} />
-                <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/ForgotPassword" element={<ForgotPassword />} />
+                <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+                <Route path="/programs" element={<ProtectedRoute><Programs /></ProtectedRoute>} />
+                <Route path="/programs/mentorship" element={<ProtectedRoute><Mentorship /></ProtectedRoute>} />
+                <Route path="/programs/communication" element={<ProtectedRoute><Communication /></ProtectedRoute>} />
+                <Route path="/programs/tech-skills" element={<ProtectedRoute><TechSkills /></ProtectedRoute>} />
+                <Route path="/programs/workshops" element={<ProtectedRoute><Workshops /></ProtectedRoute>} />
+                <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+                <Route path="/blog" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
+                <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+                <Route path="/resources/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                <Route path="/resources/learning" element={<ProtectedRoute><LearningResources /></ProtectedRoute>} />
+                <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
+                <Route path="/TermsAndConditions" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
                 <Route
                   path="/profile"
                   element={
@@ -129,7 +130,15 @@ function App() {
                     </AdminRoute>
                   }
                 />
-                <Route path="/test-connection" element={<TestConnection />} />
+                <Route
+                  path="/instructor-dashboard"
+                  element={
+                    <InstructorRoute>
+                      <InstructorDashboard />
+                    </InstructorRoute>
+                  }
+                />
+                <Route path="/test-connection" element={<ProtectedRoute><TestConnection /></ProtectedRoute>} />
               </Routes>
             </main>
             <Footer />

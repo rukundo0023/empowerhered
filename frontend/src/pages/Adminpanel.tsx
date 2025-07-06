@@ -121,8 +121,6 @@ const [newResource, setNewResource] = useState({
   const [femaleCount, setFemaleCount] = useState(0);
   const [mentorCount, setMentorCount] = useState(0);
   const [maleMentorProgress, setMaleMentorProgress] = useState<{ [userId: string]: number }>({});
-  const MAX_WOMEN = 160;
-  const MAX_MEN = 40;
 
   // Calculate gender and mentor stats when users change
   useEffect(() => {
@@ -412,21 +410,19 @@ const [newResource, setNewResource] = useState({
 
           {/* Gender and Mentor Stats */}
           <div className="flex flex-wrap gap-6 mb-6">
-            <div className={`bg-white rounded-lg shadow p-4 flex-1 min-w-[180px] ${femaleCount >= MAX_WOMEN ? 'border-2 border-red-500' : ''}`}> 
+            <div className="bg-white rounded-lg shadow p-4 flex-1 min-w-[180px]">
               <div className="text-lg font-semibold text-gray-700 flex items-center gap-2">
                 Women
-                <span className="text-xs text-gray-500">(max {MAX_WOMEN})</span>
-                {femaleCount >= MAX_WOMEN && <span title="Maximum reached" className="text-red-500 ml-1">&#9888;</span>}
               </div>
-              <div className={`text-2xl font-bold ${femaleCount >= MAX_WOMEN ? 'text-red-600' : 'text-pink-600'}`}>{femaleCount}</div>
+              <div className="text-2xl font-bold text-pink-600">{femaleCount}</div>
             </div>
-            <div className={`bg-white rounded-lg shadow p-4 flex-1 min-w-[180px] ${maleCount >= MAX_MEN ? 'border-2 border-red-500' : ''}`}> 
+            <div className={`bg-white rounded-lg shadow p-4 flex-1 min-w-[180px] ${maleCount / (maleCount + femaleCount) >= 0.2 ? 'border-2 border-red-500' : ''}`}> 
               <div className="text-lg font-semibold text-gray-700 flex items-center gap-2">
                 Men
-                <span className="text-xs text-gray-500">(max {MAX_MEN})</span>
-                {maleCount >= MAX_MEN && <span title="Maximum reached" className="text-red-500 ml-1">&#9888;</span>}
+                <span className="text-xs text-gray-500">({((maleCount / (maleCount + femaleCount)) * 100).toFixed(1)}% of users)</span>
+                {maleCount / (maleCount + femaleCount) >= 0.2 && <span title="20% limit reached" className="text-red-500 ml-1">&#9888;</span>}
               </div>
-              <div className={`text-2xl font-bold ${maleCount >= MAX_MEN ? 'text-red-600' : 'text-blue-600'}`}>{maleCount}</div>
+              <div className={`text-2xl font-bold ${maleCount / (maleCount + femaleCount) >= 0.2 ? 'text-red-600' : 'text-blue-600'}`}>{maleCount}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4 flex-1 min-w-[180px]">
               <div className="text-lg font-semibold text-gray-700">Mentors</div>

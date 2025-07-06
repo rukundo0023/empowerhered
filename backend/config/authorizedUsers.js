@@ -9,5 +9,12 @@ export const AUTHORIZED_USERS = {
     'mentor3@example.com',
     'mentor4@example.com',
     'mentor5@example.com'
+  ],
+  instructors: [
+    'instructor1@example.com',
+    'instructor2@example.com',
+    'instructor3@example.com',
+    'instructor4@example.com',
+    'instructor5@example.com',
   ]
 }; 

@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['student', 'mentor', 'admin'],
+      enum: ['student', 'mentor', 'admin', 'instructor'],
       default: 'student',
     },
     isGoogleUser: {

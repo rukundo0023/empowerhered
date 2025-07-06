@@ -40,7 +40,7 @@ const Profile = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">Gender</label>
-            <p className="mt-1 text-lg text-gray-900 capitalize">{user.genger}</p>
+            <p className="mt-1 text-lg text-gray-900 capitalize">{user.gender || 'Not specified'}</p>
           </div>
         </div>
       </div>

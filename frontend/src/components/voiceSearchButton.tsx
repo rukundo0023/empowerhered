@@ -97,7 +97,7 @@ const VoiceSearchButton: React.FC<VoiceSearchButtonProps> = ({ onResult }) => {
     { path: '/profile', text: t('nav.profile') },
     { path: '/settings', text: t('nav.settings') },
     { path: '/admin', text: t('nav.adminDashboard') },
-    { path: '/mentor', text: t('nav.mentorDashboard') },
+    { path: '/mentorDashboard', text: t('nav.mentorDashboard') },
     { path: '/success-stories', text: t('nav.stories') },
     { path: '/programs/mentorship', text: t('nav.mentorship') },
     { path: '/programs/communication', text: t('nav.communication') },
