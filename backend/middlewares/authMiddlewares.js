@@ -91,3 +91,11 @@ export const instructor = (req, res, next) => {
   console.log('Instructor middleware - Access denied');
   return res.status(401).json({ message: 'Not authorized as a valid instructor' });
 };
+
+export const adminOrInstructor = (req, res, next) => {
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'instructor')) {
+    next();
+  } else {
+    res.status(401).json({ message: 'Not authorized as admin or instructor' });
+  }
+};

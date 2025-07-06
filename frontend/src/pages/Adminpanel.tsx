@@ -49,6 +49,19 @@ interface StudentProgress {
   lastAccessed: string;
 }
 
+interface Module {
+  _id: string;
+  title: string;
+  description?: string;
+  lessons: Lesson[];
+}
+
+interface Lesson {
+  _id: string;
+  title: string;
+  content?: string;
+}
+
 type Tab = 'users' | 'courses' | 'resources' | 'progress';
 
 const Adminpanel = () => {
@@ -90,6 +103,24 @@ const [newResource, setNewResource] = useState({
   fileUrl: '',
   courseId: '',
 });
+
+const [showModuleModal, setShowModuleModal] = useState(false);
+const [selectedCourseForModules, setSelectedCourseForModules] = useState<Course | null>(null);
+const [modules, setModules] = useState<Module[]>([]);
+const [newModule, setNewModule] = useState({ title: '', description: '' });
+const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+const [newLesson, setNewLesson] = useState({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
+const [quizQuestion, setQuizQuestion] = useState({ question: '', options: ['', '', '', ''], answer: '', fileType: '', fileUrl: '' });
+const [quizList, setQuizList] = useState([]);
+
+const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
+const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+const [editModule, setEditModule] = useState({ title: '', description: '' });
+const [editLesson, setEditLesson] = useState({ title: '', content: '' });
+const [moduleLoading, setModuleLoading] = useState(false);
+const [lessonLoading, setLessonLoading] = useState(false);
+const [moduleError, setModuleError] = useState('');
+const [lessonError, setLessonError] = useState('');
 
   // Handle type change
   const handleTypeChange = (type: string) => {
@@ -371,6 +402,111 @@ const [newResource, setNewResource] = useState({
     }
   };
 
+  const fetchModules = async (courseId: string) => {
+    try {
+      const res = await api.get(`/courses/${courseId}`);
+      setModules(res.data.modules || []);
+    } catch (e) {
+      setModules([]);
+    }
+  };
+
+  const handleShowModuleModal = async (course: Course) => {
+    setSelectedCourseForModules(course);
+    await fetchModules(course._id);
+    setShowModuleModal(true);
+  };
+
+  const handleAddModule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCourseForModules) return;
+    try {
+      await api.post(`/courses/${selectedCourseForModules._id}/modules`, newModule);
+      await fetchModules(selectedCourseForModules._id);
+      setNewModule({ title: '', description: '' });
+      toast.success('Module added successfully');
+    } catch (error) {
+      toast.error('Failed to add module');
+    }
+  };
+
+  const handleDeleteModule = async (moduleId: string) => {
+    if (!selectedCourseForModules) return;
+    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
+    await fetchModules(selectedCourseForModules._id);
+  };
+
+  const handleAddLesson = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCourseForModules || !selectedModule) return;
+    const lessonPayload = {
+      ...newLesson,
+      quizzes: quizList,
+      assignment: newLesson.assignment,
+    };
+    await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, lessonPayload);
+    await fetchModules(selectedCourseForModules._id);
+    setNewLesson({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
+    setQuizList([]);
+  };
+
+  const handleDeleteLesson = async (lessonId: string) => {
+    if (!selectedCourseForModules || !selectedModule) return;
+    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
+    await fetchModules(selectedCourseForModules._id);
+  };
+
+  const handleEditModule = (mod: Module) => {
+    setEditingModuleId(mod._id);
+    setEditModule({ title: mod.title, description: mod.description || '' });
+  };
+  const handleSaveModule = async (mod: Module) => {
+    setModuleLoading(true);
+    setModuleError('');
+    try {
+      await api.put(`/courses/${selectedCourseForModules?._id}/modules/${mod._id}`, editModule);
+      await fetchModules(selectedCourseForModules!._id);
+      setEditingModuleId(null);
+      toast.success('Module updated');
+    } catch (e) {
+      setModuleError('Failed to update module');
+      toast.error('Failed to update module');
+    } finally {
+      setModuleLoading(false);
+    }
+  };
+  const handleEditLesson = (lesson: Lesson) => {
+    setEditingLessonId(lesson._id);
+    setEditLesson({ title: lesson.title, content: lesson.content || '' });
+  };
+  const handleSaveLesson = async (lesson: Lesson) => {
+    setLessonLoading(true);
+    setLessonError('');
+    try {
+      await api.put(`/courses/${selectedCourseForModules?._id}/modules/${selectedModule?._id}/lessons/${lesson._id}`, editLesson);
+      await fetchModules(selectedCourseForModules!._id);
+      setEditingLessonId(null);
+      toast.success('Lesson updated');
+    } catch (e) {
+      setLessonError('Failed to update lesson');
+      toast.error('Failed to update lesson');
+    } finally {
+      setLessonLoading(false);
+    }
+  };
+  const handleCloseModuleModal = () => {
+    setShowModuleModal(false);
+    setSelectedCourseForModules(null);
+    setModules([]);
+    setSelectedModule(null);
+    setEditingModuleId(null);
+    setEditingLessonId(null);
+    setEditModule({ title: '', description: '' });
+    setEditLesson({ title: '', content: '' });
+    setModuleError('');
+    setLessonError('');
+  };
+
   if (!user || user.role !== 'admin') {
     console.log('Not an admin user:', user);
     return null;
@@ -564,9 +700,15 @@ const [newResource, setNewResource] = useState({
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
                               onClick={() => handleDeleteCourse(course._id)}
-                              className="text-red-600 hover:text-red-900"
+                              className="text-red-600 hover:text-red-900 mr-2"
                             >
                               Delete
+                            </button>
+                            <button
+                              onClick={() => handleShowModuleModal(course)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              Manage Modules
                             </button>
                           </td>
                         </tr>
@@ -981,6 +1123,226 @@ const [newResource, setNewResource] = useState({
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Module Modal */}
+      {showModuleModal && selectedCourseForModules && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative">
+            <button className="absolute top-2 right-2 text-gray-500" onClick={handleCloseModuleModal}>&times;</button>
+            <h2 className="text-xl font-bold mb-4">Manage Modules for {selectedCourseForModules.title}</h2>
+            {moduleLoading && <div className="mb-2 text-blue-600">Saving...</div>}
+            {moduleError && <div className="mb-2 text-red-600">{moduleError}</div>}
+            {/* List Modules */}
+            <ul className="mb-4">
+              {modules.map((mod) => (
+                <li key={mod._id} className="mb-2">
+                  <div className="flex items-center justify-between">
+                    {editingModuleId === mod._id ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editModule.title}
+                          onChange={e => setEditModule({ ...editModule, title: e.target.value })}
+                          className="border rounded px-2 py-1 mr-2"
+                        />
+                        <input
+                          type="text"
+                          value={editModule.description}
+                          onChange={e => setEditModule({ ...editModule, description: e.target.value })}
+                          className="border rounded px-2 py-1 mr-2"
+                        />
+                        <button className="text-green-600 mr-2" onClick={() => handleSaveModule(mod)}>Save</button>
+                        <button className="text-gray-500" onClick={() => setEditingModuleId(null)}>Cancel</button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-semibold">{mod.title}</span>
+                        <button className="text-blue-500 ml-2" onClick={() => handleEditModule(mod)}>Edit</button>
+                        <button className="text-red-500 ml-2" onClick={() => {
+                          if(window.confirm('Delete this module?')) handleDeleteModule(mod._id);
+                        }}>Delete</button>
+                        <button className="text-blue-500 ml-2" onClick={() => setSelectedModule(mod)}>Manage Lessons</button>
+                      </>
+                    )}
+                  </div>
+                  <div className="text-sm text-gray-600">{mod.description}</div>
+                  {/* List Lessons if this module is selected */}
+                  {selectedModule && selectedModule._id === mod._id && (
+                    <div className="mt-2 ml-4">
+                      <h4 className="font-semibold mb-2">Lessons</h4>
+                      {lessonLoading && <div className="mb-2 text-blue-600">Saving...</div>}
+                      {lessonError && <div className="mb-2 text-red-600">{lessonError}</div>}
+                      <ul>
+                        {mod.lessons.map((lesson) => (
+                          <li key={lesson._id} className="flex items-center justify-between mb-1">
+                            {editingLessonId === lesson._id ? (
+                              <>
+                                <input
+                                  type="text"
+                                  value={editLesson.title}
+                                  onChange={e => setEditLesson({ ...editLesson, title: e.target.value })}
+                                  className="border rounded px-2 py-1 mr-2"
+                                />
+                                <input
+                                  type="text"
+                                  value={editLesson.content}
+                                  onChange={e => setEditLesson({ ...editLesson, content: e.target.value })}
+                                  className="border rounded px-2 py-1 mr-2"
+                                />
+                                <button className="text-green-600 mr-2" onClick={() => handleSaveLesson(lesson)}>Save</button>
+                                <button className="text-gray-500" onClick={() => setEditingLessonId(null)}>Cancel</button>
+                              </>
+                            ) : (
+                              <>
+                                <span>{lesson.title}</span>
+                                <button className="text-blue-500 ml-2" onClick={() => handleEditLesson(lesson)}>Edit</button>
+                                <button className="text-red-400 ml-2" onClick={() => {
+                                  if(window.confirm('Delete this lesson?')) handleDeleteLesson(lesson._id);
+                                }}>Delete</button>
+                              </>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                      {/* Add Lesson Form */}
+                      <form onSubmit={handleAddLesson} className="mt-2 flex flex-col gap-2 bg-gray-50 p-3 rounded">
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder="Lesson Title"
+                            value={newLesson.title}
+                            onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
+                            className="border rounded px-2 py-1 flex-1"
+                            required
+                          />
+                          <input
+                            type="text"
+                            placeholder="Lesson Content"
+                            value={newLesson.content}
+                            onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
+                            className="border rounded px-2 py-1 flex-1"
+                          />
+                        </div>
+                        {/* Quiz Section */}
+                        <div className="mt-2 p-2 bg-white rounded border">
+                          <div className="font-semibold mb-1">Quiz Questions</div>
+                          <input
+                            type="text"
+                            placeholder="Question"
+                            value={quizQuestion.question}
+                            onChange={e => setQuizQuestion({ ...quizQuestion, question: e.target.value })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <div className="flex gap-1 mb-1">
+                            {quizQuestion.options.map((opt, idx) => (
+                              <input
+                                key={idx}
+                                type="text"
+                                placeholder={`Option ${idx + 1}`}
+                                value={opt}
+                                onChange={e => {
+                                  const newOpts = [...quizQuestion.options];
+                                  newOpts[idx] = e.target.value;
+                                  setQuizQuestion({ ...quizQuestion, options: newOpts });
+                                }}
+                                className="border rounded px-2 py-1 flex-1"
+                              />
+                            ))}
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="Correct Answer"
+                            value={quizQuestion.answer}
+                            onChange={e => setQuizQuestion({ ...quizQuestion, answer: e.target.value })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File Type (e.g. image/png, application/pdf)"
+                            value={quizQuestion.fileType}
+                            onChange={e => setQuizQuestion({ ...quizQuestion, fileType: e.target.value })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File URL (optional)"
+                            value={quizQuestion.fileUrl}
+                            onChange={e => setQuizQuestion({ ...quizQuestion, fileUrl: e.target.value })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <button type="button" className="bg-blue-500 text-white px-2 py-1 rounded mb-2" onClick={() => {
+                            if (quizQuestion.question && quizQuestion.answer && quizQuestion.options.every(opt => opt)) {
+                              setQuizList([...quizList, quizQuestion]);
+                              setQuizQuestion({ question: '', options: ['', '', '', ''], answer: '', fileType: '', fileUrl: '' });
+                            }
+                          }}>Add Question</button>
+                          <ul className="list-disc ml-5">
+                            {quizList.map((q, i) => (
+                              <li key={i}>{q.question} (Answer: {q.answer}) {q.fileUrl && (<span>- <a href={q.fileUrl} target='_blank' rel='noopener noreferrer'>File</a></span>)}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        {/* Assignment Section */}
+                        <div className="mt-2 p-2 bg-white rounded border">
+                          <div className="font-semibold mb-1">Assignment</div>
+                          <input
+                            type="text"
+                            placeholder="Assignment Instructions"
+                            value={newLesson.assignment.instructions}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, instructions: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="date"
+                            placeholder="Due Date"
+                            value={newLesson.assignment.dueDate}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, dueDate: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File Type (e.g. application/pdf)"
+                            value={newLesson.assignment.fileType}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileType: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File URL (optional)"
+                            value={newLesson.assignment.fileUrl}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileUrl: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                        </div>
+                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded mt-2">Add Lesson</button>
+                      </form>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {/* Add Module Form */}
+            <form onSubmit={handleAddModule} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Module Title"
+                value={newModule.title}
+                onChange={e => setNewModule({ ...newModule, title: e.target.value })}
+                className="border rounded px-2 py-1"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Module Description"
+                value={newModule.description}
+                onChange={e => setNewModule({ ...newModule, description: e.target.value })}
+                className="border rounded px-2 py-1"
+              />
+              <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Add Module</button>
+            </form>
           </div>
         </div>
       )}

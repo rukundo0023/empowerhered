@@ -37,6 +37,19 @@ const courseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Resource'
     }],
+    modules: [
+      {
+        title: { type: String, required: true },
+        description: { type: String },
+        lessons: [
+          {
+            title: { type: String, required: true },
+            content: { type: String },
+            resources: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Resource' }]
+          }
+        ]
+      }
+    ],
   },
   {
     timestamps: true,

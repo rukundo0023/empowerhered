@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect, admin } from '../middlewares/authMiddlewares.js';
+import { protect, admin, adminOrInstructor } from '../middlewares/authMiddlewares.js';
 import {
   getCourses,
   getCourseById,
@@ -7,7 +7,14 @@ import {
   updateCourse,
   deleteCourse,
   enrollInCourse,
-  getCourseProgress
+  getCourseProgress,
+  addModule,
+  updateModule,
+  deleteModule,
+  addLesson,
+  updateLesson,
+  deleteLesson,
+  getModules
 } from '../controllers/courseController.js';
 
 const router = express.Router();
@@ -24,5 +31,14 @@ router.get('/:id/progress', protect, getCourseProgress);
 router.post('/', protect, admin, createCourse);
 router.put('/:id', protect, admin, updateCourse);
 router.delete('/:id', protect, admin, deleteCourse);
+
+// Module and Lesson management
+router.get('/:courseId/modules', getModules);
+router.post('/:courseId/modules', protect, adminOrInstructor, addModule);
+router.put('/:courseId/modules/:moduleId', protect, adminOrInstructor, updateModule);
+router.delete('/:courseId/modules/:moduleId', protect, adminOrInstructor, deleteModule);
+router.post('/:courseId/modules/:moduleId/lessons', protect, adminOrInstructor, addLesson);
+router.put('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, updateLesson);
+router.delete('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, deleteLesson);
 
 export default router; 

@@ -55,11 +55,6 @@ const resourceSchema = mongoose.Schema(
         message: props => `File URL is required for ${props.type} type`
       }
     },
-    courseId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Course',
-      required: true,
-    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -72,6 +67,16 @@ const resourceSchema = mongoose.Schema(
     views: {
       type: Number,
       default: 0,
+    },
+    quiz: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Quiz',
+      required: function() { return this.type === 'Quiz'; }
+    },
+    assignment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Assignment',
+      required: function() { return this.type === 'Assignment'; }
     },
   },
   {

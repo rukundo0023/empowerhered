@@ -239,6 +239,125 @@ const getAllStudentProgress = asyncHandler(async (req, res) => {
   res.json(progress);
 });
 
+// @desc    Add a module to a course
+// @route   POST /api/courses/:courseId/modules
+// @access  Private/Admin
+const addModule = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    course.modules.push({ title, description, lessons: [] });
+    await course.save();
+    res.status(201).json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update a module in a course
+// @route   PUT /api/courses/:courseId/modules/:moduleId
+// @access  Private/Admin
+const updateModule = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    module.title = title || module.title;
+    module.description = description || module.description;
+    await course.save();
+    res.json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Delete a module from a course
+// @route   DELETE /api/courses/:courseId/modules/:moduleId
+// @access  Private/Admin
+const deleteModule = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    course.modules.id(req.params.moduleId).remove();
+    await course.save();
+    res.json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Add a lesson to a module
+// @route   POST /api/courses/:courseId/modules/:moduleId/lessons
+// @access  Private/Admin
+const addLesson = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    module.lessons.push({ title, content, resources: [] });
+    await course.save();
+    res.status(201).json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update a lesson in a module
+// @route   PUT /api/courses/:courseId/modules/:moduleId/lessons/:lessonId
+// @access  Private/Admin
+const updateLesson = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    const lesson = module.lessons.id(req.params.lessonId);
+    if (!lesson) return res.status(404).json({ message: 'Lesson not found' });
+    lesson.title = title || lesson.title;
+    lesson.content = content || lesson.content;
+    await course.save();
+    res.json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Delete a lesson from a module
+// @route   DELETE /api/courses/:courseId/modules/:moduleId/lessons/:lessonId
+// @access  Private/Admin
+const deleteLesson = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    module.lessons.id(req.params.lessonId).remove();
+    await course.save();
+    res.json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get all modules for a course
+// @route   GET /api/courses/:courseId/modules
+// @access  Public (or protect if needed)
+const getModules = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    res.json(course.modules || []);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   getCourses,
   getCourseById,
@@ -248,4 +367,11 @@ export {
   enrollInCourse,
   getCourseProgress,
   getAllStudentProgress,
+  addModule,
+  updateModule,
+  deleteModule,
+  addLesson,
+  updateLesson,
+  deleteLesson,
+  getModules
 }; 

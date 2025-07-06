@@ -47,6 +47,19 @@ interface Submission {
   feedback?: string;
 }
 
+interface Module {
+  _id: string;
+  title: string;
+  description?: string;
+  lessons: Lesson[];
+}
+
+interface Lesson {
+  _id: string;
+  title: string;
+  content?: string;
+}
+
 type Tab = 'courses' | 'resources' | 'progress';
 
 const InstructorDashboard = () => {
@@ -83,6 +96,13 @@ const InstructorDashboard = () => {
   });
 
   const [error, setError] = useState('');
+
+  const [showModuleModal, setShowModuleModal] = useState(false);
+  const [selectedCourseForModules, setSelectedCourseForModules] = useState<Course | null>(null);
+  const [modules, setModules] = useState<Module[]>([]);
+  const [newModule, setNewModule] = useState({ title: '', description: '' });
+  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+  const [newLesson, setNewLesson] = useState({ title: '', content: '' });
 
   const handleApiError = (error: unknown, fallback = 'Something went wrong') => {
     if (error && typeof error === 'object' && 'response' in error) {
@@ -239,6 +259,49 @@ const InstructorDashboard = () => {
     }
   };
 
+  const fetchModules = async (courseId: string) => {
+    try {
+      const res = await api.get(`/courses/${courseId}`);
+      setModules(res.data.modules || []);
+    } catch {
+      setModules([]);
+    }
+  };
+
+  const handleShowModuleModal = async (course: Course) => {
+    setSelectedCourseForModules(course);
+    await fetchModules(course._id);
+    setShowModuleModal(true);
+  };
+
+  const handleAddModule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCourseForModules) return;
+    await api.post(`/courses/${selectedCourseForModules._id}/modules`, newModule);
+    await fetchModules(selectedCourseForModules._id);
+    setNewModule({ title: '', description: '' });
+  };
+
+  const handleDeleteModule = async (moduleId: string) => {
+    if (!selectedCourseForModules) return;
+    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
+    await fetchModules(selectedCourseForModules._id);
+  };
+
+  const handleAddLesson = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCourseForModules || !selectedModule) return;
+    await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, newLesson);
+    await fetchModules(selectedCourseForModules._id);
+    setNewLesson({ title: '', content: '' });
+  };
+
+  const handleDeleteLesson = async (lessonId: string) => {
+    if (!selectedCourseForModules || !selectedModule) return;
+    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
+    await fetchModules(selectedCourseForModules._id);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 mt-6">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -284,9 +347,15 @@ const InstructorDashboard = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <button
                             onClick={() => handleDeleteCourse(course._id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-600 hover:text-red-900 mr-2"
                           >
                             Delete
+                          </button>
+                          <button
+                            onClick={() => handleShowModuleModal(course)}
+                            className="text-blue-600 hover:text-blue-900"
+                          >
+                            Manage Modules
                           </button>
                         </td>
                       </tr>
@@ -702,6 +771,81 @@ const InstructorDashboard = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Module Modal */}
+      {showModuleModal && selectedCourseForModules && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative">
+            <button className="absolute top-2 right-2 text-gray-500" onClick={() => setShowModuleModal(false)}>&times;</button>
+            <h2 className="text-xl font-bold mb-4">Manage Modules for {selectedCourseForModules.title}</h2>
+            {/* List Modules */}
+            <ul className="mb-4">
+              {modules.map((mod) => (
+                <li key={mod._id} className="mb-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold">{mod.title}</span>
+                    <button className="text-red-500 ml-2" onClick={() => handleDeleteModule(mod._id)}>Delete</button>
+                    <button className="text-blue-500 ml-2" onClick={() => setSelectedModule(mod)}>Manage Lessons</button>
+                  </div>
+                  <div className="text-sm text-gray-600">{mod.description}</div>
+                  {/* List Lessons if this module is selected */}
+                  {selectedModule && selectedModule._id === mod._id && (
+                    <div className="mt-2 ml-4">
+                      <h4 className="font-semibold mb-2">Lessons</h4>
+                      <ul>
+                        {mod.lessons.map((lesson) => (
+                          <li key={lesson._id} className="flex items-center justify-between mb-1">
+                            <span>{lesson.title}</span>
+                            <button className="text-red-400 ml-2" onClick={() => handleDeleteLesson(lesson._id)}>Delete</button>
+                          </li>
+                        ))}
+                      </ul>
+                      {/* Add Lesson Form */}
+                      <form onSubmit={handleAddLesson} className="mt-2 flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Lesson Title"
+                          value={newLesson.title}
+                          onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
+                          className="border rounded px-2 py-1"
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Lesson Content"
+                          value={newLesson.content}
+                          onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
+                          className="border rounded px-2 py-1"
+                        />
+                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Add Lesson</button>
+                      </form>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {/* Add Module Form */}
+            <form onSubmit={handleAddModule} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Module Title"
+                value={newModule.title}
+                onChange={e => setNewModule({ ...newModule, title: e.target.value })}
+                className="border rounded px-2 py-1"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Module Description"
+                value={newModule.description}
+                onChange={e => setNewModule({ ...newModule, description: e.target.value })}
+                className="border rounded px-2 py-1"
+              />
+              <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Add Module</button>
+            </form>
           </div>
         </div>
       )}
