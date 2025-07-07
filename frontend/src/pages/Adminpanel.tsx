@@ -1130,7 +1130,7 @@ const [lessonError, setLessonError] = useState('');
       {/* Module Modal */}
       {showModuleModal && selectedCourseForModules && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
             <button className="absolute top-2 right-2 text-gray-500" onClick={handleCloseModuleModal}>&times;</button>
             <h2 className="text-xl font-bold mb-4">Manage Modules for {selectedCourseForModules.title}</h2>
             {moduleLoading && <div className="mb-2 text-blue-600">Saving...</div>}
@@ -1171,7 +1171,7 @@ const [lessonError, setLessonError] = useState('');
                   <div className="text-sm text-gray-600">{mod.description}</div>
                   {/* List Lessons if this module is selected */}
                   {selectedModule && selectedModule._id === mod._id && (
-                    <div className="mt-2 ml-4">
+                    <div className="mt-2 ml-4 max-h-60 overflow-y-auto pr-2">
                       <h4 className="font-semibold mb-2">Lessons</h4>
                       {lessonLoading && <div className="mb-2 text-blue-600">Saving...</div>}
                       {lessonError && <div className="mb-2 text-red-600">{lessonError}</div>}
@@ -1199,36 +1199,32 @@ const [lessonError, setLessonError] = useState('');
                               <>
                                 <span>{lesson.title}</span>
                                 <button className="text-blue-500 ml-2" onClick={() => handleEditLesson(lesson)}>Edit</button>
-                                <button className="text-red-400 ml-2" onClick={() => {
-                                  if(window.confirm('Delete this lesson?')) handleDeleteLesson(lesson._id);
-                                }}>Delete</button>
+                                <button className="text-red-500 ml-2" onClick={() => handleDeleteLesson(lesson._id)}>Delete</button>
                               </>
                             )}
                           </li>
                         ))}
                       </ul>
-                      {/* Add Lesson Form */}
-                      <form onSubmit={handleAddLesson} className="mt-2 flex flex-col gap-2 bg-gray-50 p-3 rounded">
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            placeholder="Lesson Title"
-                            value={newLesson.title}
-                            onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
-                            className="border rounded px-2 py-1 flex-1"
-                            required
-                          />
-                          <input
-                            type="text"
-                            placeholder="Lesson Content"
-                            value={newLesson.content}
-                            onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
-                            className="border rounded px-2 py-1 flex-1"
-                          />
-                        </div>
+                      {/* Add Lesson Form (with quiz and assignment options) */}
+                      <form onSubmit={handleAddLesson} className="flex flex-col gap-2 mt-2 max-h-80 overflow-y-auto pr-2">
+                        <input
+                          type="text"
+                          placeholder="Lesson Title"
+                          value={newLesson.title}
+                          onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
+                          className="border rounded px-2 py-1"
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Lesson Content"
+                          value={newLesson.content}
+                          onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
+                          className="border rounded px-2 py-1"
+                        />
                         {/* Quiz Section */}
-                        <div className="mt-2 p-2 bg-white rounded border">
-                          <div className="font-semibold mb-1">Quiz Questions</div>
+                        <div className="bg-gray-50 p-2 rounded mb-2">
+                          <label className="block font-semibold mb-1">Quiz (optional)</label>
                           <input
                             type="text"
                             placeholder="Question"
@@ -1286,8 +1282,8 @@ const [lessonError, setLessonError] = useState('');
                           </ul>
                         </div>
                         {/* Assignment Section */}
-                        <div className="mt-2 p-2 bg-white rounded border">
-                          <div className="font-semibold mb-1">Assignment</div>
+                        <div className="bg-gray-50 p-2 rounded mb-2">
+                          <label className="block font-semibold mb-1">Assignment (optional)</label>
                           <input
                             type="text"
                             placeholder="Assignment Instructions"

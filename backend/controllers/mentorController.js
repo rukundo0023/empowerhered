@@ -4,6 +4,8 @@ import Meeting from '../models/meetingModel.js';
 import Mentorship from '../models/mentorshipModel.js';
 import Booking from '../models/bookingModel.js';
 import { sendEmail } from '../utils/sendEmail.js';
+import { getOAuthClient } from '../config/googleClient.js';
+import { google } from 'googleapis';
 
 // @desc    Get mentor's mentees
 // @route   GET /api/mentors/mentees
@@ -339,6 +341,56 @@ const rejectBooking = asyncHandler(async (req, res) => {
     ...booking.toObject(),
     message: 'Booking rejected successfully'
   });
+});
+
+// @desc    Get mentor's Google Calendar availability
+// @route   GET /api/mentors/availability
+// @access  Private/Mentor
+export const getGoogleAvailability = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user || !user.googleAccessToken || !user.googleRefreshToken) {
+    return res.status(400).json({ message: 'Google Calendar not connected.' });
+  }
+  const auth = getOAuthClient(user.googleAccessToken, user.googleRefreshToken);
+  const calendar = google.calendar({ version: 'v3', auth });
+  const timeMin = new Date().toISOString();
+  const timeMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // next 7 days
+  const response = await calendar.freebusy.query({
+    requestBody: {
+      timeMin,
+      timeMax,
+      timeZone: 'UTC',
+      items: [{ id: 'primary' }]
+    }
+  });
+  res.json(response.data.calendars.primary.busy);
+});
+
+// @desc    Book a slot and create Google Calendar event
+// @route   POST /api/mentors/book
+// @access  Private
+export const bookGoogleSlot = asyncHandler(async (req, res) => {
+  const { mentorId, startTime, endTime, summary } = req.body;
+  const mentor = await User.findById(mentorId);
+  if (!mentor || !mentor.googleAccessToken || !mentor.googleRefreshToken) {
+    return res.status(400).json({ message: 'Mentor has not connected Google Calendar.' });
+  }
+  const auth = getOAuthClient(mentor.googleAccessToken, mentor.googleRefreshToken);
+  const calendar = google.calendar({ version: 'v3', auth });
+  const event = {
+    summary: summary || 'Mentorship Session',
+    start: { dateTime: startTime, timeZone: 'UTC' },
+    end: { dateTime: endTime, timeZone: 'UTC' },
+    attendees: [
+      { email: mentor.email },
+      { email: req.user.email }
+    ]
+  };
+  const response = await calendar.events.insert({
+    calendarId: 'primary',
+    requestBody: event
+  });
+  res.status(201).json(response.data);
 });
 
 export {

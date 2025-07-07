@@ -1,273 +1,238 @@
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import assets from "../../assets/assets";
 import api from "../../api/axios";
-import { useTranslation } from "react-i18next";
-import Newsletter from "../../components/Newsletter";
-import { AxiosError } from "axios";
 import { useAuth } from "../../context/AuthContext";
-import { useCallback, useState, useRef, useEffect } from "react";
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
 
-// Add Mentor type
-type Mentor = {
+// Mentor type
+interface Mentor {
   _id: string;
   name: string;
   expertise: string;
-  availability?: string[]; // ISO date strings
-  isAvailable?: boolean; // Added for active indicator
-  profilePicture?: string; // Added for avatar
-};
+  profilePicture?: string;
+  email?: string;
+}
 
 const Mentorship = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [availableMentors, setAvailableMentors] = useState<Mentor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [googleConnected, setGoogleConnected] = useState(false);
+  const [mentorBusySlots, setMentorBusySlots] = useState<{ [mentorId: string]: { start: string, end: string }[] }>({});
+  const [selectedDate, setSelectedDate] = useState<{ [mentorId: string]: Date | undefined }>({});
+  const [selectedTime, setSelectedTime] = useState<{ [mentorId: string]: string }>({});
   const bookingInProgress = useRef(false);
-  const loadingToastRef = useRef<number | null>(null);
-  const [selectedDates, setSelectedDates] = useState<{ [mentorId: string]: Date | null }>({});
+  const [busyLoading, setBusyLoading] = useState<{ [mentorId: string]: boolean }>({});
 
+  // Check if mentor has connected Google Calendar
   useEffect(() => {
-    return () => {
-      if (loadingToastRef.current) {
-        toast.dismiss(loadingToastRef.current);
+    if (user?.role === 'mentor' && user?.googleAccessToken) {
+      setGoogleConnected(true);
+    }
+  }, [user]);
+
+  // Fetch available mentors
+  useEffect(() => {
+    const fetchMentors = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get('/mentors/available');
+        setAvailableMentors(res.data);
+      } catch (err) {
+        toast.error('Failed to fetch mentors');
+      } finally {
+        setIsLoading(false);
       }
     };
+    fetchMentors();
   }, []);
 
-  const fetchAvailableMentors = useCallback(async () => {
+  // Fetch busy slots for a mentor (now public for use on date select)
+  const fetchMentorAvailability = async (mentorId: string, date?: Date) => {
+    setBusyLoading(prev => ({ ...prev, [mentorId]: true }));
     try {
-      setIsLoading(true);
-      const response = await api.get('/mentors/available');
-      setAvailableMentors(response.data);
-    } catch (error) {
-      console.error('Error fetching mentors:', error);
-      toast.error(t('mentorship.fetchMentorsError'));
+      const res = await api.get(`/mentors/availability?mentorId=${mentorId}`);
+      setMentorBusySlots(prev => ({ ...prev, [mentorId]: res.data }));
+    } catch (err) {
+      setMentorBusySlots(prev => ({ ...prev, [mentorId]: [] }));
     } finally {
-      setIsLoading(false);
+      setBusyLoading(prev => ({ ...prev, [mentorId]: false }));
     }
-  }, [t]);
+  };
 
+  // On page load, fetch for all mentors
   useEffect(() => {
-    fetchAvailableMentors();
-  }, [fetchAvailableMentors]);
+    availableMentors.forEach(mentor => {
+      if (mentor._id) fetchMentorAvailability(mentor._id);
+    });
+    // eslint-disable-next-line
+  }, [availableMentors]);
 
-  const handleBookNow = async (mentorId: string, selectedDate: Date | null) => {
-    if (!user) {
-      toast.error(t('programs.mentorship.booking.loginRequired'));
-      navigate('/login');
-      return;
+  // On date select, re-fetch busy slots for that mentor
+  const handleDateSelect = (mentorId: string, date: Date | undefined) => {
+    setSelectedDate(prev => ({ ...prev, [mentorId]: date }));
+    if (mentorId && date) {
+      fetchMentorAvailability(mentorId, date);
     }
+  };
 
-    if (!selectedDate) {
-      toast.error(t('programs.mentorship.booking.selectDate'));
-      return;
-    }
+  // Mentor: Connect Google Calendar
+  const handleConnectGoogle = () => {
+    window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
+  };
 
+  // After booking, re-fetch busy slots for that mentor
+  const handleBookGoogleSlot = async (mentorId: string) => {
+    const date = selectedDate[mentorId];
+    const time = selectedTime[mentorId];
+    if (!date || !time) return toast.error('Please select a date and time.');
+    const [hours, minutes] = time.split(':').map(Number);
+    const startDateTime = new Date(date);
+    startDateTime.setHours(hours, minutes, 0, 0);
+    const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000);
     if (bookingInProgress.current) return;
-
     bookingInProgress.current = true;
-    const loadingToast = toast.loading(t('programs.mentorship.booking.loading'));
-
     try {
-      if (!user._id) throw new Error('User ID is missing');
-
-      const bookingData = {
-        mentee: user._id,
-        name: user.name,
-        email: user.email,
-        topic: 'Initial Mentorship Session',
-        date: selectedDate.toISOString(),
-        duration: 60,
-        status: 'pending',
-        mentor: mentorId
-      };
-
-      const response = await api.post('/mentors/bookings', bookingData);
-
-      toast.dismiss(loadingToast);
-      toast.success(t('programs.mentorship.booking.success'));
-      navigate('/profile', {
-        state: {
-          bookingInfo: response.data,
-          message: t('programs.mentorship.booking.success')
-        }
+      await api.post('/mentors/book', {
+        mentorId,
+        startTime: startDateTime.toISOString(),
+        endTime: endDateTime.toISOString(),
+        summary: 'Mentorship Session'
       });
-    } catch (error) {
-      console.error('Error booking mentorship:', error);
-      toast.dismiss(loadingToast);
-
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-          toast.error(t('programs.mentorship.booking.loginRequired'));
-          navigate('/login');
-        } else {
-          toast.error(error.response?.data?.message || t('programs.mentorship.booking.error'));
-        }
-      } else {
-        toast.error(t('programs.mentorship.booking.error'));
-      }
+      toast.success('Booking successful! Check your email/calendar.');
+      // Re-fetch busy slots for this mentor
+      fetchMentorAvailability(mentorId);
+    } catch (err) {
+      toast.error('Booking failed.');
     } finally {
       bookingInProgress.current = false;
     }
   };
 
+  // Helper: get busy days for react-day-picker
+  const getDisabledDays = (mentorId: string) => {
+    const busy = mentorBusySlots[mentorId] || [];
+    // Collect all busy dates (not times)
+    const busyDates = busy.map(slot => {
+      const start = new Date(slot.start);
+      return new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    });
+    return busyDates;
+  };
+
+  // Helper: time options (every 30 min from 8am to 6pm)
+  const timeOptions = Array.from({ length: 20 }, (_, i) => {
+    const hour = 8 + Math.floor(i / 2);
+    const min = i % 2 === 0 ? '00' : '30';
+    return `${hour.toString().padStart(2, '0')}:${min}`;
+  });
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="relative pt-28"
-        style={{ backgroundImage: `url(${assets.communicationbg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-6">
-              {t('programs.mentorship.hero.title')}
-            </h1>
-            <p className="text-xl text-black max-w-3xl mx-auto">
-              {t('programs.mentorship.hero.description')}
-            </p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Available Mentors Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">
-            {t('programs.mentorship.overview.title')}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('programs.mentorship.overview.description')}
-          </p>
-        </div>
-
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
-        ) : availableMentors.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {availableMentors.map((mentor) => (
-              <motion.div
-                key={mentor._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6, boxShadow: '0 6px 24px rgba(0,0,0,0.14)' }}
-                className="relative flex flex-col items-center bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-xl shadow-lg p-4 transition-all duration-300 hover:shadow-xl hover:scale-[1.015] border border-blue-100"
-                style={{ minHeight: 320 }}
+    <div className="min-h-screen bg-gray-50 pt-32 pb-10 px-2 md:px-0">
+      <div className="max-w-3xl mx-auto mb-10 text-center">
+        <h1 className="text-5xl font-extrabold mb-3 text-blue-900 drop-shadow-lg">Mentorship Program</h1>
+        <p className="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">
+          Book a session with a mentor. All bookings are synced with Google Calendar for real-time availability!
+        </p>
+        {/* Mentor: Google Calendar connect button/status */}
+        {user?.role === 'mentor' && (
+          <div className="mb-4">
+            {googleConnected ? (
+              <span className="text-green-600 font-semibold text-lg">Google Calendar Connected ✅</span>
+            ) : (
+              <button
+                className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-2 rounded-full shadow-lg hover:from-blue-700 hover:to-blue-500 transition-all font-semibold text-lg"
+                onClick={handleConnectGoogle}
               >
-                {/* Profile Picture and Active Indicator */}
-                <div className="relative mb-2">
-                  <img
-                    src={mentor.profilePicture || assets.profile}
-                    alt={mentor.name}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-white shadow ring-1 ring-blue-200"
-                  />
-                  {/* Active/Inactive Dot */}
-                  <span
-                    className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center shadow ${mentor.isAvailable !== false ? 'bg-green-500' : 'bg-red-400'}`}
-                    title={mentor.isAvailable !== false ? t('programs.mentorship.active') : t('programs.mentorship.inactive')}
-                  />
-                </div>
-                <h3 className="text-lg font-bold mb-1 flex items-center justify-center gap-2 text-gray-800">
-                  {mentor.name}
-                  <span className={`ml-2 text-xs font-semibold ${mentor.isAvailable !== false ? 'text-green-600' : 'text-red-500'}`}
-                    >
-                    {mentor.isAvailable !== false ? t('programs.mentorship.active') : t('programs.mentorship.inactive')}
-                  </span>
-                </h3>
-                <p className="text-sm text-blue-700 mb-3 font-medium tracking-wide">{mentor.expertise}</p>
-                <div className="w-full border-t border-blue-200 my-2" />
-
-                {mentor.availability && mentor.availability.length > 0 ? (
-                  <div className="mb-2">
-                    <span className="font-medium block mb-2">{t('programs.mentorship.availability')}:</span>
-                    <Calendar
-                      tileDisabled={({ date }) =>
-                        !mentor.availability?.some(slot => {
-                          const slotDate = new Date(slot);
-                          return (
-                            slotDate.getFullYear() === date.getFullYear() &&
-                            slotDate.getMonth() === date.getMonth() &&
-                            slotDate.getDate() === date.getDate()
-                          );
-                        })
-                      }
-                      onClickDay={date => setSelectedDates(prev => ({ ...prev, [mentor._id]: date }))}
-                      value={selectedDates[mentor._id] || null}
-                    />
-                    {selectedDates[mentor._id] && (
-                      <div className="mt-2 text-sm text-blue-700">
-                        {t('programs.mentorship.selectedDate')}: {selectedDates[mentor._id]?.toLocaleString()}
-                      </div>
-                    )}
-                    <button
-                      onClick={() => handleBookNow(mentor._id, selectedDates[mentor._id])}
-                      className="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-                      disabled={!selectedDates[mentor._id]}
-                    >
-                      {t('programs.mentorship.bookNow')}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="mb-2 text-sm text-gray-500">
-                    {t('programs.mentorship.noAvailability')}
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg mb-4">
-              {t('programs.mentorship.booking.noMentors')}
-            </p>
+                Connect Google Calendar
+              </button>
+            )}
           </div>
         )}
       </div>
-
-      {/* CTA Section */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="bg-gray-100 py-16"
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">
-            {t('programs.mentorship.cta.title')}
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            {t('programs.mentorship.cta.description')}
-          </p>
-          <button
-            onClick={() => {
-              // Find the first selected mentor and date
-              const selectedMentorId = Object.keys(selectedDates).find(
-                (mentorId) => selectedDates[mentorId]
-              );
-              const selectedDate = selectedMentorId ? selectedDates[selectedMentorId] : null;
-              if (selectedMentorId && selectedDate) {
-                handleBookNow(selectedMentorId, selectedDate);
-              } else {
-                toast.info(t('programs.mentorship.cta.selectMentorFirst'));
-              }
-            }}
-            className={`bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-700 transition-colors`}
-          >
-            {t('programs.mentorship.cta.button')}
-          </button>
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">Available Mentors</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {isLoading ? (
+            <div className="col-span-2 text-center text-lg">Loading mentors...</div>
+          ) : availableMentors.length === 0 ? (
+            <div className="col-span-2 text-center text-lg">No mentors available at the moment.</div>
+          ) : (
+            availableMentors.map(mentor => (
+              <div
+                key={mentor._id}
+                className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-blue-100 hover:shadow-2xl transition-all duration-300 relative group"
+              >
+                <div className="relative mb-3">
+                  <img
+                    src={mentor.profilePicture || '/default-profile.png'}
+                    alt={mentor.name}
+                    className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow-lg group-hover:scale-105 transition-transform"
+                  />
+                  <span className="absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-white bg-green-500 shadow"></span>
+                </div>
+                <h2 className="text-xl font-bold mb-1 text-blue-900">{mentor.name}</h2>
+                <p className="text-blue-700 mb-2 font-medium">{mentor.expertise}</p>
+                <div className="w-full border-t border-blue-100 my-3" />
+                <div className="mb-2 w-full">
+                  <label className="block font-medium mb-1 text-gray-700">Book a Session:</label>
+                  <DayPicker
+                    mode="single"
+                    selected={selectedDate[mentor._id]}
+                    onSelect={date => handleDateSelect(mentor._id, date)}
+                    disabled={getDisabledDays(mentor._id)}
+                    fromDate={new Date()}
+                    className="mb-2 mx-auto"
+                  />
+                  {busyLoading[mentor._id] && (
+                    <div className="text-blue-500 text-sm mb-2">Loading availability...</div>
+                  )}
+                  <select
+                    className="w-full border rounded px-2 py-2 mb-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                    value={selectedTime[mentor._id] || ''}
+                    onChange={e => setSelectedTime(prev => ({ ...prev, [mentor._id]: e.target.value }))}
+                    disabled={busyLoading[mentor._id]}
+                  >
+                    <option value="">Select time</option>
+                    {timeOptions.map(time => {
+                      const date = selectedDate[mentor._id];
+                      let isBusy = false;
+                      if (date) {
+                        const [hour, minute] = time.split(':').map(Number);
+                        const slotStart = new Date(date);
+                        slotStart.setHours(hour, minute, 0, 0);
+                        const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
+                        isBusy = (mentorBusySlots[mentor._id] || []).some(slot => {
+                          const busyStart = new Date(slot.start);
+                          const busyEnd = new Date(slot.end);
+                          return (
+                            slotStart < busyEnd && slotEnd > busyStart
+                          );
+                        });
+                      }
+                      return (
+                        <option key={time} value={time} disabled={isBusy}>
+                          {time} {isBusy ? '(Booked)' : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <button
+                  className="mt-2 w-full bg-gradient-to-r from-green-500 to-green-400 text-white px-4 py-2 rounded-full font-semibold shadow-lg hover:from-green-600 hover:to-green-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => handleBookGoogleSlot(mentor._id)}
+                  disabled={!selectedDate[mentor._id] || !selectedTime[mentor._id]}
+                >
+                  Book Session
+                </button>
+              </div>
+            ))
+          )}
         </div>
-      </motion.div>
-
-      <Newsletter />
+      </div>
     </div>
   );
 };

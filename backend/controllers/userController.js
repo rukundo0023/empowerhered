@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import { AUTHORIZED_USERS } from '../config/authorizedUsers.js';
 import bcrypt from 'bcrypt';
-import { client } from '../config/googleClient.js';
+import { getOAuthClient } from '../config/googleClient.js';
 import { sendWelcomeEmail } from '../utils/SendWelcomeEmail.js';
 
 // Generate JWT

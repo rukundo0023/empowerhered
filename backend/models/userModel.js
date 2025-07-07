@@ -74,6 +74,20 @@ const userSchema = mongoose.Schema(
         type: Date,
       },
     ],
+
+    // --- Google OAuth fields for mentors ---
+    googleId: {
+      type: String,
+    },
+    googleAccessToken: {
+      type: String,
+    },
+    googleRefreshToken: {
+      type: String,
+    },
+    googleTokenExpiry: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

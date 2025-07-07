@@ -13,7 +13,9 @@ import {
   getAvailableMentors,
   getPendingBookings,
   acceptBooking,
-  rejectBooking
+  rejectBooking,
+  getGoogleAvailability,
+  bookGoogleSlot
 } from '../controllers/mentorController.js';
 
 const router = express.Router();
@@ -37,5 +39,7 @@ router.get('/stats', getMentorStats);
 router.get('/bookings', getPendingBookings);
 router.put('/bookings/:id/accept', acceptBooking);
 router.put('/bookings/:id/reject', rejectBooking);
+router.get('/availability', getGoogleAvailability);
+router.post('/book', bookGoogleSlot);
 
 export default router; 

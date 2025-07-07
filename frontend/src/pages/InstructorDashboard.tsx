@@ -104,6 +104,13 @@ const InstructorDashboard = () => {
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const [newLesson, setNewLesson] = useState({ title: '', content: '' });
 
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+  const [editLesson, setEditLesson] = useState({ title: '', content: '' });
+  const [moduleLoading, setModuleLoading] = useState(false);
+  const [moduleError, setModuleError] = useState('');
+  const [lessonLoading, setLessonLoading] = useState(false);
+  const [lessonError, setLessonError] = useState('');
+
   const handleApiError = (error: unknown, fallback = 'Something went wrong') => {
     if (error && typeof error === 'object' && 'response' in error) {
       const err = error as { response?: { data?: { message?: string } } };
@@ -277,9 +284,17 @@ const InstructorDashboard = () => {
   const handleAddModule = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCourseForModules) return;
-    await api.post(`/courses/${selectedCourseForModules._id}/modules`, newModule);
-    await fetchModules(selectedCourseForModules._id);
-    setNewModule({ title: '', description: '' });
+    setModuleLoading(true);
+    setModuleError('');
+    try {
+      await api.post(`/courses/${selectedCourseForModules._id}/modules`, newModule);
+      await fetchModules(selectedCourseForModules._id);
+      setNewModule({ title: '', description: '' });
+    } catch (error) {
+      handleApiError(error, 'Error adding module');
+    } finally {
+      setModuleLoading(false);
+    }
   };
 
   const handleDeleteModule = async (moduleId: string) => {
@@ -291,15 +306,49 @@ const InstructorDashboard = () => {
   const handleAddLesson = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCourseForModules || !selectedModule) return;
-    await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, newLesson);
-    await fetchModules(selectedCourseForModules._id);
-    setNewLesson({ title: '', content: '' });
+    setLessonLoading(true);
+    setLessonError('');
+    try {
+      await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, newLesson);
+      await fetchModules(selectedCourseForModules._id);
+      setNewLesson({ title: '', content: '' });
+    } catch (error) {
+      handleApiError(error, 'Error adding lesson');
+    } finally {
+      setLessonLoading(false);
+    }
   };
 
   const handleDeleteLesson = async (lessonId: string) => {
     if (!selectedCourseForModules || !selectedModule) return;
     await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
     await fetchModules(selectedCourseForModules._id);
+  };
+
+  const handleEditLesson = (lesson: Lesson) => {
+    setEditingLessonId(lesson._id);
+    setEditLesson({ title: lesson.title, content: lesson.content || '' });
+  };
+
+  const handleSaveLesson = async (lesson: Lesson) => {
+    if (!selectedCourseForModules || !selectedModule) return;
+    setLessonLoading(true);
+    setLessonError('');
+    try {
+      await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, editLesson);
+      await fetchModules(selectedCourseForModules._id);
+      setEditingLessonId(null);
+    } catch (error) {
+      handleApiError(error, 'Error saving lesson');
+    } finally {
+      setLessonLoading(false);
+    }
+  };
+
+  const handleCloseModuleModal = () => {
+    setShowModuleModal(false);
+    setSelectedModule(null);
+    setEditingLessonId(null);
   };
 
   return (
@@ -613,13 +662,19 @@ const InstructorDashboard = () => {
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
-                  <input
-                    type="text"
+                  <select
                     value={newResource.category}
                     onChange={(e) => setNewResource({ ...newResource, category: e.target.value })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
-                  />
+                  >
+                    <option value="">Select category</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Business">Communication</option>
+                    <option value="Health">Personal Development</option>
+                    <option value="Education">Leadership</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">Course</label>
@@ -778,9 +833,11 @@ const InstructorDashboard = () => {
       {/* Module Modal */}
       {showModuleModal && selectedCourseForModules && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative">
-            <button className="absolute top-2 right-2 text-gray-500" onClick={() => setShowModuleModal(false)}>&times;</button>
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
+            <button className="absolute top-2 right-2 text-gray-500" onClick={handleCloseModuleModal}>&times;</button>
             <h2 className="text-xl font-bold mb-4">Manage Modules for {selectedCourseForModules.title}</h2>
+            {moduleLoading && <div className="mb-2 text-blue-600">Saving...</div>}
+            {moduleError && <div className="mb-2 text-red-600">{moduleError}</div>}
             {/* List Modules */}
             <ul className="mb-4">
               {modules.map((mod) => (
@@ -793,18 +850,42 @@ const InstructorDashboard = () => {
                   <div className="text-sm text-gray-600">{mod.description}</div>
                   {/* List Lessons if this module is selected */}
                   {selectedModule && selectedModule._id === mod._id && (
-                    <div className="mt-2 ml-4">
+                    <div className="mt-2 ml-4 max-h-60 overflow-y-auto pr-2">
                       <h4 className="font-semibold mb-2">Lessons</h4>
+                      {lessonLoading && <div className="mb-2 text-blue-600">Saving...</div>}
+                      {lessonError && <div className="mb-2 text-red-600">{lessonError}</div>}
                       <ul>
                         {mod.lessons.map((lesson) => (
                           <li key={lesson._id} className="flex items-center justify-between mb-1">
-                            <span>{lesson.title}</span>
-                            <button className="text-red-400 ml-2" onClick={() => handleDeleteLesson(lesson._id)}>Delete</button>
+                            {editingLessonId === lesson._id ? (
+                              <>
+                                <input
+                                  type="text"
+                                  value={editLesson.title}
+                                  onChange={e => setEditLesson({ ...editLesson, title: e.target.value })}
+                                  className="border rounded px-2 py-1 mr-2"
+                                />
+                                <input
+                                  type="text"
+                                  value={editLesson.content}
+                                  onChange={e => setEditLesson({ ...editLesson, content: e.target.value })}
+                                  className="border rounded px-2 py-1 mr-2"
+                                />
+                                <button className="text-green-600 mr-2" onClick={() => handleSaveLesson(lesson)}>Save</button>
+                                <button className="text-gray-500" onClick={() => setEditingLessonId(null)}>Cancel</button>
+                              </>
+                            ) : (
+                              <>
+                                <span>{lesson.title}</span>
+                                <button className="text-blue-500 ml-2" onClick={() => handleEditLesson(lesson)}>Edit</button>
+                                <button className="text-red-500 ml-2" onClick={() => handleDeleteLesson(lesson._id)}>Delete</button>
+                              </>
+                            )}
                           </li>
                         ))}
                       </ul>
-                      {/* Add Lesson Form */}
-                      <form onSubmit={handleAddLesson} className="mt-2 flex gap-2">
+                      {/* Add Lesson Form (with quiz and assignment options) */}
+                      <form onSubmit={handleAddLesson} className="flex flex-col gap-2 mt-2 max-h-80 overflow-y-auto pr-2">
                         <input
                           type="text"
                           placeholder="Lesson Title"
@@ -820,7 +901,45 @@ const InstructorDashboard = () => {
                           onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
                           className="border rounded px-2 py-1"
                         />
-                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Add Lesson</button>
+                        {/* Quiz Section */}
+                        <div className="bg-gray-50 p-2 rounded mb-2">
+                          <label className="block font-semibold mb-1">Quiz (optional)</label>
+                          {/* Render quiz options here, e.g. quizList.map(...) and add option to add more */}
+                          {/* ...existing quiz UI... */}
+                        </div>
+                        {/* Assignment Section */}
+                        <div className="bg-gray-50 p-2 rounded mb-2">
+                          <label className="block font-semibold mb-1">Assignment (optional)</label>
+                          <input
+                            type="text"
+                            placeholder="Assignment Instructions"
+                            value={newLesson.assignment?.instructions || ''}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, instructions: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="date"
+                            placeholder="Due Date"
+                            value={newLesson.assignment?.dueDate || ''}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, dueDate: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File Type (e.g. application/pdf)"
+                            value={newLesson.assignment?.fileType || ''}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileType: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="File URL (optional)"
+                            value={newLesson.assignment?.fileUrl || ''}
+                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileUrl: e.target.value } })}
+                            className="border rounded px-2 py-1 mb-1 w-full"
+                          />
+                        </div>
+                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded mt-2">Add Lesson</button>
                       </form>
                     </div>
                   )}
