@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { contactService } from '../api/contactService';
+import { toast } from 'react-toastify';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -28,12 +29,14 @@ const ContactForm = () => {
 
     try {
       const response = await contactService.submitContactForm(formData);
+      toast.success(response.message);
       setStatus({
         type: 'success',
         message: response.message
       });
       setFormData({ name: '', email: '', message: '' });
     } catch (error: any) {
+      toast.error(error.message);
       setStatus({
         type: 'error',
         message: error.message
@@ -47,14 +50,6 @@ const ContactForm = () => {
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Contact Us</h2>
       
-      {status.type && (
-        <div className={`p-4 mb-4 rounded ${
-          status.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-        }`}>
-          {status.message}
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
