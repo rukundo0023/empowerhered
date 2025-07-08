@@ -37,116 +37,120 @@ import MentorSchedule from './pages/MentorSchedule';
 import MentorMeetingDetails from './pages/MentorMeetingDetails';
 import InstructorRoute from "./components/InstructorRoute";
 import InstructorDashboard from './pages/InstructorDashboard';
+import OfflineIndicator from './components/OfflineIndicator';
 
 function App() {
   return (
-    <GoogleProvider>
-      <Router>
-        <AuthProvider>
-          <div className="flex min-h-screen flex-col overflow-x-hidden">
-            <Navbar />
-            <main className="flex-1 w-full">
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/ForgotPassword" element={<ForgotPassword />} />
-                <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-                <Route path="/programs" element={<ProtectedRoute><Programs /></ProtectedRoute>} />
-                <Route path="/programs/mentorship" element={<ProtectedRoute><Mentorship /></ProtectedRoute>} />
-                <Route path="/programs/communication" element={<ProtectedRoute><Communication /></ProtectedRoute>} />
-                <Route path="/programs/tech-skills" element={<ProtectedRoute><TechSkills /></ProtectedRoute>} />
-                <Route path="/programs/workshops" element={<ProtectedRoute><Workshops /></ProtectedRoute>} />
-                <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
-                <Route path="/blog" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
-                <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
-                <Route path="/resources/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
-                <Route path="/resources/learning" element={<ProtectedRoute><LearningResources /></ProtectedRoute>} />
-                <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
-                <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
-                <Route path="/TermsAndConditions" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/settings"
-                  element={
-                    <ProtectedRoute>
-                      <Settings />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                {/* Mentor Routes */}
-                <Route
-                  path="/mentorDashboard"
-                  element={
-                    <MentorRoute>
-                      <MentorDashboard />
-                    </MentorRoute>
-                  }
-                />
-                <Route
-                  path="/mentor/schedule/:menteeId?"
-                  element={
-                    <MentorRoute>
-                      <MentorSchedule />
-                    </MentorRoute>
-                  }
-                />
-                <Route
-                  path="/mentor/meeting/:id"
-                  element={
-                    <MentorRoute>
-                      <MentorMeetingDetails />
-                    </MentorRoute>
-                  }
-                />
-                <Route
-                  path="/mentor/mentee/:id"
-                  element={
-                    <MentorRoute>
-                      <MentorDashboard />
-                    </MentorRoute>
-                  }
-                />
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminRoute>
-                      <Adminpanel />
-                    </AdminRoute>
-                  }
-                />
-                <Route
-                  path="/instructor-dashboard"
-                  element={
-                    <InstructorRoute>
-                      <InstructorDashboard />
-                    </InstructorRoute>
-                  }
-                />
-                <Route path="/test-connection" element={<ProtectedRoute><TestConnection /></ProtectedRoute>} />
-              </Routes>
-            </main>
-            <Footer />
-            <ToastContainer />
-          </div>
-        </AuthProvider>
-      </Router>
-    </GoogleProvider>
+    <>
+      <OfflineIndicator />
+      <GoogleProvider>
+        <Router>
+          <AuthProvider>
+            <div className="flex min-h-screen flex-col overflow-x-hidden">
+              <Navbar />
+              <main className="flex-1 w-full">
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/ForgotPassword" element={<ForgotPassword />} />
+                  <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                  <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+                  <Route path="/programs" element={<ProtectedRoute><Programs /></ProtectedRoute>} />
+                  <Route path="/programs/mentorship" element={<ProtectedRoute><Mentorship /></ProtectedRoute>} />
+                  <Route path="/programs/communication" element={<ProtectedRoute><Communication /></ProtectedRoute>} />
+                  <Route path="/programs/tech-skills" element={<ProtectedRoute><TechSkills /></ProtectedRoute>} />
+                  <Route path="/programs/workshops" element={<ProtectedRoute><Workshops /></ProtectedRoute>} />
+                  <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+                  <Route path="/blog" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
+                  <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+                  <Route path="/resources/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                  <Route path="/resources/learning" element={<ProtectedRoute><LearningResources /></ProtectedRoute>} />
+                  <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                  <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
+                  <Route path="/TermsAndConditions" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <ProtectedRoute>
+                        <Settings />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* Mentor Routes */}
+                  <Route
+                    path="/mentorDashboard"
+                    element={
+                      <MentorRoute>
+                        <MentorDashboard />
+                      </MentorRoute>
+                    }
+                  />
+                  <Route
+                    path="/mentor/schedule/:menteeId?"
+                    element={
+                      <MentorRoute>
+                        <MentorSchedule />
+                      </MentorRoute>
+                    }
+                  />
+                  <Route
+                    path="/mentor/meeting/:id"
+                    element={
+                      <MentorRoute>
+                        <MentorMeetingDetails />
+                      </MentorRoute>
+                    }
+                  />
+                  <Route
+                    path="/mentor/mentee/:id"
+                    element={
+                      <MentorRoute>
+                        <MentorDashboard />
+                      </MentorRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin"
+                    element={
+                      <AdminRoute>
+                        <Adminpanel />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="/instructor-dashboard"
+                    element={
+                      <InstructorRoute>
+                        <InstructorDashboard />
+                      </InstructorRoute>
+                    }
+                  />
+                  <Route path="/test-connection" element={<ProtectedRoute><TestConnection /></ProtectedRoute>} />
+                </Routes>
+              </main>
+              <Footer />
+              <ToastContainer />
+            </div>
+          </AuthProvider>
+        </Router>
+      </GoogleProvider>
+    </>
   );
 }
 

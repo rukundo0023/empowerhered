@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import { setCache, getCache } from '../api/cacheUtil';
 
 interface Course {
   _id: string;
@@ -23,13 +24,25 @@ const Courses: React.FC = () => {
   }, []);
 
   const fetchCourses = async () => {
-    try {
-      const response = await api.get('/courses');
-      setCourses(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-      toast.error('Failed to load courses');
+    if (navigator.onLine) {
+      try {
+        const response = await api.get('/courses');
+        setCourses(response.data);
+        await setCache('courses', response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        toast.error('Failed to load courses');
+        setLoading(false);
+      }
+    } else {
+      // Offline: load from cache
+      const cached = await getCache<Course[]>('courses');
+      if (cached) {
+        setCourses(cached);
+      } else {
+        toast.error('No cached courses available');
+      }
       setLoading(false);
     }
   };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import { setCache, getCache } from '../api/cacheUtil';
 
 interface Question {
   _id: string;
@@ -22,12 +23,17 @@ const QuizComponent = ({ lessonId }: { lessonId: string }) => {
 
   useEffect(() => {
     const fetchQuiz = async () => {
-      try {
-        // Assume API: /api/quizzes?lesson=lessonId
-        const res = await api.get(`/quizzes?lesson=${lessonId}`);
-        setQuiz(res.data);
-      } catch (e) {
-        setQuiz(null);
+      if (navigator.onLine) {
+        try {
+          const res = await api.get(`/quizzes?lesson=${lessonId}`);
+          setQuiz(res.data);
+          await setCache(`quiz_${lessonId}`, res.data);
+        } catch (e) {
+          setQuiz(null);
+        }
+      } else {
+        const cached = await getCache<Quiz>(`quiz_${lessonId}`);
+        setQuiz(cached || null);
       }
     };
     fetchQuiz();
