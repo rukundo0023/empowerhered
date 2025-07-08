@@ -31,7 +31,7 @@ router.post('/:id/enroll', protect, enrollInCourse);
 router.get('/:id/progress', protect, getCourseProgress);
 
 // Admin routes
-router.post('/', protect, admin, createCourse);
+router.post('/', protect, adminOrInstructor, createCourse);
 router.put('/:id', protect, admin, updateCourse);
 router.delete('/:id', protect, adminOrInstructor, deleteCourse);
 

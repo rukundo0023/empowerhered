@@ -133,7 +133,10 @@ const deleteCourse = async (req, res) => {
       return res.status(404).json({ message: 'Course not found' });
     }
     // Only allow if admin or creator
-    if (req.user.role !== 'admin' && course.createdBy.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== 'admin' &&
+      (!course.createdBy || course.createdBy.toString() !== req.user._id.toString())
+    ) {
       return res.status(403).json({ message: 'Not authorized to delete this course' });
     }
     await course.deleteOne();
