@@ -288,11 +288,11 @@ const LearningResources = () => {
                   )}
                   {/* Quiz */}
                   <div className="mb-6">
-                    <QuizComponent lessonId={selectedLesson._id} />
+                    <QuizComponent lesson={selectedLesson} />
                   </div>
                   {/* Assignment */}
                   <div className="mb-6">
-                    <AssignmentComponent lessonId={selectedLesson._id} />
+                    <AssignmentComponent lesson={selectedLesson} />
                   </div>
                 </div>
               </div>

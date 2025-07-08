@@ -9,7 +9,14 @@ interface Assignment {
   feedback?: string;
 }
 
-const AssignmentComponent = ({ lessonId }: { lessonId: string }) => {
+interface Lesson {
+  _id: string;
+  title: string;
+  content?: string;
+  assignment?: Assignment;
+}
+
+const AssignmentComponent = ({ lesson }: { lesson: Lesson }) => {
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [text, setText] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -18,19 +25,15 @@ const AssignmentComponent = ({ lessonId }: { lessonId: string }) => {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchAssignment = async () => {
-      try {
-        // Assume API: /api/assignments?lesson=lessonId
-        const res = await api.get(`/assignments?lesson=${lessonId}`);
-        setAssignment(res.data);
-        if (res.data.grade) setGrade(res.data.grade);
-        if (res.data.feedback) setFeedback(res.data.feedback);
-      } catch (e) {
-        setAssignment(null);
-      }
-    };
-    fetchAssignment();
-  }, [lessonId]);
+    // Use assignment from lesson.assignment
+    if (lesson && lesson.assignment) {
+      setAssignment(lesson.assignment);
+      if (lesson.assignment.grade) setGrade(lesson.assignment.grade);
+      if (lesson.assignment.feedback) setFeedback(lesson.assignment.feedback);
+    } else {
+      setAssignment(null);
+    }
+  }, [lesson]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,12 +43,8 @@ const AssignmentComponent = ({ lessonId }: { lessonId: string }) => {
       // Implement file upload logic here if needed
       // For now, just skip
     }
-    try {
-      await api.post(`/assignments/${assignment._id}/submit`, { text, fileUrl });
-      setSubmitted(true);
-    } catch (e) {
-      setSubmitted(true);
-    }
+    // You can implement local submission logic here if needed
+    setSubmitted(true);
   };
 
   if (!assignment) return <div>No assignment for this lesson.</div>;
