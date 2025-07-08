@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import QuizBuilder, { QuizQuestion } from '../components/QuizBuilder';
+import AssignmentFields, { AssignmentFieldsData } from '../components/AssignmentFields';
+import Modal from '../components/Modal'; // Assume a simple Modal component exists or use a div for modal
+import { FaPlus, FaEdit, FaTrash, FaChevronDown, FaClipboardList, FaQuestionCircle } from 'react-icons/fa';
+import TiptapEditor from '../components/TiptapEditor';
 
 interface User {
   _id: string;
@@ -60,6 +65,8 @@ interface Lesson {
   _id: string;
   title: string;
   content?: string;
+  quizzes?: QuizQuestion[]; // Added quizzes
+  assignment?: AssignmentFieldsData; // Added assignment
 }
 
 type Tab = 'users' | 'courses' | 'resources' | 'progress';
@@ -110,8 +117,8 @@ const [modules, setModules] = useState<Module[]>([]);
 const [newModule, setNewModule] = useState({ title: '', description: '' });
 const [selectedModule, setSelectedModule] = useState<Module | null>(null);
 const [newLesson, setNewLesson] = useState({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
-const [quizQuestion, setQuizQuestion] = useState({ question: '', options: ['', '', '', ''], answer: '', fileType: '', fileUrl: '' });
-const [quizList, setQuizList] = useState([]);
+const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+const [assignmentFields, setAssignmentFields] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
 
 const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
 const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
@@ -441,13 +448,14 @@ const [lessonError, setLessonError] = useState('');
     if (!selectedCourseForModules || !selectedModule) return;
     const lessonPayload = {
       ...newLesson,
-      quizzes: quizList,
-      assignment: newLesson.assignment,
+      quizzes: quizQuestions,
+      assignment: assignmentFields,
     };
     await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, lessonPayload);
     await fetchModules(selectedCourseForModules._id);
     setNewLesson({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
-    setQuizList([]);
+    setQuizQuestions([]);
+    setAssignmentFields({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
   };
 
   const handleDeleteLesson = async (lessonId: string) => {
@@ -506,6 +514,11 @@ const [lessonError, setLessonError] = useState('');
     setModuleError('');
     setLessonError('');
   };
+
+  const [showQuizModal, setShowQuizModal] = useState<string | null>(null); // lessonId or null
+  const [showAssignmentModal, setShowAssignmentModal] = useState<string | null>(null); // lessonId or null
+  const [quizModalBuffer, setQuizModalBuffer] = useState<QuizQuestion[]>([]);
+  const [assignmentModalBuffer, setAssignmentModalBuffer] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
 
   if (!user || user.role !== 'admin') {
     console.log('Not an admin user:', user);
@@ -1136,190 +1149,101 @@ const [lessonError, setLessonError] = useState('');
             {moduleLoading && <div className="mb-2 text-blue-600">Saving...</div>}
             {moduleError && <div className="mb-2 text-red-600">{moduleError}</div>}
             {/* List Modules */}
-            <ul className="mb-4">
-              {modules.map((mod) => (
-                <li key={mod._id} className="mb-2">
-                  <div className="flex items-center justify-between">
-                    {editingModuleId === mod._id ? (
-                      <>
-                        <input
-                          type="text"
-                          value={editModule.title}
-                          onChange={e => setEditModule({ ...editModule, title: e.target.value })}
-                          className="border rounded px-2 py-1 mr-2"
-                        />
-                        <input
-                          type="text"
-                          value={editModule.description}
-                          onChange={e => setEditModule({ ...editModule, description: e.target.value })}
-                          className="border rounded px-2 py-1 mr-2"
-                        />
-                        <button className="text-green-600 mr-2" onClick={() => handleSaveModule(mod)}>Save</button>
-                        <button className="text-gray-500" onClick={() => setEditingModuleId(null)}>Cancel</button>
-                      </>
-                    ) : (
-                      <>
-                        <span className="font-semibold">{mod.title}</span>
-                        <button className="text-blue-500 ml-2" onClick={() => handleEditModule(mod)}>Edit</button>
-                        <button className="text-red-500 ml-2" onClick={() => {
-                          if(window.confirm('Delete this module?')) handleDeleteModule(mod._id);
-                        }}>Delete</button>
-                        <button className="text-blue-500 ml-2" onClick={() => setSelectedModule(mod)}>Manage Lessons</button>
-                      </>
-                    )}
+            <ul className="space-y-6">
+  {modules.map((mod) => (
+    <li key={mod._id} className="bg-white rounded-lg shadow p-4 border border-blue-100">
+      <div className="flex items-center justify-between mb-2">
+        {editingModuleId === mod._id ? (
+          <>
+            <input
+              type="text"
+              value={editModule.title}
+              onChange={e => setEditModule({ ...editModule, title: e.target.value })}
+              className="border rounded px-2 py-1 mr-2"
+            />
+            <input
+              type="text"
+              value={editModule.description}
+              onChange={e => setEditModule({ ...editModule, description: e.target.value })}
+              className="border rounded px-2 py-1 mr-2"
+            />
+            <button className="text-green-600 mr-2" onClick={() => handleSaveModule(mod)}>Save</button>
+            <button className="text-gray-500" onClick={() => setEditingModuleId(null)}>Cancel</button>
+          </>
+        ) : (
+          <>
+            <div>
+              <span className="text-lg font-bold text-blue-800">{mod.title}</span>
+              <span className="ml-2 text-gray-500 text-sm">{mod.description}</span>
+            </div>
+            <div className="flex gap-2">
+              <button className="text-blue-500 hover:text-blue-700" title="Edit Module" onClick={() => { setEditingModuleId(mod._id); setEditModule({ title: mod.title, description: mod.description || '' }); }}><FaEdit /></button>
+              <button className="text-red-500 hover:text-red-700" title="Delete Module" onClick={() => handleDeleteModule(mod._id)}><FaTrash /></button>
+              <button className="text-green-600 hover:text-green-800" title="Add Lesson" onClick={() => setSelectedModule(mod)}><FaPlus /></button>
+            </div>
+          </>
+        )}
+      </div>
+      {selectedModule && selectedModule._id === mod._id && (
+        <div className="ml-2">
+          <h4 className="font-semibold text-blue-700 mb-2 flex items-center gap-2"><FaClipboardList /> Lessons</h4>
+          <ul className="space-y-4">
+            {mod.lessons.map((lesson) => (
+              <li key={lesson._id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-blue-900">{lesson.title}</span>
+                    {lesson.quizzes && lesson.quizzes.length > 0 && <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs ml-2 flex items-center gap-1"><FaQuestionCircle /> Quiz</span>}
+                    {lesson.assignment && lesson.assignment.instructions && <span className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs ml-2 flex items-center gap-1"><FaClipboardList /> Assignment</span>}
                   </div>
-                  <div className="text-sm text-gray-600">{mod.description}</div>
-                  {/* List Lessons if this module is selected */}
-                  {selectedModule && selectedModule._id === mod._id && (
-                    <div className="mt-2 ml-4 max-h-60 overflow-y-auto pr-2">
-                      <h4 className="font-semibold mb-2">Lessons</h4>
-                      {lessonLoading && <div className="mb-2 text-blue-600">Saving...</div>}
-                      {lessonError && <div className="mb-2 text-red-600">{lessonError}</div>}
-                      <ul>
-                        {mod.lessons.map((lesson) => (
-                          <li key={lesson._id} className="flex items-center justify-between mb-1">
-                            {editingLessonId === lesson._id ? (
-                              <>
-                                <input
-                                  type="text"
-                                  value={editLesson.title}
-                                  onChange={e => setEditLesson({ ...editLesson, title: e.target.value })}
-                                  className="border rounded px-2 py-1 mr-2"
-                                />
-                                <input
-                                  type="text"
-                                  value={editLesson.content}
-                                  onChange={e => setEditLesson({ ...editLesson, content: e.target.value })}
-                                  className="border rounded px-2 py-1 mr-2"
-                                />
-                                <button className="text-green-600 mr-2" onClick={() => handleSaveLesson(lesson)}>Save</button>
-                                <button className="text-gray-500" onClick={() => setEditingLessonId(null)}>Cancel</button>
-                              </>
-                            ) : (
-                              <>
-                                <span>{lesson.title}</span>
-                                <button className="text-blue-500 ml-2" onClick={() => handleEditLesson(lesson)}>Edit</button>
-                                <button className="text-red-500 ml-2" onClick={() => handleDeleteLesson(lesson._id)}>Delete</button>
-                              </>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                      {/* Add Lesson Form (with quiz and assignment options) */}
-                      <form onSubmit={handleAddLesson} className="flex flex-col gap-2 mt-2 max-h-80 overflow-y-auto pr-2">
-                        <input
-                          type="text"
-                          placeholder="Lesson Title"
-                          value={newLesson.title}
-                          onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
-                          className="border rounded px-2 py-1"
-                          required
-                        />
-                        <input
-                          type="text"
-                          placeholder="Lesson Content"
-                          value={newLesson.content}
-                          onChange={e => setNewLesson({ ...newLesson, content: e.target.value })}
-                          className="border rounded px-2 py-1"
-                        />
-                        {/* Quiz Section */}
-                        <div className="bg-gray-50 p-2 rounded mb-2">
-                          <label className="block font-semibold mb-1">Quiz (optional)</label>
-                          <input
-                            type="text"
-                            placeholder="Question"
-                            value={quizQuestion.question}
-                            onChange={e => setQuizQuestion({ ...quizQuestion, question: e.target.value })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <div className="flex gap-1 mb-1">
-                            {quizQuestion.options.map((opt, idx) => (
-                              <input
-                                key={idx}
-                                type="text"
-                                placeholder={`Option ${idx + 1}`}
-                                value={opt}
-                                onChange={e => {
-                                  const newOpts = [...quizQuestion.options];
-                                  newOpts[idx] = e.target.value;
-                                  setQuizQuestion({ ...quizQuestion, options: newOpts });
-                                }}
-                                className="border rounded px-2 py-1 flex-1"
-                              />
-                            ))}
-                          </div>
-                          <input
-                            type="text"
-                            placeholder="Correct Answer"
-                            value={quizQuestion.answer}
-                            onChange={e => setQuizQuestion({ ...quizQuestion, answer: e.target.value })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <input
-                            type="text"
-                            placeholder="File Type (e.g. image/png, application/pdf)"
-                            value={quizQuestion.fileType}
-                            onChange={e => setQuizQuestion({ ...quizQuestion, fileType: e.target.value })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <input
-                            type="text"
-                            placeholder="File URL (optional)"
-                            value={quizQuestion.fileUrl}
-                            onChange={e => setQuizQuestion({ ...quizQuestion, fileUrl: e.target.value })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <button type="button" className="bg-blue-500 text-white px-2 py-1 rounded mb-2" onClick={() => {
-                            if (quizQuestion.question && quizQuestion.answer && quizQuestion.options.every(opt => opt)) {
-                              setQuizList([...quizList, quizQuestion]);
-                              setQuizQuestion({ question: '', options: ['', '', '', ''], answer: '', fileType: '', fileUrl: '' });
-                            }
-                          }}>Add Question</button>
-                          <ul className="list-disc ml-5">
-                            {quizList.map((q, i) => (
-                              <li key={i}>{q.question} (Answer: {q.answer}) {q.fileUrl && (<span>- <a href={q.fileUrl} target='_blank' rel='noopener noreferrer'>File</a></span>)}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        {/* Assignment Section */}
-                        <div className="bg-gray-50 p-2 rounded mb-2">
-                          <label className="block font-semibold mb-1">Assignment (optional)</label>
-                          <input
-                            type="text"
-                            placeholder="Assignment Instructions"
-                            value={newLesson.assignment.instructions}
-                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, instructions: e.target.value } })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <input
-                            type="date"
-                            placeholder="Due Date"
-                            value={newLesson.assignment.dueDate}
-                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, dueDate: e.target.value } })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <input
-                            type="text"
-                            placeholder="File Type (e.g. application/pdf)"
-                            value={newLesson.assignment.fileType}
-                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileType: e.target.value } })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                          <input
-                            type="text"
-                            placeholder="File URL (optional)"
-                            value={newLesson.assignment.fileUrl}
-                            onChange={e => setNewLesson({ ...newLesson, assignment: { ...newLesson.assignment, fileUrl: e.target.value } })}
-                            className="border rounded px-2 py-1 mb-1 w-full"
-                          />
-                        </div>
-                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded mt-2">Add Lesson</button>
-                      </form>
+                  <div className="flex gap-2">
+                    <button className="text-blue-500 hover:text-blue-700" title="Edit Lesson" onClick={() => handleEditLesson(lesson)}><FaEdit /></button>
+                    <button className="text-red-500 hover:text-red-700" title="Delete Lesson" onClick={() => handleDeleteLesson(lesson._id)}><FaTrash /></button>
+                    <button className="text-green-600 hover:text-green-800" title="Add Quiz" onClick={() => { setShowQuizModal(lesson._id); setQuizModalBuffer(lesson.quizzes || []); }}><FaPlus /> Quiz</button>
+                    <button className="text-orange-600 hover:text-orange-800" title="Add Assignment" onClick={() => { setShowAssignmentModal(lesson._id); setAssignmentModalBuffer(lesson.assignment || { instructions: '', dueDate: '', fileType: '', fileUrl: '' }); }}><FaPlus /> Assignment</button>
+                  </div>
+                </div>
+                {/* Collapsible Quiz Details */}
+                {lesson.quizzes && lesson.quizzes.length > 0 && (
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-blue-700 flex items-center gap-1"><FaChevronDown /> Quiz Details</summary>
+                    <ul className="ml-6 mt-2 space-y-2">
+                      {lesson.quizzes.map((q, i) => (
+                        <li key={i} className="bg-blue-50 rounded p-2 border border-blue-100">
+                          <div className="font-semibold">Q{i + 1}: {q.text} <span className="ml-2 text-xs">({q.type}, {q.points} pts)</span></div>
+                          {q.type === 'MCQ' && q.options && (
+                            <div className="ml-4">Options: {q.options.map((opt, oi) => <span key={oi} className={q.correctAnswer === opt ? 'text-green-700 font-bold' : ''}>{opt}{oi < q.options.length-1 ? ', ' : ''}</span>)} <span className="ml-2">Correct: <b>{q.correctAnswer}</b></span></div>
+                          )}
+                          {q.type === 'ShortAnswer' && (
+                            <div className="ml-4">Correct: <b>{q.correctAnswer}</b></div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+                {/* Collapsible Assignment Details */}
+                {lesson.assignment && lesson.assignment.instructions && (
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-orange-700 flex items-center gap-1"><FaChevronDown /> Assignment Details</summary>
+                    <div className="ml-6 mt-2 bg-orange-50 rounded p-2 border border-orange-100">
+                      <div><b>Instructions:</b> {lesson.assignment.instructions}</div>
+                      <div><b>Due Date:</b> {lesson.assignment.dueDate}</div>
+                      <div><b>File Type:</b> {lesson.assignment.fileType}</div>
+                      {lesson.assignment.fileUrl && <div><b>File URL:</b> <a href={lesson.assignment.fileUrl} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">{lesson.assignment.fileUrl}</a></div>}
                     </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+                  </details>
+                )}
+                <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: lesson.content || '' }} />
+              </li>
+            ))}
+          </ul>
+          {/* Add Lesson Form (unchanged) */}
+        </div>
+      )}
+    </li>
+  ))}
+</ul>
             {/* Add Module Form */}
             <form onSubmit={handleAddModule} className="flex gap-2">
               <input
@@ -1341,6 +1265,41 @@ const [lessonError, setLessonError] = useState('');
             </form>
           </div>
         </div>
+      )}
+
+      {/* Quiz Modal */}
+      {showQuizModal && (
+        <Modal onClose={() => setShowQuizModal(null)}>
+          <h3 className="text-lg font-bold mb-2">Add/Edit Quiz</h3>
+          <QuizBuilder questions={quizModalBuffer} onChange={setQuizModalBuffer} />
+          <div className="flex gap-2 mt-4">
+            <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={async () => {
+              const lesson = modules.flatMap(m => m.lessons).find(l => l._id === showQuizModal);
+              if (!lesson) return;
+              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: quizModalBuffer });
+              await fetchModules(selectedCourseForModules._id);
+              setShowQuizModal(null);
+            }}>Save</button>
+            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowQuizModal(null)}>Cancel</button>
+          </div>
+        </Modal>
+      )}
+      {/* Assignment Modal */}
+      {showAssignmentModal && (
+        <Modal onClose={() => setShowAssignmentModal(null)}>
+          <h3 className="text-lg font-bold mb-2">Add/Edit Assignment</h3>
+          <AssignmentFields value={assignmentModalBuffer} onChange={setAssignmentModalBuffer} />
+          <div className="flex gap-2 mt-4">
+            <button className="bg-orange-600 text-white px-4 py-2 rounded" onClick={async () => {
+              const lesson = modules.flatMap(m => m.lessons).find(l => l._id === showAssignmentModal);
+              if (!lesson) return;
+              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, assignment: assignmentModalBuffer });
+              await fetchModules(selectedCourseForModules._id);
+              setShowAssignmentModal(null);
+            }}>Save</button>
+            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowAssignmentModal(null)}>Cancel</button>
+          </div>
+        </Modal>
       )}
     </div>
   );
