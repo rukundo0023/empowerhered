@@ -395,6 +395,21 @@ const getModules = async (req, res) => {
   }
 };
 
+// @desc    Get a single module by ID
+// @route   GET /api/courses/:courseId/modules/:moduleId
+// @access  Public or protected as needed
+const getModuleById = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    res.json(module);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   getCourses,
   getCourseById,
@@ -411,5 +426,6 @@ export {
   addLesson,
   updateLesson,
   deleteLesson,
-  getModules
+  getModules,
+  getModuleById
 }; 

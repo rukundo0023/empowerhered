@@ -15,7 +15,8 @@ import {
   updateLesson,
   deleteLesson,
   getModules,
-  getProgressByInstructor
+  getProgressByInstructor,
+  getModuleById
 } from '../controllers/courseController.js';
 
 const router = express.Router();
@@ -42,5 +43,6 @@ router.delete('/:courseId/modules/:moduleId', protect, adminOrInstructor, delete
 router.post('/:courseId/modules/:moduleId/lessons', protect, adminOrInstructor, addLesson);
 router.put('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, updateLesson);
 router.delete('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, deleteLesson);
+router.get('/:courseId/modules/:moduleId', getModuleById);
 
 export default router; 

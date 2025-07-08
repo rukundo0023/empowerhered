@@ -676,13 +676,18 @@ const InstructorDashboard = () => {
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">Category</label>
-                  <input
-                    type="text"
+                  <select
                     value={newCourse.category}
                     onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
-                  />
+                  >
+                    <option value="">Select category</option>
+                    <option value="tech">Technology</option>
+                    <option value="business">Communication</option>
+                    <option value="personal-development">Personal Development</option>
+                    <option value="leadership">Leadership</option>
+                  </select>
                 </div>
                 <div className="flex justify-end space-x-3">
                   <button
@@ -755,9 +760,9 @@ const InstructorDashboard = () => {
                   >
                     <option value="">Select category</option>
                     <option value="Technology">Technology</option>
-                    <option value="Business">Communication</option>
-                    <option value="Health">Personal Development</option>
-                    <option value="Education">Leadership</option>
+                    <option value="Communication">Communication</option>
+                    <option value="Business">Business</option>
+                    <option value="Education">Education</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
