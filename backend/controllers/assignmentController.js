@@ -74,4 +74,33 @@ const getAssignmentSubmissions = async (req, res) => {
   }
 };
 
-export { createAssignment, getAssignment, submitAssignment, gradeAssignment, getAssignmentSubmissions }; 
+// @desc    Update an assignment
+// @route   PUT /api/assignments/:id
+// @access  Private/Admin
+const updateAssignment = async (req, res) => {
+  try {
+    const assignment = await Assignment.findById(req.params.id);
+    if (!assignment) return res.status(404).json({ message: 'Assignment not found' });
+    Object.assign(assignment, req.body);
+    const updatedAssignment = await assignment.save();
+    res.json(updatedAssignment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Delete an assignment
+// @route   DELETE /api/assignments/:id
+// @access  Private/Admin
+const deleteAssignment = async (req, res) => {
+  try {
+    const assignment = await Assignment.findById(req.params.id);
+    if (!assignment) return res.status(404).json({ message: 'Assignment not found' });
+    await assignment.deleteOne();
+    res.json({ message: 'Assignment deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { createAssignment, getAssignment, submitAssignment, gradeAssignment, getAssignmentSubmissions, updateAssignment, deleteAssignment }; 

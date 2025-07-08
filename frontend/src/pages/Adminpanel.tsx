@@ -249,7 +249,12 @@ const [lessonError, setLessonError] = useState('');
           break;
         }
         case 'progress': {
-          const res = await api.get('/courses/progress');
+          let res;
+          if (user.role === 'instructor') {
+            res = await api.get(`/progress?instructorId=${user._id}`);
+          } else {
+            res = await api.get('/progress');
+          }
           setStudentProgress(Array.isArray(res.data) ? res.data : []);
           break;
         }
@@ -439,8 +444,17 @@ const [lessonError, setLessonError] = useState('');
 
   const handleDeleteModule = async (moduleId: string) => {
     if (!selectedCourseForModules) return;
-    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
-    await fetchModules(selectedCourseForModules._id);
+    try {
+      await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
+      toast.success('Module deleted');
+      // If the deleted module was selected, reset selection
+      if (selectedModule && selectedModule._id === moduleId) {
+        setSelectedModule(null);
+      }
+      await fetchModules(selectedCourseForModules._id);
+    } catch (error) {
+      handleApiError(error, 'Error deleting module');
+    }
   };
 
   const handleAddLesson = async (e: React.FormEvent) => {
@@ -460,8 +474,13 @@ const [lessonError, setLessonError] = useState('');
 
   const handleDeleteLesson = async (lessonId: string) => {
     if (!selectedCourseForModules || !selectedModule) return;
-    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
-    await fetchModules(selectedCourseForModules._id);
+    try {
+      await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
+      toast.success('Lesson deleted');
+      await fetchModules(selectedCourseForModules._id);
+    } catch (error) {
+      handleApiError(error, 'Error deleting lesson');
+    }
   };
 
   const handleEditModule = (mod: Module) => {

@@ -54,4 +54,33 @@ const getQuizResults = async (req, res) => {
   res.json({ message: 'Not implemented' });
 };
 
-export { createQuiz, getQuiz, submitQuiz, getQuizResults }; 
+// @desc    Update a quiz
+// @route   PUT /api/quizzes/:id
+// @access  Private/Admin
+const updateQuiz = async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+    if (!quiz) return res.status(404).json({ message: 'Quiz not found' });
+    Object.assign(quiz, req.body);
+    const updatedQuiz = await quiz.save();
+    res.json(updatedQuiz);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Delete a quiz
+// @route   DELETE /api/quizzes/:id
+// @access  Private/Admin
+const deleteQuiz = async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+    if (!quiz) return res.status(404).json({ message: 'Quiz not found' });
+    await quiz.deleteOne();
+    res.json({ message: 'Quiz deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { createQuiz, getQuiz, submitQuiz, getQuizResults, updateQuiz, deleteQuiz }; 

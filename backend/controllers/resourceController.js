@@ -6,8 +6,13 @@ import Course from '../models/courseModel.js';
 // @route   GET /api/resources
 // @access  Public
 const getResources = asyncHandler(async (req, res) => {
-  const resources = await Resource.find({})
-    .populate('courseId', 'title')
+  const filter = {};
+  if (req.query.createdBy) {
+    filter.createdBy = req.query.createdBy;
+  } else if (req.query.instructor) {
+    filter.createdBy = req.query.instructor;
+  }
+  const resources = await Resource.find(filter)
     .populate('createdBy', 'name');
   res.json(resources);
 });

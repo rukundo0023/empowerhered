@@ -239,6 +239,43 @@ const getAllStudentProgress = asyncHandler(async (req, res) => {
   res.json(progress);
 });
 
+// @desc    Get all student progress, optionally filtered by instructorId
+// @route   GET /api/progress?instructorId=...
+// @access  Private/Admin or Instructor
+const getProgressByInstructor = asyncHandler(async (req, res) => {
+  const { instructorId } = req.query;
+  let users = await User.find({})
+    .select('name courseProgress')
+    .populate({
+      path: 'courseProgress.courseId',
+      select: 'title createdBy',
+    });
+
+  let progress = users.flatMap(user =>
+    user.courseProgress.map(progress => {
+      // Defensive: Only include if courseId exists and is an object
+      if (!progress.courseId || typeof progress.courseId !== 'object') {
+        return null;
+      }
+      return {
+        userId: user._id,
+        userName: user.name,
+        courseId: progress.courseId?._id,
+        courseName: progress.courseId?.title,
+        courseCreatedBy: progress.courseId?.createdBy,
+        progress: progress.progress,
+        lastAccessed: progress.lastAccessed
+      };
+    })
+  ).filter(Boolean);
+
+  if (instructorId) {
+    progress = progress.filter(p => p.courseCreatedBy && p.courseCreatedBy.toString() === instructorId);
+  }
+
+  res.json(progress);
+});
+
 // @desc    Add a module to a course
 // @route   POST /api/courses/:courseId/modules
 // @access  Private/Admin
@@ -367,6 +404,7 @@ export {
   enrollInCourse,
   getCourseProgress,
   getAllStudentProgress,
+  getProgressByInstructor,
   addModule,
   updateModule,
   deleteModule,

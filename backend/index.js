@@ -13,7 +13,11 @@ import storyRoutes from "./routes/storyRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import mentorRoutes from "./routes/mentorRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
+import { getProgressByInstructor } from './controllers/courseController.js';
+import { protect } from './middlewares/authMiddlewares.js';
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -62,6 +66,9 @@ app.use("/api/stories", storyRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/mentors", mentorRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/assignments", assignmentRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.get('/api/progress', protect, getProgressByInstructor);
 
 // Test route
 app.get('/', (req, res) => {

@@ -181,7 +181,7 @@ const InstructorDashboard = () => {
   // Fetch progress for instructor's courses
   const fetchProgress = async () => {
     try {
-      const res = await api.get('/progress?instructorId=' + user?._id);
+      const res = await api.get('/courses/progress?instructorId=' + user?._id);
       setStudentProgress(res.data);
     } catch (error) {
       handleApiError(error, 'Failed to fetch progress');
@@ -319,8 +319,17 @@ const InstructorDashboard = () => {
 
   const handleDeleteModule = async (moduleId: string) => {
     if (!selectedCourseForModules) return;
-    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
-    await fetchModules(selectedCourseForModules._id);
+    try {
+      await api.delete(`/courses/${selectedCourseForModules._id}/modules/${moduleId}`);
+      toast.success('Module deleted');
+      // If the deleted module was selected, reset selection
+      if (selectedModule && selectedModule._id === moduleId) {
+        setSelectedModule(null);
+      }
+      await fetchModules(selectedCourseForModules._id);
+    } catch (error) {
+      handleApiError(error, 'Error deleting module');
+    }
   };
 
   const handleAddLesson = async (e: React.FormEvent) => {
@@ -346,8 +355,13 @@ const InstructorDashboard = () => {
 
   const handleDeleteLesson = async (lessonId: string) => {
     if (!selectedCourseForModules || !selectedModule) return;
-    await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
-    await fetchModules(selectedCourseForModules._id);
+    try {
+      await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
+      toast.success('Lesson deleted');
+      await fetchModules(selectedCourseForModules._id);
+    } catch (error) {
+      handleApiError(error, 'Error deleting lesson');
+    }
   };
 
   const handleEditLesson = (lesson: Lesson) => {
@@ -380,6 +394,46 @@ const InstructorDashboard = () => {
     setSelectedModule(module);
     setNewModule({ title: module.title, description: module.description || '' });
     setShowModuleModal(true);
+  };
+
+  // Add handler to delete a quiz from a lesson
+  const handleDeleteQuiz = async (lessonId: string, quizIdx: number) => {
+    if (!selectedCourseForModules || !selectedModule) return;
+    if (!window.confirm('Delete this quiz?')) return;
+    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
+    if (!lesson) return;
+    const updatedQuizzes = (lesson.quizzes || []).filter((_, idx) => idx !== quizIdx);
+    await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: updatedQuizzes });
+    await fetchModules(selectedCourseForModules._id);
+    toast.success('Quiz deleted');
+  };
+
+  // Add handler to edit a quiz from a lesson
+  const handleEditQuiz = (lessonId: string, quizIdx: number) => {
+    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
+    if (!lesson) return;
+    setShowQuizModal(lessonId);
+    setQuizModalBuffer(lesson.quizzes ? [ ...(lesson.quizzes[quizIdx] ? [lesson.quizzes[quizIdx]] : []) ] : []);
+    setEditingQuizIdx({ lessonId, idx: quizIdx });
+  };
+
+  // Add handler to delete an assignment from a lesson
+  const handleDeleteAssignment = async (lessonId: string) => {
+    if (!selectedCourseForModules || !selectedModule) return;
+    if (!window.confirm('Delete this assignment?')) return;
+    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
+    if (!lesson) return;
+    await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, assignment: null });
+    await fetchModules(selectedCourseForModules._id);
+    toast.success('Assignment deleted');
+  };
+
+  // Add handler to edit an assignment from a lesson
+  const handleEditAssignment = (lessonId: string) => {
+    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
+    if (!lesson) return;
+    setShowAssignmentModal(lessonId);
+    setAssignmentModalBuffer(lesson.assignment || { instructions: '', dueDate: '', fileType: '', fileUrl: '' });
   };
 
   return (
@@ -917,6 +971,10 @@ const InstructorDashboard = () => {
                                       {q.type === 'ShortAnswer' && (
                                         <div className="ml-4">Correct: <b>{q.correctAnswer}</b></div>
                                       )}
+                                      <div className="flex gap-2 mt-2">
+                                        <button className="text-blue-500 hover:text-blue-700" title="Edit Quiz" onClick={() => handleEditQuiz(lesson._id, i)}><FaEdit /></button>
+                                        <button className="text-red-500 hover:text-red-700" title="Delete Quiz" onClick={() => handleDeleteQuiz(lesson._id, i)}><FaTrash /></button>
+                                      </div>
                                     </li>
                                   ))}
                                 </ul>
@@ -931,6 +989,10 @@ const InstructorDashboard = () => {
                                   <div><b>Due Date:</b> {lesson.assignment.dueDate}</div>
                                   <div><b>File Type:</b> {lesson.assignment.fileType}</div>
                                   {lesson.assignment.fileUrl && <div><b>File URL:</b> <a href={lesson.assignment.fileUrl} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">{lesson.assignment.fileUrl}</a></div>}
+                                  <div className="flex gap-2 mt-2">
+                                    <button className="text-blue-500 hover:text-blue-700" title="Edit Assignment" onClick={() => handleEditAssignment(lesson._id)}><FaEdit /></button>
+                                    <button className="text-red-500 hover:text-red-700" title="Delete Assignment" onClick={() => handleDeleteAssignment(lesson._id)}><FaTrash /></button>
+                                  </div>
                                 </div>
                               </details>
                             )}
@@ -995,10 +1057,22 @@ const InstructorDashboard = () => {
             <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={async () => {
               const lesson = modules.flatMap(m => m.lessons).find(l => l._id === showQuizModal);
               if (!lesson) return;
-              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: quizModalBuffer });
+              let updatedQuizzes = lesson.quizzes || [];
+              if (editingQuizIdx && editingQuizIdx.lessonId === showQuizModal && quizModalBuffer.length === 1) {
+                // Edit existing quiz
+                updatedQuizzes = updatedQuizzes.map((q, idx) => idx === editingQuizIdx.idx ? quizModalBuffer[0] : q);
+              } else if (quizModalBuffer.length > 0) {
+                // Add new quiz
+                updatedQuizzes = [...updatedQuizzes, ...quizModalBuffer];
+              }
+              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: updatedQuizzes });
               await fetchModules(selectedCourseForModules._id);
               setShowQuizModal(null);
-            }}>Save</button>
+              setEditingQuizIdx(null);
+              toast.success('Quiz saved');
+            }}>
+              Save
+            </button>
             <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowQuizModal(null)}>Cancel</button>
           </div>
         </Modal>

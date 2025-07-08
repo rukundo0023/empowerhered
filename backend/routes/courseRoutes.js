@@ -14,12 +14,14 @@ import {
   addLesson,
   updateLesson,
   deleteLesson,
-  getModules
+  getModules,
+  getProgressByInstructor
 } from '../controllers/courseController.js';
 
 const router = express.Router();
 
 // Public routes
+router.get('/progress', protect, getProgressByInstructor);
 router.get('/', getCourses);
 router.get('/:id', getCourseById);
 
