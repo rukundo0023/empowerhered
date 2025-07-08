@@ -271,7 +271,7 @@ const LearningResources = () => {
                     {completedLessons.includes(selectedLesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
                     {selectedLesson.title}
                   </h2>
-                  <div className="mb-4 text-gray-800 whitespace-pre-line text-lg">{selectedLesson.content || <span className="italic text-gray-400">No content for this lesson.</span>}</div>
+                  <div className="tiptap mb-4 text-gray-800 text-lg" dangerouslySetInnerHTML={{ __html: selectedLesson.content || '<span class="italic text-gray-400">No content for this lesson.</span>' }} />
                   {/* Resources */}
                   {selectedLesson.resources && selectedLesson.resources.length > 0 && (
                     <div className="mb-4">

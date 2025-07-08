@@ -3,6 +3,7 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Youtube from '@tiptap/extension-youtube';
+import Image from '@tiptap/extension-image';
 
 interface TiptapEditorProps {
   value: string;
@@ -15,6 +16,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ value, onChange }) => {
       StarterKit,
       Link.configure({ openOnClick: true }),
       Youtube.configure({ controls: true, width: 480, height: 280 }),
+      Image.configure({ inline: false, allowBase64: true }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -40,6 +42,10 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ value, onChange }) => {
           const url = prompt('Enter URL');
           if (url) editor?.chain().focus().setLink({ href: url }).run();
         }}>Link</button>
+        <button type="button" onClick={() => {
+          const url = prompt('Image URL');
+          if (url) editor?.chain().focus().setImage({ src: url }).run();
+        }}>Image</button>
         <button type="button" onClick={() => {
           const url = prompt('YouTube URL');
           if (url) editor?.chain().focus().setYoutubeVideo({ src: url }).run();

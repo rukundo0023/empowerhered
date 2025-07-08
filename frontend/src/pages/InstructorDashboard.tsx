@@ -1014,7 +1014,6 @@ const InstructorDashboard = () => {
                           className="border rounded px-2 py-1"
                           required
                         />
-                        {/* TODO: Replace with TiptapEditor */}
                         <TiptapEditor
                           content={newLesson.content}
                           onChange={(content) => setNewLesson({ ...newLesson, content: content })}

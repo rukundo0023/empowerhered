@@ -51,6 +51,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return
       }
 
+      // If offline, skip verification and keep user from localStorage
+      if (!navigator.onLine) {
+        console.log("AuthContext - Offline, skipping token verification and keeping user from localStorage")
+        setLoading(false)
+        return
+      }
+
       console.log("AuthContext - Verifying token for user:", { 
         email: user.email, 
         role: user.role 
@@ -72,7 +79,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
         setLoading(false)
-      } catch (error) {
+      } catch (error: any) {
+        // If offline, do NOT remove user on 401; only remove if online
+        if (error?.response?.status === 401 && !navigator.onLine) {
+          console.warn("AuthContext - 401 received while offline, keeping user in localStorage for offline access")
+          setLoading(false)
+          return
+        }
         console.error("AuthContext - Token verification failed:", error)
         localStorage.removeItem("user")
         setUser(null)

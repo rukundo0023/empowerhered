@@ -33,7 +33,7 @@ router.get('/:id/progress', protect, getCourseProgress);
 // Admin routes
 router.post('/', protect, admin, createCourse);
 router.put('/:id', protect, admin, updateCourse);
-router.delete('/:id', protect, admin, deleteCourse);
+router.delete('/:id', protect, adminOrInstructor, deleteCourse);
 
 // Module and Lesson management
 router.get('/:courseId/modules', getModules);

@@ -1257,7 +1257,32 @@ const [lessonError, setLessonError] = useState('');
               </li>
             ))}
           </ul>
-          {/* Add Lesson Form (unchanged) */}
+          {/* Add Lesson Form */}
+          <div className="mt-4 bg-white p-6 rounded-lg shadow border border-gray-200 max-w-xl">
+            <h5 className="font-bold text-lg mb-2 text-blue-700">Add Lesson</h5>
+            <form onSubmit={handleAddLesson} className="flex flex-col gap-4">
+              <input
+                type="text"
+                placeholder="Lesson Title"
+                value={newLesson.title}
+                onChange={e => setNewLesson({ ...newLesson, title: e.target.value })}
+                className="border rounded px-2 py-1"
+                required
+              />
+              <div>
+                <TiptapEditor value={newLesson.content} onChange={content => setNewLesson({ ...newLesson, content })} />
+              </div>
+              <div>
+                <h6 className="font-semibold text-blue-600 mb-1">Quiz (optional)</h6>
+                <QuizBuilder questions={quizQuestions} onChange={setQuizQuestions} />
+              </div>
+              <div>
+                <h6 className="font-semibold text-orange-600 mb-1">Assignment (optional)</h6>
+                <AssignmentFields value={assignmentFields} onChange={setAssignmentFields} />
+              </div>
+              <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded self-start">Add Lesson</button>
+            </form>
+          </div>
         </div>
       )}
     </li>

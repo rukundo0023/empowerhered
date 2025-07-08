@@ -6,19 +6,27 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     // Show loading or spinner while auth status is being checked
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    // Redirect to login if user is not authenticated
-    return <Navigate to="/login" replace />
+    if (!navigator.onLine) {
+      // Offline and not authenticated: show message instead of redirect
+      return (
+        <div style={{ padding: '2rem', textAlign: 'center', color: '#b91c1c', fontWeight: 'bold' }}>
+          You are offline. Please connect to the internet to log in.
+        </div>
+      );
+    }
+    // Online: redirect to login
+    return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 export default ProtectedRoute

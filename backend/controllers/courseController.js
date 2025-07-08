@@ -83,6 +83,7 @@ const createCourse = async (req, res) => {
       level,
       category,
       imageUrl: imageUrl || 'https://via.placeholder.com/400x300',
+      createdBy: req.user._id,
     });
 
     res.status(201).json(course);
@@ -131,7 +132,10 @@ const deleteCourse = async (req, res) => {
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
     }
-
+    // Only allow if admin or creator
+    if (req.user.role !== 'admin' && course.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to delete this course' });
+    }
     await course.deleteOne();
     res.json({ message: 'Course removed' });
   } catch (error) {
@@ -316,12 +320,22 @@ const updateModule = async (req, res) => {
 // @access  Private/Admin
 const deleteModule = async (req, res) => {
   try {
+    console.log('DELETE /api/courses/:courseId/modules/:moduleId', req.params);
     const course = await Course.findById(req.params.courseId);
-    if (!course) return res.status(404).json({ message: 'Course not found' });
-    course.modules.id(req.params.moduleId).remove();
+    if (!course) {
+      console.error('Course not found:', req.params.courseId);
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    const module = course.modules.id(req.params.moduleId);
+    if (!module) {
+      console.error('Module not found:', req.params.moduleId);
+      return res.status(404).json({ message: 'Module not found' });
+    }
+    module.remove();
     await course.save();
     res.json(course);
   } catch (error) {
+    console.error('Error deleting module:', error);
     res.status(500).json({ message: error.message });
   }
 };

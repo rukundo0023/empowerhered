@@ -55,6 +55,7 @@ export default defineConfig({
           },
         ],
       },
+      includeAssets: ['**/*.png', '**/*.svg', '**/*.jpg', '**/*.jpeg', '**/*.gif'],
     }),
   ],
 }); 
