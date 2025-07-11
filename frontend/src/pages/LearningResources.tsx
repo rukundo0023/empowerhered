@@ -255,7 +255,7 @@ const LearningResources = () => {
               >
                 <option value="">All Categories</option>
                 <option value="tech">Tech</option>
-                <option value="business">Business</option>
+                <option value="communication">Communication</option>
                 <option value="personal-development">Personal Development</option>
                 <option value="leadership">Leadership</option>
               </select>
