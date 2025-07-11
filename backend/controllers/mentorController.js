@@ -316,6 +316,18 @@ const acceptBooking = asyncHandler(async (req, res) => {
     mentorship = existingMentorship;
   }
 
+  // Create a Meeting for this booking
+  const meeting = await Meeting.create({
+    mentor: mentorId,
+    mentee: booking.mentee,
+    date: booking.date,
+    status: 'scheduled',
+    notes: booking.topic,
+    duration: booking.duration || 60
+  });
+  mentorship.meetings.push(meeting._id);
+  await mentorship.save();
+
   res.status(200).json({
     ...booking.toObject(),
     mentorshipId: mentorship._id,

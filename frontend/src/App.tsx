@@ -33,7 +33,6 @@ import TestConnection from "./components/TestConnection.tsx";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import MentorDashboard from "./pages/Mentordashboard";
-import MentorSchedule from './pages/MentorSchedule';
 import MentorMeetingDetails from './pages/MentorMeetingDetails';
 import InstructorRoute from "./components/InstructorRoute";
 import InstructorDashboard from './pages/InstructorDashboard';
@@ -73,7 +72,6 @@ function App() {
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/admin" element={<AdminRoute><Adminpanel /></AdminRoute>} />
                   <Route path="/mentorDashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
-                  <Route path="/mentor/schedule/:menteeId" element={<MentorRoute><MentorSchedule /></MentorRoute>} />
                   <Route path="/mentor/meeting/:meetingId" element={<MentorRoute><MentorMeetingDetails /></MentorRoute>} />
                   <Route path="/instructor-dashboard" element={<InstructorRoute><InstructorDashboard /></InstructorRoute>} />
                   <Route path="/terms" element={<TermsAndConditions />} />

@@ -37,13 +37,11 @@ const Mentordashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for booking information in location state
     const bookingInfo = location.state?.bookingInfo;
     const message = location.state?.message;
 
     if (message) {
       toast.success(message);
-      // Clear the state after showing the message
       window.history.replaceState({}, document.title);
     }
 
@@ -84,7 +82,6 @@ const Mentordashboard = () => {
     try {
       await api.put(`/mentors/bookings/${bookingId}/accept`);
       toast.success('Booking accepted successfully');
-      // Refresh the data
       const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
         api.get<Mentee[]>('/mentors/mentees'),
         api.get<Meeting[]>('/mentors/meetings'),
@@ -93,9 +90,15 @@ const Mentordashboard = () => {
       setMentees(menteesRes.data);
       setUpcomingMeetings(meetingsRes.data);
       setPendingBookings(bookingsRes.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error accepting booking:', error);
-      toast.error('Failed to accept booking');
+      // Check for specific error message from backend
+      const errorMsg = error?.response?.data?.message || error.message || '';
+      if (errorMsg.includes('A mentorship already exists with this mentee')) {
+        toast.error('A mentorship already exists with this mentee.');
+      } else {
+        toast.error('Failed to accept booking');
+      }
     }
   };
 
@@ -103,7 +106,6 @@ const Mentordashboard = () => {
     try {
       await api.put(`/mentors/bookings/${bookingId}/reject`);
       toast.success('Booking rejected successfully');
-      // Refresh the data
       const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
         api.get<Mentee[]>('/mentors/mentees'),
         api.get<Meeting[]>('/mentors/meetings'),
@@ -125,6 +127,15 @@ const Mentordashboard = () => {
       </div>
     );
   }
+
+  // Filter upcoming meetings to only those in the future
+  const now = new Date();
+  const filteredUpcomingMeetings = upcomingMeetings.filter(
+    (meeting) => new Date(meeting.date) > now && meeting.status === 'scheduled'
+  );
+
+  // Debug: log the upcoming meetings to inspect their structure
+  console.log('Upcoming Meetings:', filteredUpcomingMeetings);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -176,59 +187,18 @@ const Mentordashboard = () => {
               </div>
             </section>
 
-            {/* Mentees Section */}
-            <section className="bg-white rounded-lg shadow p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">My Mentees</h2>
-              <div className="space-y-6">
-                {mentees.length > 0 ? (
-                  mentees.map((mentee) => (
-                    <div key={mentee.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{mentee.name}</h3>
-                          <p className="text-sm text-gray-600">{mentee.email}</p>
-                          <p className="text-sm text-gray-600 mt-2">
-                            Progress: {mentee.progress}%
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            Last Meeting: {mentee.lastMeeting}
-                          </p>
-                        </div>
-                        <div className="space-x-2">
-                          <button
-                            onClick={() => handleScheduleMeeting(mentee.id)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                          >
-                            Schedule Meeting
-                          </button>
-                          <button
-                            onClick={() => handleViewProgress(mentee.id)}
-                            className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
-                          >
-                            View Progress
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-600">No mentees yet</p>
-                )}
-              </div>
-            </section>
-
             {/* Upcoming Meetings Section */}
             <section className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Upcoming Meetings</h2>
               <div className="space-y-4">
-                {upcomingMeetings.length > 0 ? (
-                  upcomingMeetings.map((meeting) => (
+                {filteredUpcomingMeetings.length > 0 ? (
+                  filteredUpcomingMeetings.map((meeting) => (
                     <div key={meeting.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-center">
                         <div>
-                          <h3 className="font-medium text-gray-900">{meeting.menteeName}</h3>
+                          <h3 className="font-medium text-gray-900">Mentee: {meeting.menteeName}</h3>
                           <p className="text-sm text-gray-600">
-                            Date: {new Date(meeting.date).toLocaleDateString()}
+                            Date & Time: {new Date(meeting.date).toLocaleString()}
                           </p>
                           <p className="text-sm text-gray-600">
                             Status: {meeting.status}
@@ -248,27 +218,6 @@ const Mentordashboard = () => {
                 )}
               </div>
             </section>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
-              <div className="space-y-4">
-                <button
-                  onClick={() => navigate('/mentor/schedule')}
-                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Schedule New Meeting
-                </button>
-                <button
-                  onClick={() => navigate('/mentor/profile')}
-                  className="w-full bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
-                >
-                  Update Profile
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
