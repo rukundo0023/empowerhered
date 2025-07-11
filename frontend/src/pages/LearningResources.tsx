@@ -5,6 +5,7 @@ import AssignmentComponent from './AssignmentComponent';
 import { FaBook, FaCheckCircle, FaRegCircle, FaFileAlt, FaVideo, FaLink, FaQuestionCircle, FaClipboardList, FaArrowLeft } from 'react-icons/fa';
 import { getCache, setCache, CACHE_EXPIRY } from '../api/cacheUtil';
 import localforage from 'localforage';
+import { useAuth } from '../context/AuthContext';
 
 // Utility to cache a file by URL
 async function cacheResourceFile(url: string) {
@@ -75,6 +76,7 @@ const LearningResources = () => {
     (searchTerm === '' || course.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchCourses();
@@ -217,7 +219,7 @@ const LearningResources = () => {
             <h1 className="text-4xl font-bold text-blue-900 mb-2">Learning Resources</h1>
             <p className="text-lg text-blue-800">Browse courses, explore modules, and master lessons with quizzes and assignments.</p>
             {/* Progress Bar */}
-            {selectedCourse && courseProgress !== null && (
+            {selectedCourse && courseProgress !== null && user && !['admin', 'mentor', 'instructor'].includes(user.role) && (
               <div className="mt-4">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-blue-900 font-semibold">Progress:</span>

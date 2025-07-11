@@ -733,12 +733,17 @@ const [lessonError, setLessonError] = useState('');
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <button
-                                onClick={() => handleDeleteUser(user._id)}
-                                className="text-red-600 hover:text-red-900"
-                              >
-                                Delete
-                              </button>
+                              {/* Prevent deletion of admin users */}
+                              {user.role === 'admin' ? (
+                                <span className="text-gray-400 cursor-not-allowed" title="Cannot delete admin user">Delete</span>
+                              ) : (
+                                <button
+                                  onClick={() => handleDeleteUser(user._id)}
+                                  className="text-red-600 hover:text-red-900"
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))
@@ -863,7 +868,12 @@ const [lessonError, setLessonError] = useState('');
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {studentProgress.map((progress) => (
+                      {studentProgress
+                        .filter(progress => {
+                          const u = users.find(user => user._id === progress.userId);
+                          return u && !['admin', 'mentor', 'instructor'].includes(u.role);
+                        })
+                        .map((progress) => (
                         <>
                           <tr key={`${progress.userId}-${progress.courseId}`}>
                             <td className="px-6 py-4 whitespace-nowrap">{progress.userName}</td>

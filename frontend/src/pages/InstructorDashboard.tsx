@@ -639,7 +639,15 @@ const InstructorDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {studentProgress.map((progress) => (
+                  {studentProgress
+                    .filter(progress => {
+                      // If you have a users list, filter by role
+                      // Otherwise, only show if userName is not 'admin', 'mentor', or 'instructor'
+                      // (You may want to adjust this logic if you have access to user roles)
+                      // For now, filter by userName as a fallback
+                      return !['admin', 'mentor', 'instructor'].some(role => progress.userName.toLowerCase().includes(role));
+                    })
+                    .map((progress) => (
                     <>
                       <tr key={`${progress.userId}-${progress.courseId}`}>
                         <td className="px-6 py-4 whitespace-nowrap">{progress.userName}</td>

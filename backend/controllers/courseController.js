@@ -440,6 +440,10 @@ const visitLesson = async (req, res) => {
       console.log('User not found');
       return res.status(404).json({ message: 'User not found' });
     }
+    // Prevent progress tracking for admin, mentor, or instructor
+    if (['admin', 'mentor', 'instructor'].includes(user.role)) {
+      return res.json({ message: 'Progress is not tracked for this user role.' });
+    }
     console.log('User before update:', JSON.stringify(user, null, 2));
 
     // Step 1: Find or create lessonProgress entry
