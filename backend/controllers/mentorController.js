@@ -19,19 +19,17 @@ const getMentees = asyncHandler(async (req, res) => {
     // Log the mentorships to see what is actually being returned
     console.log('Mentorships:', mentorships);
 
-    const mentees = mentorships
-      .filter(mentorship => mentorship.mentee && mentorship.mentee._id)
-      .map(mentorship => ({
-        id: mentorship.mentee._id,
-        name: mentorship.mentee.name,
-        email: mentorship.mentee.email,
-        progress: mentorship.progress,
-        lastMeeting: mentorship.meetings.length > 0 
-          ? mentorship.meetings[mentorship.meetings.length - 1].date 
-          : 'No meetings yet'
-      }));
+    const safeMentorships = mentorships.filter(m => m.mentee && m.mentee.name && m.mentee.email).map(m => ({
+      id: m.mentee._id,
+      menteeName: m.mentee.name,
+      menteeEmail: m.mentee.email,
+      progress: m.progress,
+      lastMeeting: m.meetings.length > 0 
+        ? m.meetings[m.meetings.length - 1].date 
+        : 'No meetings yet'
+    }));
 
-    res.json(mentees);
+    res.json(safeMentorships);
   } catch (error) {
     console.error('Error in getMentees:', error);
     res.status(500).json({ message: 'Server error in getMentees', error: error.message });
@@ -70,7 +68,7 @@ const getUpcomingMeetings = asyncHandler(async (req, res) => {
 
   const formattedMeetings = meetings.map(meeting => ({
     id: meeting._id,
-    menteeName: meeting.mentee.name,
+    menteeName: meeting.mentee && meeting.mentee.name ? meeting.mentee.name : 'Unknown',
     date: meeting.date,
     status: meeting.status,
     notes: meeting.notes
@@ -286,12 +284,20 @@ const acceptBooking = asyncHandler(async (req, res) => {
   await booking.save();
 
   try {
+    const mentor = await User.findById(mentorId);
     await sendEmail({
       to: booking.menteeEmail,
-      subject: 'Your booking has been accepted!',
+      subject: 'Your mentorship booking has been accepted!',
       html: `<p>Hi ${booking.menteeName},</p>
-             <p>Your booking for the mentorship session on ${booking.date} has been accepted.</p>
-             <p>Looking forward to a great session!</p>`
+             <p>Great news! Your mentorship session has been <b>accepted</b> by <b>${mentor?.name || 'your mentor'}</b>.</p>
+             <ul>
+               <li><b>Topic:</b> ${booking.topic}</li>
+               <li><b>Date:</b> ${new Date(booking.date).toLocaleDateString()}</li>
+               <li><b>Time:</b> ${booking.time || 'To be scheduled'}</li>
+             </ul>
+             <p>You can contact your mentor at: <a href="mailto:${mentor?.email}">${mentor?.email}</a></p>
+             <p>Looking forward to a great session!</p>
+             <p style="margin-top:2em;">Best regards,<br/>EmpowerHerEd Team</p>`
     });
   } catch (error) {
     console.error('Failed to send confirmation email:', error);
@@ -336,6 +342,26 @@ const rejectBooking = asyncHandler(async (req, res) => {
 
   booking.status = 'cancelled';
   await booking.save();
+
+  try {
+    const mentor = await User.findById(req.user._id);
+    await sendEmail({
+      to: booking.menteeEmail,
+      subject: 'Your mentorship booking has been rejected',
+      html: `<p>Hi ${booking.menteeName},</p>
+             <p>Unfortunately, your mentorship session request with <b>${mentor?.name || 'the mentor'}</b> was <b>rejected</b>.</p>
+             <ul>
+               <li><b>Topic:</b> ${booking.topic}</li>
+               <li><b>Date:</b> ${new Date(booking.date).toLocaleDateString()}</li>
+               <li><b>Time:</b> ${booking.time || 'To be scheduled'}</li>
+             </ul>
+             <p>You can try booking another session or choose a different mentor.</p>
+             <p>If you have questions, contact us at <a href="mailto:support@empowerhered.com">support@empowerhered.com</a>.</p>
+             <p style="margin-top:2em;">Best regards,<br/>EmpowerHerEd Team</p>`
+    });
+  } catch (error) {
+    console.error('Failed to send rejection email:', error);
+  }
 
   res.status(200).json({
     ...booking.toObject(),

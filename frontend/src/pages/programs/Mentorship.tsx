@@ -6,6 +6,7 @@ import 'react-day-picker/dist/style.css';
 import OfflineImage from '../../components/OfflineImage';
 import { offlineService } from '../../services/offlineService';
 import allowedMentors from '../../constants/allowedMentors.json';
+import api from '../../api/axios';
 
 interface Mentor {
   _id: string;
@@ -31,6 +32,9 @@ const Mentorship = () => {
     date: undefined as Date | undefined,
   });
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [userBookings, setUserBookings] = useState<any[]>([]);
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [bookingError, setBookingError] = useState('');
 
   useEffect(() => {
     fetchMentors();
@@ -42,6 +46,24 @@ const Mentorship = () => {
         menteeEmail: user.email || ''
       }));
     }
+  }, [user]);
+
+  useEffect(() => {
+    const fetchUserBookings = async () => {
+      setLoadingBookings(true);
+      setBookingError('');
+      try {
+        if (user?._id) {
+          const res = await api.get(`/mentors/bookings?mentee=${user._id}`);
+          setUserBookings(res.data);
+        }
+      } catch (err) {
+        setBookingError('Failed to load your bookings');
+      } finally {
+        setLoadingBookings(false);
+      }
+    };
+    fetchUserBookings();
   }, [user]);
 
   const fetchMentors = async () => {
@@ -75,8 +97,8 @@ const Mentorship = () => {
     try {
       const booking = await offlineService.createBooking({
         mentee: user?._id || 'offline_user',
-        menteeName: bookingData.menteeName,
-        menteeEmail: bookingData.menteeEmail,
+        name: bookingData.menteeName,
+        email: bookingData.menteeEmail,
         topic: bookingData.topic || 'General Mentorship',
         time: bookingData.time,
         notes: bookingData.notes,
