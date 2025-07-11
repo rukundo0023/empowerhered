@@ -143,11 +143,6 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         // Maximum file size for precaching
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
-        navigateFallback: '/offline.html',
-        navigateFallbackAllowlist: [
-          /^\/$/, // home
-          /^\/resources\/learning/, // allow this route
-        ],
       },
       includeAssets: [
         '**/*.png', 
@@ -166,7 +161,6 @@ export default defineConfig({
       devOptions: {
         enabled: true,
         type: 'module',
-        navigateFallback: 'offline.html'
       },
       // Inject manifest
       injectRegister: 'auto',
