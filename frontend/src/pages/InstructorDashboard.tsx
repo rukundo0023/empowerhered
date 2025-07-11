@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
@@ -131,6 +131,11 @@ const InstructorDashboard = () => {
   const [quizModalBuffer, setQuizModalBuffer] = useState<QuizQuestion[]>([]);
   const [assignmentModalBuffer, setAssignmentModalBuffer] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
 
+  const [expandedProgress, setExpandedProgress] = useState<string | null>(null);
+  const [detailedProgress, setDetailedProgress] = useState<any>({});
+
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleApiError = (error: unknown, fallback = 'Something went wrong') => {
     if (error && typeof error === 'object' && 'response' in error) {
       const err = error as { response?: { data?: { message?: string } } };
@@ -158,6 +163,28 @@ const InstructorDashboard = () => {
     initializeData();
   }, [user]);
 
+  useEffect(() => {
+    if (activeTab === 'progress') {
+      fetchProgress(); // Initial fetch
+      if (pollingRef.current) clearInterval(pollingRef.current);
+      pollingRef.current = setInterval(() => {
+        fetchProgress();
+      }, 15000); // 15 seconds
+    } else {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    }
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
   // Fetch only instructor's own courses
   const fetchCourses = async () => {
     try {
@@ -181,7 +208,7 @@ const InstructorDashboard = () => {
   // Fetch progress for instructor's courses
   const fetchProgress = async () => {
     try {
-      const res = await api.get('/courses/progress?instructorId=' + user?._id);
+      const res = await api.get('/progress');
       setStudentProgress(res.data);
     } catch (error) {
       handleApiError(error, 'Failed to fetch progress');
@@ -436,6 +463,18 @@ const InstructorDashboard = () => {
     setAssignmentModalBuffer(lesson.assignment || { instructions: '', dueDate: '', fileType: '', fileUrl: '' });
   };
 
+  const fetchLessonProgress = async (userId: string, courseId: string) => {
+    try {
+      const res = await api.get(`/users/${userId}`); // get user to get token if needed
+      const progressRes = await api.get(`/courses/${courseId}/lesson-progress`, {
+        headers: { Authorization: `Bearer ${res.data.token}` }
+      });
+      setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: progressRes.data.lessonProgress }));
+    } catch (e) {
+      setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: [] }));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 mt-6">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -588,19 +627,20 @@ const InstructorDashboard = () => {
 
           {/* Progress Tab */}
           {activeTab === 'progress' && (
-            <div className="mb-8">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Accessed</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {studentProgress.map((progress) => (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Accessed</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {studentProgress.map((progress) => (
+                    <>
                       <tr key={`${progress.userId}-${progress.courseId}`}>
                         <td className="px-6 py-4 whitespace-nowrap">{progress.userName}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{progress.courseName}</td>
@@ -616,11 +656,53 @@ const InstructorDashboard = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           {new Date(progress.lastAccessed).toLocaleDateString()}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            className="text-blue-600 underline"
+                            onClick={async () => {
+                              setExpandedProgress(expandedProgress === `${progress.userId}-${progress.courseId}` ? null : `${progress.userId}-${progress.courseId}`);
+                              if (!detailedProgress[`${progress.userId}-${progress.courseId}`]) {
+                                await fetchLessonProgress(progress.userId, progress.courseId);
+                              }
+                            }}
+                          >
+                            {expandedProgress === `${progress.userId}-${progress.courseId}` ? 'Hide' : 'View'}
+                          </button>
+                        </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                      {expandedProgress === `${progress.userId}-${progress.courseId}` && (
+                        <tr>
+                          <td colSpan={5} className="bg-gray-50 px-6 py-4">
+                            <strong>Lesson Progress:</strong>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                              {(detailedProgress[`${progress.userId}-${progress.courseId}`] || []).map((mod: any, idx: number) => (
+                                <div key={idx}>
+                                  <div><b>Module {mod.moduleIndex + 1}:</b> {mod.completedLessons.length} lessons completed</div>
+                                  <div>
+                                    {[0,1,2,3].map(lessonIdx => (
+                                      <span key={lessonIdx} style={{
+                                        display: 'inline-block',
+                                        width: 24,
+                                        height: 24,
+                                        margin: 2,
+                                        borderRadius: '50%',
+                                        background: mod.completedLessons.includes(lessonIdx) ? 'green' : '#ccc',
+                                        color: 'white',
+                                        textAlign: 'center',
+                                        lineHeight: '24px'
+                                      }}>{lessonIdx+1}</span>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>

@@ -88,6 +88,27 @@ const userSchema = mongoose.Schema(
     googleTokenExpiry: {
       type: Date,
     },
+    lessonProgress: [
+      {
+        courseId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Course',
+        },
+        moduleIndex: {
+          type: Number,
+          required: true,
+        },
+        completedLessons: [
+          {
+            type: Number, // index of the lesson in the module
+          }
+        ],
+        lastAccessed: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

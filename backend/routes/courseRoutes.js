@@ -16,7 +16,9 @@ import {
   deleteLesson,
   getModules,
   getProgressByInstructor,
-  getModuleById
+  getModuleById,
+  visitLesson,
+  getUserLessonProgress
 } from '../controllers/courseController.js';
 
 const router = express.Router();
@@ -44,5 +46,11 @@ router.post('/:courseId/modules/:moduleId/lessons', protect, adminOrInstructor, 
 router.put('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, updateLesson);
 router.delete('/:courseId/modules/:moduleId/lessons/:lessonId', protect, adminOrInstructor, deleteLesson);
 router.get('/:courseId/modules/:moduleId', getModuleById);
+
+// Add this route for lesson visit progress tracking
+router.post('/:courseId/modules/:moduleIndex/lessons/:lessonIndex/visit', protect, visitLesson);
+
+// Add this route to get user's lesson progress for a course
+router.get('/:courseId/lesson-progress', protect, getUserLessonProgress);
 
 export default router; 

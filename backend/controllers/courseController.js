@@ -427,6 +427,99 @@ const getModuleById = async (req, res) => {
   }
 };
 
+// @desc    Mark lesson as visited (completed) for user
+// @route   POST /api/courses/:courseId/modules/:moduleIndex/lessons/:lessonIndex/visit
+// @access  Private
+const visitLesson = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { courseId, moduleIndex, lessonIndex } = req.params;
+    console.log('visitLesson called with:', { userId, courseId, moduleIndex, lessonIndex });
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log('User before update:', JSON.stringify(user, null, 2));
+
+    // Step 1: Find or create lessonProgress entry
+    let progressEntry = user.lessonProgress.find(lp =>
+      lp.courseId.toString() === courseId && lp.moduleIndex === Number(moduleIndex)
+    );
+    console.log('After finding lessonProgress:', JSON.stringify(progressEntry, null, 2));
+    if (!progressEntry) {
+      progressEntry = {
+        courseId: new mongoose.Types.ObjectId(courseId),
+        moduleIndex: Number(moduleIndex),
+        completedLessons: [],
+        lastAccessed: new Date(),
+      };
+      user.lessonProgress.push(progressEntry);
+      console.log('Created new lessonProgress entry');
+    }
+
+    // Step 2: Mark lesson as completed if not already
+    if (!progressEntry.completedLessons.includes(Number(lessonIndex))) {
+      progressEntry.completedLessons.push(Number(lessonIndex));
+      progressEntry.lastAccessed = new Date();
+      console.log('Marked lesson as completed');
+      user.markModified('lessonProgress');
+    }
+
+    // Step 3: Get course and count total lessons
+    const course = await Course.findById(courseId);
+    let totalLessons = 0;
+    if (course && course.modules) {
+      totalLessons = course.modules.reduce((sum, mod) => sum + (mod.lessons ? mod.lessons.length : 0), 0);
+    }
+    console.log('Total lessons in course:', totalLessons);
+
+    // Step 4: Count completed lessons for this course
+    const completedLessons = user.lessonProgress
+      .filter(lp => lp.courseId.toString() === courseId)
+      .reduce((sum, lp) => sum + (lp.completedLessons ? lp.completedLessons.length : 0), 0);
+    console.log('Completed lessons for this course:', completedLessons);
+
+    // Step 5: Update courseProgress
+    let courseProgress = user.courseProgress.find(cp => cp.courseId.toString() === courseId);
+    if (!courseProgress) {
+      courseProgress = {
+        courseId: new mongoose.Types.ObjectId(courseId),
+        progress: 0,
+        lastAccessed: new Date(),
+      };
+      user.courseProgress.push(courseProgress);
+      console.log('Created new courseProgress entry');
+    }
+    courseProgress.progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+    courseProgress.lastAccessed = new Date();
+    console.log('Updated courseProgress:', JSON.stringify(courseProgress, null, 2));
+
+    await user.save();
+    console.log('User after update:', JSON.stringify(user, null, 2));
+    res.json({ message: 'Lesson marked as completed', lessonProgress: user.lessonProgress, courseProgress });
+  } catch (error) {
+    console.error('visitLesson error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get user's lesson progress for a course
+// @route   GET /api/courses/:courseId/lesson-progress
+// @access  Private
+const getUserLessonProgress = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { courseId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    const progress = user.lessonProgress.filter(lp => lp.courseId.toString() === courseId);
+    res.json({ lessonProgress: progress });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   getCourses,
   getCourseById,
@@ -444,5 +537,7 @@ export {
   updateLesson,
   deleteLesson,
   getModules,
-  getModuleById
+  getModuleById,
+  visitLesson,
+  getUserLessonProgress
 }; 

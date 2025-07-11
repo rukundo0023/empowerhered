@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
@@ -196,6 +196,8 @@ const [lessonError, setLessonError] = useState('');
     });
   }, [maleMentorProgress, users]);
 
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const initializeData = async () => {
       if (!user || !user.token) {
@@ -229,6 +231,28 @@ const [lessonError, setLessonError] = useState('');
     initializeData();
   }, [user]);
 
+  useEffect(() => {
+    if (activeTab === 'progress') {
+      fetchData(); // Initial fetch
+      if (pollingRef.current) clearInterval(pollingRef.current);
+      pollingRef.current = setInterval(() => {
+        fetchData();
+      }, 15000); // 15 seconds
+    } else {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    }
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -255,6 +279,7 @@ const [lessonError, setLessonError] = useState('');
           } else {
             res = await api.get('/progress');
           }
+          console.log('Progress data:', res.data); // Log the response data
           setStudentProgress(Array.isArray(res.data) ? res.data : []);
           break;
         }
@@ -539,6 +564,9 @@ const [lessonError, setLessonError] = useState('');
   const [quizModalBuffer, setQuizModalBuffer] = useState<QuizQuestion[]>([]);
   const [assignmentModalBuffer, setAssignmentModalBuffer] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
 
+  const [expandedProgress, setExpandedProgress] = useState<string | null>(null);
+  const [detailedProgress, setDetailedProgress] = useState<any>({});
+
   if (!user || user.role !== 'admin') {
     console.log('Not an admin user:', user);
     return null;
@@ -547,6 +575,18 @@ const [lessonError, setLessonError] = useState('');
   if (isLoading && !isInitialized) {
     return <div>Loading...</div>;
   }
+
+  const fetchLessonProgress = async (userId: string, courseId: string) => {
+    try {
+      const res = await api.get(`/users/${userId}`); // get user to get token if needed
+      const progressRes = await api.get(`/courses/${courseId}/lesson-progress`, {
+        headers: { Authorization: `Bearer ${res.data.token}` }
+      });
+      setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: progressRes.data.lessonProgress }));
+    } catch (e) {
+      setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: [] }));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 mt-6">
@@ -819,26 +859,71 @@ const [lessonError, setLessonError] = useState('');
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Accessed</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {studentProgress.map((progress) => (
-                        <tr key={`${progress.userId}-${progress.courseId}`}>
-                          <td className="px-6 py-4 whitespace-nowrap">{progress.userName}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{progress.courseName}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                              <div
-                                className="bg-blue-600 h-2.5 rounded-full"
-                                style={{ width: `${progress.progress}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-sm text-gray-500">{progress.progress}%</span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {new Date(progress.lastAccessed).toLocaleDateString()}
-                          </td>
-                        </tr>
+                        <>
+                          <tr key={`${progress.userId}-${progress.courseId}`}>
+                            <td className="px-6 py-4 whitespace-nowrap">{progress.userName}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">{progress.courseName}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                <div
+                                  className="bg-blue-600 h-2.5 rounded-full"
+                                  style={{ width: `${progress.progress}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-sm text-gray-500">{progress.progress}%</span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {new Date(progress.lastAccessed).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <button
+                                className="text-blue-600 underline"
+                                onClick={async () => {
+                                  setExpandedProgress(expandedProgress === `${progress.userId}-${progress.courseId}` ? null : `${progress.userId}-${progress.courseId}`);
+                                  if (!detailedProgress[`${progress.userId}-${progress.courseId}`]) {
+                                    await fetchLessonProgress(progress.userId, progress.courseId);
+                                  }
+                                }}
+                              >
+                                {expandedProgress === `${progress.userId}-${progress.courseId}` ? 'Hide' : 'View'}
+                              </button>
+                            </td>
+                          </tr>
+                          {expandedProgress === `${progress.userId}-${progress.courseId}` && (
+                            <tr>
+                              <td colSpan={5} className="bg-gray-50 px-6 py-4">
+                                <strong>Lesson Progress:</strong>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                  {(detailedProgress[`${progress.userId}-${progress.courseId}`] || []).map((mod: any, idx: number) => (
+                                    <div key={idx}>
+                                      <div><b>Module {mod.moduleIndex + 1}:</b> {mod.completedLessons.length} lessons completed</div>
+                                      <div>
+                                        {[0,1,2,3].map(lessonIdx => (
+                                          <span key={lessonIdx} style={{
+                                            display: 'inline-block',
+                                            width: 24,
+                                            height: 24,
+                                            margin: 2,
+                                            borderRadius: '50%',
+                                            background: mod.completedLessons.includes(lessonIdx) ? 'green' : '#ccc',
+                                            color: 'white',
+                                            textAlign: 'center',
+                                            lineHeight: '24px'
+                                          }}>{lessonIdx+1}</span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </>
                       ))}
                     </tbody>
                   </table>

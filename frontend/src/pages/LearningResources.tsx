@@ -74,6 +74,7 @@ const LearningResources = () => {
     (levelFilter === '' || course.level === levelFilter) &&
     (searchTerm === '' || course.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  const [courseProgress, setCourseProgress] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCourses();
@@ -137,6 +138,13 @@ const LearningResources = () => {
     setSelectedLesson(null);
     setExpandedModuleId(null);
     await fetchModules(course._id);
+    // Fetch real user progress
+    try {
+      const res = await api.get(`/courses/${course._id}/progress`);
+      setCourseProgress(res.data.progress ?? 0);
+    } catch {
+      setCourseProgress(null);
+    }
   };
 
   const handleExpandModule = (moduleId: string) => {
@@ -144,9 +152,17 @@ const LearningResources = () => {
     setSelectedLesson(null);
   };
 
-  const handleSelectLesson = (lesson: Lesson) => {
+  const handleSelectLesson = async (lesson: Lesson, moduleIndex: number, lessonIndex: number) => {
     setSelectedLesson(lesson);
-    // Simulate marking as complete
+    // Mark as visited in backend
+    if (selectedCourse && moduleIndex !== undefined && lessonIndex !== undefined) {
+      try {
+        await api.post(`/courses/${selectedCourse._id}/modules/${moduleIndex}/lessons/${lessonIndex}/visit`);
+      } catch (e) {
+        // Optionally handle error
+      }
+    }
+    // Simulate marking as complete in local state
     if (!completedLessons.includes(lesson._id)) {
       setCompletedLessons([...completedLessons, lesson._id]);
     }
@@ -200,6 +216,21 @@ const LearningResources = () => {
             </button>
             <h1 className="text-4xl font-bold text-blue-900 mb-2">Learning Resources</h1>
             <p className="text-lg text-blue-800">Browse courses, explore modules, and master lessons with quizzes and assignments.</p>
+            {/* Progress Bar */}
+            {selectedCourse && courseProgress !== null && (
+              <div className="mt-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-blue-900 font-semibold">Progress:</span>
+                  <span className="text-blue-700">{courseProgress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div
+                    className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                    style={{ width: `${courseProgress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-8 px-4 pb-12">
@@ -265,7 +296,7 @@ const LearningResources = () => {
                   <div className="text-gray-500">No modules yet.</div>
                 ) : (
                   <ul>
-                    {modules.map((mod) => (
+                    {modules.map((mod, moduleIdx) => (
                       <li key={mod._id} className="mb-2">
                         <button
                           className={`w-full text-left px-2 py-2 rounded transition font-semibold flex items-center gap-2 ${expandedModuleId === mod._id ? 'bg-blue-50 text-blue-900' : 'hover:bg-blue-50 text-blue-700'}`}
@@ -279,11 +310,11 @@ const LearningResources = () => {
                             {mod.lessons.length === 0 ? (
                               <li className="text-gray-400 italic">No lessons yet.</li>
                             ) : (
-                              mod.lessons.map((lesson) => (
+                              mod.lessons.map((lesson, lessonIdx) => (
                                 <li key={lesson._id} className="mb-1">
                                   <button
                                     className={`w-full text-left px-2 py-1 rounded transition flex items-center gap-2 ${selectedLesson?._id === lesson._id ? 'bg-blue-200 text-blue-900' : 'hover:bg-blue-100 text-blue-700'}`}
-                                    onClick={() => handleSelectLesson(lesson)}
+                                    onClick={() => handleSelectLesson(lesson, moduleIdx, lessonIdx)}
                                   >
                                     {completedLessons.includes(lesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
                                     {lesson.title}
