@@ -38,6 +38,7 @@ import MentorMeetingDetails from './pages/MentorMeetingDetails';
 import InstructorRoute from "./components/InstructorRoute";
 import InstructorDashboard from './pages/InstructorDashboard';
 import OfflineIndicator from './components/OfflineIndicator';
+import OfflineStatus from './components/OfflineStatus';
 
 function App() {
   return (
@@ -67,89 +68,36 @@ function App() {
                   <Route path="/resources/learning" element={<ProtectedRoute><LearningResources /></ProtectedRoute>} />
                   <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
                   <Route path="/success-stories" element={<ProtectedRoute><SuccessStories /></ProtectedRoute>} />
-                  <Route path="/TermsAndConditions" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/settings"
-                    element={
-                      <ProtectedRoute>
-                        <Settings />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  {/* Mentor Routes */}
-                  <Route
-                    path="/mentorDashboard"
-                    element={
-                      <MentorRoute>
-                        <MentorDashboard />
-                      </MentorRoute>
-                    }
-                  />
-                  <Route
-                    path="/mentor/schedule/:menteeId?"
-                    element={
-                      <MentorRoute>
-                        <MentorSchedule />
-                      </MentorRoute>
-                    }
-                  />
-                  <Route
-                    path="/mentor/meeting/:id"
-                    element={
-                      <MentorRoute>
-                        <MentorMeetingDetails />
-                      </MentorRoute>
-                    }
-                  />
-                  <Route
-                    path="/mentor/mentee/:id"
-                    element={
-                      <MentorRoute>
-                        <MentorDashboard />
-                      </MentorRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin"
-                    element={
-                      <AdminRoute>
-                        <Adminpanel />
-                      </AdminRoute>
-                    }
-                  />
-                  <Route
-                    path="/instructor-dashboard"
-                    element={
-                      <InstructorRoute>
-                        <InstructorDashboard />
-                      </InstructorRoute>
-                    }
-                  />
-                  <Route path="/test-connection" element={<ProtectedRoute><TestConnection /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/admin" element={<AdminRoute><Adminpanel /></AdminRoute>} />
+                  <Route path="/mentorDashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
+                  <Route path="/mentor/schedule/:menteeId" element={<MentorRoute><MentorSchedule /></MentorRoute>} />
+                  <Route path="/mentor/meeting/:meetingId" element={<MentorRoute><MentorMeetingDetails /></MentorRoute>} />
+                  <Route path="/instructor-dashboard" element={<InstructorRoute><InstructorDashboard /></InstructorRoute>} />
+                  <Route path="/terms" element={<TermsAndConditions />} />
+                  <Route path="/test-connection" element={<TestConnection />} />
                 </Routes>
               </main>
               <Footer />
-              <ToastContainer />
             </div>
+            {/* Offline Status Component */}
+            <OfflineStatus />
           </AuthProvider>
         </Router>
       </GoogleProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react"
 import api from "../api/axios"
+import offlineAuthService from "../services/offlineAuthService"
 
 interface User {
   _id: string
@@ -7,11 +8,13 @@ interface User {
   email: string
   role: string
   token: string
+  isOfflineUser?: boolean
 }
 
 interface AuthContextType {
   user: User | null
   login: (userData: User) => void
+  signup: (userData: User) => void
   loginWithGoogle: (googleToken: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
@@ -42,11 +45,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [loading, setLoading] = useState(true)
 
+  // Handle online/offline status changes
+  useEffect(() => {
+    const handleOnline = async () => {
+      console.log("AuthContext - Back online, checking for offline user sync")
+      
+      // Check if current user is an offline user and sync
+      if (user?.isOfflineUser) {
+        try {
+          await offlineAuthService.syncOfflineAuth(api);
+          console.log("AuthContext - Offline auth synced successfully");
+        } catch (error) {
+          console.error("AuthContext - Failed to sync offline auth:", error);
+        }
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+    };
+  }, [user]);
+
   // Verify token on mount and when user changes
   useEffect(() => {
     const verifyToken = async () => {
       if (!user?.token) {
         console.log("AuthContext - No token found, skipping verification")
+        setLoading(false)
+        return
+      }
+
+      // If user is an offline user, skip verification
+      if (user.isOfflineUser) {
+        console.log("AuthContext - Offline user, skipping token verification")
         setLoading(false)
         return
       }
@@ -97,7 +130,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [user?.token])
 
   useEffect(() => {
-    if (user?.token) {
+    if (user?.token && !user.isOfflineUser) {
       console.log("AuthContext - Setting auth header for user:", { 
         email: user.email, 
         role: user.role 
@@ -121,6 +154,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("AuthContext - Error saving user to localStorage:", error)
       throw new Error("Failed to save login data")
+    }
+  }
+
+  const signup = (userData: User) => {
+    try {
+      console.log("AuthContext - Signing up user:", { 
+        email: userData.email, 
+        role: userData.role 
+      })
+      localStorage.setItem("user", JSON.stringify(userData))
+      setUser(userData)
+      setLoading(false)
+    } catch (error) {
+      console.error("AuthContext - Error saving user to localStorage:", error)
+      throw new Error("Failed to save signup data")
     }
   }
 
@@ -161,6 +209,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         user,
         login,
+        signup,
         loginWithGoogle,
         logout,
         isAuthenticated: !!user,

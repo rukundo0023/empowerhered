@@ -2,8 +2,34 @@ import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import QuizComponent from './QuizComponent';
 import AssignmentComponent from './AssignmentComponent';
-import Navbar from '../components/Navbar';
 import { FaBook, FaCheckCircle, FaRegCircle, FaFileAlt, FaVideo, FaLink, FaQuestionCircle, FaClipboardList, FaArrowLeft } from 'react-icons/fa';
+import { getCache, setCache, CACHE_EXPIRY } from '../api/cacheUtil';
+import localforage from 'localforage';
+
+// Utility to cache a file by URL
+async function cacheResourceFile(url: string) {
+  try {
+    const key = `resource_${btoa(url)}`;
+    // Check if already cached
+    const cached = await localforage.getItem(key);
+    if (cached) return;
+    const response = await fetch(url);
+    if (!response.ok) return;
+    const blob = await response.blob();
+    await localforage.setItem(key, blob);
+  } catch (err) {
+    // Ignore errors for now
+  }
+}
+
+async function getCachedResourceFile(url: string): Promise<Blob | null> {
+  try {
+    const key = `resource_${btoa(url)}`;
+    return await localforage.getItem<Blob>(key);
+  } catch {
+    return null;
+  }
+}
 
 interface Module {
   _id: string;
@@ -57,8 +83,15 @@ const LearningResources = () => {
     setLoadingCourses(true);
     setError('');
     try {
-      const res = await api.get('/courses');
-      setCourses(res.data);
+      if (!navigator.onLine) {
+        // Offline: load from cache
+        const cached = await getCache<Course[]>('courses');
+        setCourses(cached || []);
+      } else {
+        const res = await api.get('/courses');
+        setCourses(res.data);
+        await setCache('courses', res.data, CACHE_EXPIRY.COURSES);
+      }
     } catch (e) {
       setError('Failed to load courses');
     } finally {
@@ -70,8 +103,27 @@ const LearningResources = () => {
     setLoadingModules(true);
     setError('');
     try {
-      const res = await api.get(`/courses/${courseId}/modules`);
-      setModules(res.data);
+      if (!navigator.onLine) {
+        // Try to load from cache
+        const cached = await getCache(`modules_${courseId}`);
+        setModules(cached || []);
+      } else {
+        const res = await api.get(`/courses/${courseId}/modules`);
+        setModules(res.data);
+        await setCache(`modules_${courseId}`, res.data, CACHE_EXPIRY.DEFAULT);
+        // Cache all resource files for each lesson
+        for (const mod of res.data) {
+          for (const lesson of mod.lessons) {
+            if (lesson.resources) {
+              for (const resrc of lesson.resources) {
+                if (resrc.fileUrl || resrc.url) {
+                  await cacheResourceFile(resrc.fileUrl || resrc.url);
+                }
+              }
+            }
+          }
+        }
+      }
     } catch (e) {
       setError('Failed to load modules');
       setModules([]);
@@ -97,6 +149,13 @@ const LearningResources = () => {
     // Simulate marking as complete
     if (!completedLessons.includes(lesson._id)) {
       setCompletedLessons([...completedLessons, lesson._id]);
+    }
+    // Simulate caching quiz/assignment data for offline (if present)
+    if (lesson.quiz) {
+      setCache(`quiz_${lesson._id}`, lesson.quiz, CACHE_EXPIRY.DEFAULT);
+    }
+    if (lesson.assignment) {
+      setCache(`assignment_${lesson._id}`, lesson.assignment, CACHE_EXPIRY.DEFAULT);
     }
   };
 
@@ -129,8 +188,7 @@ const LearningResources = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
-      <div className="flex-1 flex flex-col mt-16">
+      <div className="flex-1 flex flex-col">
         <div className="bg-gradient-to-r from-blue-100 to-blue-300 py-10 mb-8 shadow">
           <div className="max-w-5xl mx-auto px-4">
             <button
@@ -280,7 +338,16 @@ const LearningResources = () => {
                         {selectedLesson.resources.map((res: any) => (
                           <li key={res._id} className="mb-1 flex items-center gap-2">
                             {getResourceIcon(res.type)}
-                            <a href={res.fileUrl || res.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{res.title} ({res.type})</a>
+                            {res.fileUrl || res.url ? (
+                              navigator.onLine ? (
+                                <a href={res.fileUrl || res.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{res.title} ({res.type})</a>
+                              ) : (
+                                // Offline: try to serve cached file
+                                <OfflineResourceLink url={res.fileUrl || res.url} title={res.title} type={res.type} />
+                              )
+                            ) : (
+                              <span>{res.title} ({res.type})</span>
+                            )}
                           </li>
                         ))}
                       </ul>
@@ -305,3 +372,18 @@ const LearningResources = () => {
 };
 
 export default LearningResources;
+
+function OfflineResourceLink({ url, title, type }: { url: string, title: string, type: string }) {
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+  useEffect(() => {
+    getCachedResourceFile(url).then(blob => {
+      if (blob) {
+        setBlobUrl(URL.createObjectURL(blob));
+      }
+    });
+  }, [url]);
+  if (blobUrl) {
+    return <a href={blobUrl} download={title} className="text-blue-600 underline">{title} ({type})</a>;
+  }
+  return <span className="text-gray-400">{title} ({type}) - Not available offline</span>;
+}

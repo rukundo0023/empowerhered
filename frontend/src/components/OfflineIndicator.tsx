@@ -19,15 +19,16 @@ const OfflineIndicator: React.FC = () => {
   return (
     <div style={{
       position: 'fixed',
-      top: 0,
+      top: '64px', // Position below navbar (navbar height is 64px)
       left: 0,
       width: '100%',
       background: '#f87171',
       color: '#fff',
       textAlign: 'center',
-      padding: '8px 0',
-      zIndex: 1000,
+      padding: '4px 0', // Reduced padding from 8px to 4px
+      zIndex: 999, // Lower than navbar z-index (1000)
       fontWeight: 'bold',
+      fontSize: '14px', // Smaller font size
     }}>
       You are offline. Some features may be unavailable.
     </div>

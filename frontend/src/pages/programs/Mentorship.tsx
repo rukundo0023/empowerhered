@@ -1,238 +1,323 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import api from "../../api/axios";
-import { useAuth } from "../../context/AuthContext";
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import OfflineImage from '../../components/OfflineImage';
+import { offlineService } from '../../services/offlineService';
+import allowedMentors from '../../constants/allowedMentors.json';
 
-// Mentor type
 interface Mentor {
   _id: string;
   name: string;
+  email: string;
   expertise: string;
+  bio: string;
   profilePicture?: string;
-  email?: string;
 }
 
 const Mentorship = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [availableMentors, setAvailableMentors] = useState<Mentor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [googleConnected, setGoogleConnected] = useState(false);
-  const [mentorBusySlots, setMentorBusySlots] = useState<{ [mentorId: string]: { start: string, end: string }[] }>({});
-  const [selectedDate, setSelectedDate] = useState<{ [mentorId: string]: Date | undefined }>({});
-  const [selectedTime, setSelectedTime] = useState<{ [mentorId: string]: string }>({});
-  const bookingInProgress = useRef(false);
-  const [busyLoading, setBusyLoading] = useState<{ [mentorId: string]: boolean }>({});
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [selectedMentor, setSelectedMentor] = useState<string>('');
+  const [bookingData, setBookingData] = useState({
+    menteeName: '',
+    menteeEmail: '',
+    topic: '',
+    time: '',
+    notes: '',
+    date: undefined as Date | undefined,
+  });
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
-  // Check if mentor has connected Google Calendar
   useEffect(() => {
-    if (user?.role === 'mentor' && user?.googleAccessToken) {
-      setGoogleConnected(true);
+    fetchMentors();
+    // Set user data for booking
+    if (user) {
+      setBookingData(prev => ({
+        ...prev,
+        menteeName: user.name || '',
+        menteeEmail: user.email || ''
+      }));
     }
   }, [user]);
 
-  // Fetch available mentors
-  useEffect(() => {
-    const fetchMentors = async () => {
-      setIsLoading(true);
-      try {
-        const res = await api.get('/mentors/available');
-        setAvailableMentors(res.data);
-      } catch (err) {
-        toast.error('Failed to fetch mentors');
-      } finally {
-        setIsLoading(false);
+  const fetchMentors = async () => {
+    setIsLoading(true);
+    try {
+      // Fetch real mentors from backend, filter by allowed mentors
+      const mentors = await offlineService.getMentors(allowedMentors);
+      setAvailableMentors(mentors);
+      // Check offline status
+      const status = offlineService.getOfflineStatus();
+      setOfflineMode(!status.isOnline);
+      if (!status.isOnline) {
+        toast.info('You are in offline mode. Bookings will be queued for sync when online.');
       }
-    };
-    fetchMentors();
-  }, []);
-
-  // Fetch busy slots for a mentor (now public for use on date select)
-  const fetchMentorAvailability = async (mentorId: string, date?: Date) => {
-    setBusyLoading(prev => ({ ...prev, [mentorId]: true }));
-    try {
-      const res = await api.get(`/mentors/availability?mentorId=${mentorId}`);
-      setMentorBusySlots(prev => ({ ...prev, [mentorId]: res.data }));
-    } catch (err) {
-      setMentorBusySlots(prev => ({ ...prev, [mentorId]: [] }));
+    } catch (error) {
+      console.error('Error fetching mentors:', error);
+      toast.error('Failed to load mentors');
     } finally {
-      setBusyLoading(prev => ({ ...prev, [mentorId]: false }));
+      setIsLoading(false);
     }
   };
 
-  // On page load, fetch for all mentors
-  useEffect(() => {
-    availableMentors.forEach(mentor => {
-      if (mentor._id) fetchMentorAvailability(mentor._id);
-    });
-    // eslint-disable-next-line
-  }, [availableMentors]);
-
-  // On date select, re-fetch busy slots for that mentor
-  const handleDateSelect = (mentorId: string, date: Date | undefined) => {
-    setSelectedDate(prev => ({ ...prev, [mentorId]: date }));
-    if (mentorId && date) {
-      fetchMentorAvailability(mentorId, date);
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedMentor || !bookingData.menteeName || !bookingData.menteeEmail || !bookingData.date || !bookingData.time) {
+      toast.error('Please fill in all required fields, including date and time');
+      return;
     }
-  };
 
-  // Mentor: Connect Google Calendar
-  const handleConnectGoogle = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
-  };
-
-  // After booking, re-fetch busy slots for that mentor
-  const handleBookGoogleSlot = async (mentorId: string) => {
-    const date = selectedDate[mentorId];
-    const time = selectedTime[mentorId];
-    if (!date || !time) return toast.error('Please select a date and time.');
-    const [hours, minutes] = time.split(':').map(Number);
-    const startDateTime = new Date(date);
-    startDateTime.setHours(hours, minutes, 0, 0);
-    const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000);
-    if (bookingInProgress.current) return;
-    bookingInProgress.current = true;
     try {
-      await api.post('/mentors/book', {
-        mentorId,
-        startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString(),
-        summary: 'Mentorship Session'
+      const booking = await offlineService.createBooking({
+        mentee: user?._id || 'offline_user',
+        menteeName: bookingData.menteeName,
+        menteeEmail: bookingData.menteeEmail,
+        topic: bookingData.topic || 'General Mentorship',
+        time: bookingData.time,
+        notes: bookingData.notes,
+        date: bookingData.date,
+        status: 'pending'
       });
-      toast.success('Booking successful! Check your email/calendar.');
-      // Re-fetch busy slots for this mentor
-      fetchMentorAvailability(mentorId);
-    } catch (err) {
-      toast.error('Booking failed.');
-    } finally {
-      bookingInProgress.current = false;
+
+      toast.success(
+        offlineMode 
+          ? 'Booking created offline! It will be synced when you\'re back online.'
+          : 'Booking request sent successfully!'
+      );
+      
+      setShowBookingForm(false);
+      setSelectedMentor('');
+      setBookingData({
+        menteeName: user?.name || '',
+        menteeEmail: user?.email || '',
+        topic: '',
+        time: '',
+        notes: '',
+        date: undefined,
+      });
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      toast.error('Failed to create booking request');
     }
   };
 
-  // Helper: get busy days for react-day-picker
-  const getDisabledDays = (mentorId: string) => {
-    const busy = mentorBusySlots[mentorId] || [];
-    // Collect all busy dates (not times)
-    const busyDates = busy.map(slot => {
-      const start = new Date(slot.start);
-      return new Date(start.getFullYear(), start.getMonth(), start.getDate());
-    });
-    return busyDates;
+  const handleMentorSelect = (mentorId: string) => {
+    setSelectedMentor(mentorId);
+    setShowBookingForm(true);
   };
 
-  // Helper: time options (every 30 min from 8am to 6pm)
-  const timeOptions = Array.from({ length: 20 }, (_, i) => {
-    const hour = 8 + Math.floor(i / 2);
-    const min = i % 2 === 0 ? '00' : '30';
-    return `${hour.toString().padStart(2, '0')}:${min}`;
-  });
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-32 pb-10 px-2 md:px-0">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading mentors...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pt-32 pb-10 px-2 md:px-0">
       <div className="max-w-3xl mx-auto mb-10 text-center">
         <h1 className="text-5xl font-extrabold mb-3 text-blue-900 drop-shadow-lg">Mentorship Program</h1>
         <p className="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">
-          Book a session with a mentor. All bookings are synced with Google Calendar for real-time availability!
+          Connect with experienced mentors who can guide you in your career journey.
         </p>
-        {/* Mentor: Google Calendar connect button/status */}
-        {user?.role === 'mentor' && (
-          <div className="mb-4">
-            {googleConnected ? (
-              <span className="text-green-600 font-semibold text-lg">Google Calendar Connected ✅</span>
-            ) : (
-              <button
-                className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-2 rounded-full shadow-lg hover:from-blue-700 hover:to-blue-500 transition-all font-semibold text-lg"
-                onClick={handleConnectGoogle}
-              >
-                Connect Google Calendar
-              </button>
-            )}
+        
+        {offlineMode && (
+          <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+            <p className="text-yellow-800 text-sm">
+              📱 Offline Mode - You can view mentors and create booking requests. They will be synced when you're back online.
+            </p>
           </div>
         )}
       </div>
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">Available Mentors</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {isLoading ? (
-            <div className="col-span-2 text-center text-lg">Loading mentors...</div>
-          ) : availableMentors.length === 0 ? (
-            <div className="col-span-2 text-center text-lg">No mentors available at the moment.</div>
-          ) : (
-            availableMentors.map(mentor => (
-              <div
-                key={mentor._id}
-                className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-blue-100 hover:shadow-2xl transition-all duration-300 relative group"
-              >
-                <div className="relative mb-3">
-                  <img
-                    src={mentor.profilePicture || '/default-profile.png'}
-                    alt={mentor.name}
-                    className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow-lg group-hover:scale-105 transition-transform"
-                  />
-                  <span className="absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-white bg-green-500 shadow"></span>
+
+      {/* Mentors List */}
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {availableMentors.map((mentor) => (
+            <div key={mentor._id} className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-start space-x-4">
+                <OfflineImage
+                  src={mentor.profilePicture || '/placeholder-mentor.svg'}
+                  alt={mentor.name}
+                  className="w-16 h-16 rounded-full object-cover"
+                  fallbackSrc="/placeholder-mentor.svg"
+                />
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-gray-900">{mentor.name}</h3>
+                  <p className="text-blue-600 font-medium">{mentor.expertise}</p>
+                  <p className="text-gray-600 text-sm mt-2">{mentor.bio}</p>
+                  
+                  <button
+                    onClick={() => handleMentorSelect(mentor._id)}
+                    disabled={offlineMode}
+                    className={`mt-4 px-4 py-2 rounded-md font-medium transition-colors duration-200 ${
+                      offlineMode
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
+                  >
+                    {offlineMode ? 'Booking unavailable offline' : 'Book Session'}
+                  </button>
                 </div>
-                <h2 className="text-xl font-bold mb-1 text-blue-900">{mentor.name}</h2>
-                <p className="text-blue-700 mb-2 font-medium">{mentor.expertise}</p>
-                <div className="w-full border-t border-blue-100 my-3" />
-                <div className="mb-2 w-full">
-                  <label className="block font-medium mb-1 text-gray-700">Book a Session:</label>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {availableMentors.length === 0 && (
+          <div className="text-center py-12">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No mentors available</h3>
+            <p className="text-gray-600">
+              {offlineMode 
+                ? "No cached mentors found. Please connect to the internet to load mentors."
+                : "Check back later for available mentors."
+              }
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Booking Modal */}
+      {showBookingForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Book Mentorship Session</h2>
+            
+            <form onSubmit={handleBookingSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Name *
+                </label>
+                <input
+                  type="text"
+                  value={bookingData.menteeName}
+                  onChange={(e) => setBookingData(prev => ({ ...prev, menteeName: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  value={bookingData.menteeEmail}
+                  onChange={(e) => setBookingData(prev => ({ ...prev, menteeEmail: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Topic
+                </label>
+                <input
+                  type="text"
+                  value={bookingData.topic}
+                  onChange={(e) => setBookingData(prev => ({ ...prev, topic: e.target.value }))}
+                  placeholder="What would you like to discuss?"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Date *
+                </label>
+                <div className="flex justify-center">
                   <DayPicker
                     mode="single"
-                    selected={selectedDate[mentor._id]}
-                    onSelect={date => handleDateSelect(mentor._id, date)}
-                    disabled={getDisabledDays(mentor._id)}
+                    selected={bookingData.date}
+                    onSelect={(date) => setBookingData(prev => ({ ...prev, date }))}
                     fromDate={new Date()}
-                    className="mb-2 mx-auto"
+                    className="border rounded-md p-1 shadow-sm w-fit min-w-[220px] max-w-[260px] text-sm bg-white"
+                    style={{ fontSize: '0.9rem' }}
+                    required
                   />
-                  {busyLoading[mentor._id] && (
-                    <div className="text-blue-500 text-sm mb-2">Loading availability...</div>
-                  )}
-                  <select
-                    className="w-full border rounded px-2 py-2 mb-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                    value={selectedTime[mentor._id] || ''}
-                    onChange={e => setSelectedTime(prev => ({ ...prev, [mentor._id]: e.target.value }))}
-                    disabled={busyLoading[mentor._id]}
-                  >
-                    <option value="">Select time</option>
-                    {timeOptions.map(time => {
-                      const date = selectedDate[mentor._id];
-                      let isBusy = false;
-                      if (date) {
-                        const [hour, minute] = time.split(':').map(Number);
-                        const slotStart = new Date(date);
-                        slotStart.setHours(hour, minute, 0, 0);
-                        const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
-                        isBusy = (mentorBusySlots[mentor._id] || []).some(slot => {
-                          const busyStart = new Date(slot.start);
-                          const busyEnd = new Date(slot.end);
-                          return (
-                            slotStart < busyEnd && slotEnd > busyStart
-                          );
-                        });
-                      }
-                      return (
-                        <option key={time} value={time} disabled={isBusy}>
-                          {time} {isBusy ? '(Booked)' : ''}
-                        </option>
-                      );
-                    })}
-                  </select>
                 </div>
-                <button
-                  className="mt-2 w-full bg-gradient-to-r from-green-500 to-green-400 text-white px-4 py-2 rounded-full font-semibold shadow-lg hover:from-green-600 hover:to-green-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => handleBookGoogleSlot(mentor._id)}
-                  disabled={!selectedDate[mentor._id] || !selectedTime[mentor._id]}
+                {!bookingData.date && <p className="text-xs text-red-500 mt-1">Please select a date.</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Time *
+                </label>
+                <select
+                  value={bookingData.time}
+                  onChange={e => setBookingData(prev => ({ ...prev, time: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
                 >
-                  Book Session
+                  <option value="">Select a time</option>
+                  {Array.from({ length: ((19 - 9) * 60) / 15 + 1 }, (_, i) => {
+                    const minutes = 9 * 60 + i * 15;
+                    const h = Math.floor(minutes / 60);
+                    const m = minutes % 60;
+                    const label = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                    const ampm = h < 12 ? 'AM' : 'PM';
+                    const hour12 = h % 12 === 0 ? 12 : h % 12;
+                    const display = `${hour12}:${m.toString().padStart(2, '0')} ${ampm}`;
+                    return <option key={label} value={label}>{display}</option>;
+                  })}
+                </select>
+                {!bookingData.time && <p className="text-xs text-red-500 mt-1">Please select a time.</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <textarea
+                  value={bookingData.notes}
+                  onChange={(e) => setBookingData(prev => ({ ...prev, notes: e.target.value }))}
+                  placeholder="Any specific questions or topics you'd like to cover?"
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowBookingForm(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  {offlineMode ? 'Queue Booking' : 'Submit Request'}
                 </button>
               </div>
-            ))
-          )}
+            </form>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Offline Status */}
+      {offlineMode && (
+        <div className="mt-8 text-center">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-md">
+            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-blue-800 text-sm">
+              Offline Mode - Bookings will be synced when online
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

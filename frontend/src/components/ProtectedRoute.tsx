@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
 
   if (loading) {
     // Show loading or spinner while auth status is being checked
@@ -24,6 +24,25 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     }
     // Online: redirect to login
     return <Navigate to="/login" replace />;
+  }
+
+  // Show offline indicator for offline users
+  if (user?.isOfflineUser) {
+    return (
+      <>
+        <div style={{ 
+          padding: '0.5rem', 
+          textAlign: 'center', 
+          backgroundColor: '#fef3c7', 
+          color: '#92400e', 
+          fontSize: '0.875rem',
+          borderBottom: '1px solid #f59e0b'
+        }}>
+          🔄 You're logged in offline. Your session will sync when you reconnect.
+        </div>
+        {children}
+      </>
+    );
   }
 
   return <>{children}</>;

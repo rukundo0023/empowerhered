@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import { useTranslation } from "react-i18next";
+import offlineAuthService from "../services/offlineAuthService";
+import OfflineSignupInfo from "../components/OfflineSignupInfo";
 
 const Signup = () => {
   const { t } = useTranslation();
@@ -31,6 +33,32 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [emailAvailability, setEmailAvailability] = useState<boolean | null>(null);
+
+  // Check offline status and email availability
+  useEffect(() => {
+    const updateOfflineStatus = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    const checkEmailAvailability = async () => {
+      if (formData.email && formData.email.includes('@')) {
+        const available = await offlineAuthService.isEmailAvailableForSignup(formData.email);
+        setEmailAvailability(available);
+      }
+    };
+
+    window.addEventListener('online', updateOfflineStatus);
+    window.addEventListener('offline', updateOfflineStatus);
+    
+    checkEmailAvailability();
+
+    return () => {
+      window.removeEventListener('online', updateOfflineStatus);
+      window.removeEventListener('offline', updateOfflineStatus);
+    };
+  }, [formData.email]);
 
   const getUserInitials = (name: string) => {
     return name
@@ -92,14 +120,26 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/users/register", formData);
-      toast.success(t('auth.signup.success'));
-      setRegistrationSuccess(true);
+      console.log("Signup component - Attempting signup:", { email: formData.email, isOffline });
 
-      setTimeout(() => navigate("/login"), 2000);
+      if (isOffline) {
+        // Handle offline signup
+        const offlineUser = await offlineAuthService.signupOffline(formData);
+        signup(offlineUser);
+        toast.success('Account created offline. Your registration will sync when you reconnect.');
+        setRegistrationSuccess(true);
+        setTimeout(() => navigate("/dashboard"), 2000);
+      } else {
+        // Handle online signup
+        const response = await api.post("/users/register", formData);
+        toast.success(t('auth.signup.success'));
+        setRegistrationSuccess(true);
+        setTimeout(() => navigate("/login"), 2000);
+      }
     } catch (error: any) {
-      console.error(error);
-      toast.error(error.response?.data?.message || t('auth.signup.error'));
+      console.error("Signup component - Signup error:", error);
+      const errorMessage = error.message || error.response?.data?.message || t('auth.signup.error');
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -114,10 +154,27 @@ const Signup = () => {
               {getUserInitials(formData.name)}
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {t('auth.signup.success.title', { name: formData.name })}
+              {isOffline ? 'Account Created Offline!' : t('auth.signup.success.title', { name: formData.name })}
             </h2>
-            <p className="text-gray-600 mb-4">{t('auth.signup.success.message')}</p>
-            <p className="text-sm text-gray-500">{t('auth.signup.success.redirecting')}</p>
+            <p className="text-gray-600 mb-4">
+              {isOffline 
+                ? 'Your account has been created locally and will sync when you reconnect to the internet.'
+                : t('auth.signup.success.message')
+              }
+            </p>
+            <p className="text-sm text-gray-500">
+              {isOffline 
+                ? 'Redirecting to dashboard...'
+                : t('auth.signup.success.redirecting')
+              }
+            </p>
+            {isOffline && (
+              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                <p className="text-sm text-yellow-800">
+                  🔄 Your account will be synced to the server when you're back online.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -138,6 +195,8 @@ const Signup = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <OfflineSignupInfo />
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name */}
             <div>
@@ -169,6 +228,12 @@ const Signup = () => {
                 className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm"
               />
               {errors.email && <p className="text-sm text-red-600">{errors.email}</p>}
+              {emailAvailability === false && (
+                <p className="text-sm text-red-600">This email is already registered</p>
+              )}
+              {emailAvailability === true && formData.email && (
+                <p className="text-sm text-green-600">✓ Email is available</p>
+              )}
             </div>
 
             {/* Gender */}
