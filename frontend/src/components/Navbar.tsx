@@ -29,9 +29,9 @@ const Navbar = () => {
   ];
 
   const resourcesMenu = [
-    { name: t('nav.blog'), path: "/blog" },
-    { name: t('nav.community'), path: "/resources/community" },
     { name: t('nav.learning'), path: "/resources/learning" },
+    { name: t('nav.community'), path: "/resources/community" },
+    { name: t('nav.blog'), path: "/blog" },
   ];
 
   const searchableContent = [
@@ -342,7 +342,7 @@ const Navbar = () => {
                     {user?.role === 'student' && (
                       <Link
                         to="/dashboard"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                         onClick={() => setIsProfileOpen(false)}
                       >
                         <FaChartLine className="mr-2 text-blue-600" />
@@ -582,7 +582,7 @@ const Navbar = () => {
                   {user?.role === 'student' && (
                     <Link
                       to="/dashboard"
-                      className="block py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
+                      className="py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <FaChartLine className="mr-2 text-blue-600" />
