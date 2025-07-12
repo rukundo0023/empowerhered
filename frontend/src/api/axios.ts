@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_PORT = import.meta.env.VITE_API_PORT || 5000;
-const API_URL = `http://localhost:${API_PORT}/api`;
+const API_URL = import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_API_PORT || 5000}/api`;
 
 const api = axios.create({
   baseURL: API_URL,
@@ -9,7 +8,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
   timeout: 10000, // 10 second timeout
-  withCredentials: true
+  withCredentials: true,
 });
 
 // Request interceptor
@@ -43,7 +42,7 @@ api.interceptors.response.use(
   },
   (error) => {
     console.error('Response error:', error.response || error);
-    
+
     if (error.code === 'ECONNABORTED') {
       return Promise.reject(new Error('Request timeout. Please try again.'));
     }
@@ -52,13 +51,11 @@ api.interceptors.response.use(
       return Promise.reject(new Error('Network error. Please check your connection.'));
     }
 
-    // Handle specific error cases
     const status = error.response.status;
     const message = error.response.data?.message || 'An error occurred';
 
     switch (status) {
       case 401:
-        // Clear user data on authentication errors
         localStorage.removeItem('user');
         return Promise.reject(new Error(message));
       case 403:
@@ -73,4 +70,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api; 
+export default api;
