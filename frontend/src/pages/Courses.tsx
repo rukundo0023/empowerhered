@@ -65,7 +65,7 @@ const Courses: React.FC = () => {
   };
 
   const isEnrolled = (courseId: string) => {
-    return user?.enrolledCourses?.includes(courseId) || false;
+    return (user as any)?.enrolledCourses?.includes(courseId) || false;
   };
 
   if (loading) {

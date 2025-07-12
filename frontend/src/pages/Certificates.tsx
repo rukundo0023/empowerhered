@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { 
   getMyCertificates, 
@@ -17,7 +16,7 @@ import {
 } from 'react-icons/fa';
 
 const Certificates: React.FC = () => {
-  const { user } = useAuth();
+
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);

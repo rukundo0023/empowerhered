@@ -1,4 +1,4 @@
-import { getCache, setCache, CACHE_EXPIRY } from '../api/cacheUtil';
+import { getCache, setCache, CACHE_EXPIRY, getOfflineQueue } from '../api/cacheUtil';
 import { addToOfflineQueue } from '../api/cacheUtil';
 
 export interface OfflineUser {
@@ -26,7 +26,6 @@ export interface SignupData {
 }
 
 class OfflineAuthService {
-  private isOnline: boolean = navigator.onLine;
 
   constructor() {
     this.setupNetworkListeners();
@@ -34,11 +33,11 @@ class OfflineAuthService {
 
   private setupNetworkListeners() {
     window.addEventListener('online', () => {
-      this.isOnline = true;
+      // Removed: this.isOnline = true;
     });
 
     window.addEventListener('offline', () => {
-      this.isOnline = false;
+      // Removed: this.isOnline = false;
     });
   }
 
@@ -223,7 +222,7 @@ class OfflineAuthService {
   async isOfflineLoginAvailable(): Promise<boolean> {
     try {
       const credentials = await getCache<LoginCredentials[]>('offline_credentials');
-      return credentials && credentials.length > 0;
+      return Boolean(credentials && credentials.length > 0);
     } catch (error) {
       return false;
     }
@@ -298,8 +297,8 @@ class OfflineAuthService {
     try {
       const queue = await getOfflineQueue();
       return queue
-        .filter(action => action.endpoint === '/users/register')
-        .map(action => action.data as SignupData);
+        .filter((action: any) => action.endpoint === '/users/register')
+        .map((action: any) => action.data as SignupData);
     } catch (error) {
       console.error('Error getting pending signups:', error);
       return [];
@@ -316,12 +315,12 @@ class OfflineAuthService {
 
       for (const signupData of pendingSignups) {
         try {
-          const response = await api.post('/users/register', signupData);
+          await api.post('/users/register', signupData);
           console.log('Offline signup synced successfully for:', signupData.email);
           
           // Remove from queue after successful sync
           const queue = await getOfflineQueue();
-          const updatedQueue = queue.filter(action => 
+          const updatedQueue = queue.filter((action: any) => 
             !(action.endpoint === '/users/register' && action.data.email === signupData.email)
           );
           await setCache('offline_queue', updatedQueue, CACHE_EXPIRY.DEFAULT);

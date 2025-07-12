@@ -5,7 +5,6 @@ import axios from 'axios';
 import {
   Box,
   Container,
-  Paper,
   Typography,
   Card,
   CardContent,
@@ -16,7 +15,6 @@ import {
   Divider,
   CircularProgress,
   Alert,
-  Grid,
   Tabs,
   Tab,
 } from '@mui/material';
@@ -111,25 +109,23 @@ const MentorDashboard: React.FC = () => {
       </Typography>
 
       {/* Stats */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }} gap={3} mb={4}>
         {[
           { label: 'Total Mentees', value: stats.totalMentees, color: '#e3f2fd', textColor: 'primary' },
           { label: 'Active Mentees', value: stats.activeMentees, color: '#f3e5f5', textColor: 'secondary' },
           { label: 'Completed Meetings', value: stats.completedMeetings, color: '#e8f5e9', textColor: 'success.main' },
           { label: 'Pending Meetings', value: stats.pendingMeetings, color: '#fff3e0', textColor: 'warning.main' },
         ].map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, bgcolor: stat.color }}>
-              <Typography component="h2" variant="h6" color={stat.textColor} gutterBottom>
-                {stat.label}
-              </Typography>
-              <Typography component="p" variant="h4">
-                {stat.value}
-              </Typography>
-            </Paper>
-          </Grid>
+          <Box key={index} sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, bgcolor: stat.color, borderRadius: 2, boxShadow: 1 }}>
+            <Typography component="h2" variant="h6" color={stat.textColor} gutterBottom>
+              {stat.label}
+            </Typography>
+            <Typography component="p" variant="h4">
+              {stat.value}
+            </Typography>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       {/* Tabs */}
       <Tabs

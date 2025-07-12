@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { DayPicker } from 'react-day-picker';
@@ -6,7 +6,6 @@ import 'react-day-picker/dist/style.css';
 import OfflineImage from '../../components/OfflineImage';
 import { offlineService } from '../../services/offlineService';
 import allowedMentors from '../../constants/allowedMentors.json';
-import api from '../../api/axios';
 
 interface Mentor {
   _id: string;
@@ -32,9 +31,7 @@ const Mentorship = () => {
     date: undefined as Date | undefined,
   });
   const [showBookingForm, setShowBookingForm] = useState(false);
-  const [userBookings, setUserBookings] = useState<any[]>([]);
-  const [loadingBookings, setLoadingBookings] = useState(true);
-  const [bookingError, setBookingError] = useState('');
+
 
   useEffect(() => {
     fetchMentors();
@@ -48,23 +45,7 @@ const Mentorship = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    const fetchUserBookings = async () => {
-      setLoadingBookings(true);
-      setBookingError('');
-      try {
-        if (user?._id) {
-          const res = await api.get(`/mentors/bookings?mentee=${user._id}`);
-          setUserBookings(res.data);
-        }
-      } catch (err) {
-        setBookingError('Failed to load your bookings');
-      } finally {
-        setLoadingBookings(false);
-      }
-    };
-    fetchUserBookings();
-  }, [user]);
+
 
   const fetchMentors = async () => {
     setIsLoading(true);
@@ -95,14 +76,15 @@ const Mentorship = () => {
     }
 
     try {
-      const booking = await offlineService.createBooking({
+      await offlineService.createBooking({
         mentee: user?._id || 'offline_user',
-        name: bookingData.menteeName,
-        email: bookingData.menteeEmail,
+        menteeName: bookingData.menteeName,
+        menteeEmail: bookingData.menteeEmail,
         topic: bookingData.topic || 'General Mentorship',
         time: bookingData.time,
         notes: bookingData.notes,
         date: bookingData.date,
+        duration: 60, // Default duration of 60 minutes
         status: 'pending'
       });
 

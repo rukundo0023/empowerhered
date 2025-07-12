@@ -8,10 +8,7 @@ const ContactForm = () => {
     email: '',
     message: ''
   });
-  const [status, setStatus] = useState<{
-    type: 'success' | 'error' | null;
-    message: string;
-  }>({ type: null, message: '' });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -25,22 +22,13 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setStatus({ type: null, message: '' });
 
     try {
       const response = await contactService.submitContactForm(formData);
       toast.success(response.message);
-      setStatus({
-        type: 'success',
-        message: response.message
-      });
       setFormData({ name: '', email: '', message: '' });
     } catch (error: any) {
       toast.error(error.message);
-      setStatus({
-        type: 'error',
-        message: error.message
-      });
     } finally {
       setIsSubmitting(false);
     }

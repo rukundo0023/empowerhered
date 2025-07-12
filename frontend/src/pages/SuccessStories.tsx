@@ -118,7 +118,7 @@ const firstPart = words.join(' '); // Get all words except the last
                   />
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-neutral-900">{story.name}</h3>
-                    <p className="text-neutral-600">{story.role}</p>
+                    <p className="text-neutral-600">Program Graduate</p>
                   </div>
                 </div>
                 <blockquote className="text-lg text-neutral-700 italic mb-6">

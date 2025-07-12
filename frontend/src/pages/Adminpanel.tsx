@@ -2,20 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../api/axios";
-import QuizBuilder, { QuizQuestion } from '../components/QuizBuilder';
-import AssignmentFields, { AssignmentFieldsData } from '../components/AssignmentFields';
+import QuizBuilder from '../components/QuizBuilder';
+import AssignmentFields from '../components/AssignmentFields';
 import Modal from '../components/Modal'; // Assume a simple Modal component exists or use a div for modal
-import { FaPlus, FaEdit, FaTrash, FaChevronDown, FaClipboardList, FaQuestionCircle } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaClipboardList } from 'react-icons/fa';
 import TiptapEditor from '../components/TiptapEditor';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  gender: string;
-  createdAt: string;
-}
+import type { User, Lesson, Module } from '../types';
 
 interface Course {
   _id: string;
@@ -54,20 +46,7 @@ interface StudentProgress {
   lastAccessed: string;
 }
 
-interface Module {
-  _id: string;
-  title: string;
-  description?: string;
-  lessons: Lesson[];
-}
 
-interface Lesson {
-  _id: string;
-  title: string;
-  content?: string;
-  quizzes?: QuizQuestion[]; // Added quizzes
-  assignment?: AssignmentFieldsData; // Added assignment
-}
 
 type Tab = 'users' | 'courses' | 'resources' | 'progress';
 
@@ -117,17 +96,11 @@ const [modules, setModules] = useState<Module[]>([]);
 const [newModule, setNewModule] = useState({ title: '', description: '' });
 const [selectedModule, setSelectedModule] = useState<Module | null>(null);
 const [newLesson, setNewLesson] = useState({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
-const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
-const [assignmentFields, setAssignmentFields] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
-
 const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
-const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
 const [editModule, setEditModule] = useState({ title: '', description: '' });
-const [editLesson, setEditLesson] = useState({ title: '', content: '' });
+
 const [moduleLoading, setModuleLoading] = useState(false);
-const [lessonLoading, setLessonLoading] = useState(false);
 const [moduleError, setModuleError] = useState('');
-const [lessonError, setLessonError] = useState('');
 
 // Lesson content pagination state
 const [lessonContentPages, setLessonContentPages] = useState<{ [lessonId: string]: number }>({});
@@ -171,7 +144,7 @@ const contentPerPage = 1000; // Characters per page
     users.forEach(u => {
       if (u.gender === 'male') males++;
       if (u.gender === 'female') females++;
-      if (u.role === 'mentor') mentors++;
+      if (u.role === 'mentor' || u.role === 'instructor') mentors++;
     });
     setMaleCount(males);
     setFemaleCount(females);
@@ -200,7 +173,7 @@ const contentPerPage = 1000; // Characters per page
     });
   }, [maleMentorProgress, users]);
 
-  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -278,7 +251,7 @@ const contentPerPage = 1000; // Characters per page
         }
         case 'progress': {
           let res;
-          if (user.role === 'instructor') {
+          if (user && user.role === 'instructor') {
             res = await api.get(`/progress?instructorId=${user._id}`);
           } else {
             res = await api.get('/progress');
@@ -489,37 +462,20 @@ const contentPerPage = 1000; // Characters per page
   const handleAddLesson = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCourseForModules || !selectedModule) return;
-    setLessonLoading(true);
-    setLessonError('');
+
     try {
       const lessonPayload = {
         ...newLesson
       };
       await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, lessonPayload);
       await fetchModules(selectedCourseForModules._id);
-      setNewLesson({ title: '', content: '' });
+      setNewLesson({ title: '', content: '', quizzes: [], assignment: { instructions: '', dueDate: '', fileType: '', fileUrl: '' } });
     } catch (error) {
       handleApiError(error, 'Error adding lesson');
-    } finally {
-      setLessonLoading(false);
     }
   };
 
-  const handleDeleteLesson = async (lessonId: string) => {
-    if (!selectedCourseForModules || !selectedModule) return;
-    try {
-      await api.delete(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lessonId}`);
-      toast.success('Lesson deleted');
-      await fetchModules(selectedCourseForModules._id);
-    } catch (error) {
-      handleApiError(error, 'Error deleting lesson');
-    }
-  };
 
-  const handleEditModule = (mod: Module) => {
-    setEditingModuleId(mod._id);
-    setEditModule({ title: mod.title, description: mod.description || '' });
-  };
   const handleSaveModule = async (mod: Module) => {
     setModuleLoading(true);
     setModuleError('');
@@ -535,36 +491,16 @@ const contentPerPage = 1000; // Characters per page
       setModuleLoading(false);
     }
   };
-  const handleEditLesson = (lesson: Lesson) => {
-    setEditingLessonId(lesson._id);
-    setEditLesson({ title: lesson.title, content: lesson.content || '' });
-  };
-  const handleSaveLesson = async (lesson: Lesson) => {
-    setLessonLoading(true);
-    setLessonError('');
-    try {
-      await api.put(`/courses/${selectedCourseForModules?._id}/modules/${selectedModule?._id}/lessons/${lesson._id}`, editLesson);
-      await fetchModules(selectedCourseForModules!._id);
-      setEditingLessonId(null);
-      toast.success('Lesson updated');
-    } catch (e) {
-      setLessonError('Failed to update lesson');
-      toast.error('Failed to update lesson');
-    } finally {
-      setLessonLoading(false);
-    }
-  };
+
   const handleCloseModuleModal = () => {
     setShowModuleModal(false);
     setSelectedCourseForModules(null);
     setModules([]);
     setSelectedModule(null);
     setEditingModuleId(null);
-    setEditingLessonId(null);
     setEditModule({ title: '', description: '' });
-    setEditLesson({ title: '', content: '' });
+
     setModuleError('');
-    setLessonError('');
     setLessonContentPages({}); // Reset lesson content pagination
   };
 
@@ -950,8 +886,8 @@ const contentPerPage = 1000; // Characters per page
                         <tr key={resource._id}>
                           <td className="px-6 py-4 whitespace-nowrap">{resource.title}</td>
                           <td className="px-6 py-4 whitespace-nowrap">{resource.type}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{resource.courseId?.title || 'N/A'}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{resource.createdBy?.name || 'N/A'}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">{resource.courseId || 'N/A'}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">{resource.createdBy || 'N/A'}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             {resource.type === 'Link' ? (
                               <a 

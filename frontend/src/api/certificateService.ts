@@ -102,7 +102,7 @@ export const verifyCertificate = async (certificateNumber: string): Promise<Cert
 // Check if user can generate certificate for a course
 export const canGenerateCertificate = async (courseId: string): Promise<{ canGenerate: boolean; reason?: string; currentProgress?: number }> => {
   try {
-    const response = await api.post('/certificates/generate', { courseId });
+    await api.post('/certificates/generate', { courseId });
     return { canGenerate: true };
   } catch (error: any) {
     if (error.response?.status === 400) {

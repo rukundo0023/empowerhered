@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext"
 import { toast } from "react-toastify"
 
 const Settings = () => {
-  const { user, setUser} = useAuth()
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState("account")
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -94,8 +94,8 @@ const Settings = () => {
         }
       }
 
-      // Call the updateUser function from AuthContext
-      await setUser(setUser(updatedUser))
+      // Update user data in localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser))
 
       // Clear password fields after successful update
       setFormData(prev => ({

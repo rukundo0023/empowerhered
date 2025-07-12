@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import QuizGame from '../components/QuizGame';
 import axios from '../api/axios';
+import type { Lesson } from '../types';
 
-const LessonPage = ({ lessonId, courseId, moduleIndex, lessonIndex }) => {
-  const [lesson, setLesson] = useState(null);
-  const [progress, setProgress] = useState([]);
+type Props = {
+  lessonId: string;
+  courseId: string;
+  moduleIndex: number;
+  lessonIndex: number;
+};
+
+const LessonPage = ({ lessonId, courseId, moduleIndex, lessonIndex }: Props) => {
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [progress, setProgress] = useState<number[]>([]);
 
   useEffect(() => {
     axios.get(`/api/lessons/${lessonId}`).then(res => setLesson(res.data));
@@ -14,7 +22,7 @@ const LessonPage = ({ lessonId, courseId, moduleIndex, lessonIndex }) => {
         .catch(() => {});
       // Fetch progress for this course
       axios.get(`/api/courses/${courseId}/lesson-progress`).then(res => {
-        const moduleProgress = res.data.lessonProgress.find(lp => lp.moduleIndex === Number(moduleIndex));
+        const moduleProgress = res.data.lessonProgress.find((lp: any) => lp.moduleIndex === Number(moduleIndex));
         setProgress(moduleProgress ? moduleProgress.completedLessons : []);
       });
     }
@@ -48,8 +56,8 @@ const LessonPage = ({ lessonId, courseId, moduleIndex, lessonIndex }) => {
         </div>
       )}
       {lesson.games && lesson.games.map((game, idx) => {
-        if (game.type === 'quiz') {
-          return <QuizGame key={idx} questions={game.config.questions} />;
+        if (game.type === 'quiz' && game.config && game.config.questions) {
+          return <QuizGame key={idx} questions={game.config.questions as any} />;
         }
         // Add more game types as needed
         return null;

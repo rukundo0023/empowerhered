@@ -211,7 +211,7 @@ const Home = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {t('home.successStories.stories', { returnObjects: true }).map((story, index) => (
+            {(t('home.successStories.stories', { returnObjects: true }) as Array<{ name: string; role: string; quote: string; achievement: string }>).map((story, index) => (
               <motion.div
                 key={story.name}
                 initial={{ opacity: 0, y: 20 }}
@@ -279,15 +279,15 @@ const Home = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {t('home.cta.features', { returnObjects: true }).map((feature, index) => (
+            {(t('home.cta.features', { returnObjects: true }) as Array<{ title: string; description: string }>).map((feature, index) => (
               <motion.div
-                key={feature}
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 text-center"
               >
-                <div className="text-gray-600 font-medium">{feature}</div>
+                <div className="text-gray-600 font-medium">{feature.title}</div>
               </motion.div>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
 import { uploadFile } from '../api/uploadService';
+import type { Lesson } from '../types';
 
 interface Assignment {
   _id: string;
@@ -11,13 +12,6 @@ interface Assignment {
   fileUrl?: string;
   grade?: number;
   feedback?: string;
-}
-
-interface Lesson {
-  _id: string;
-  title: string;
-  content?: string;
-  assignment?: Assignment;
 }
 
 const AssignmentComponent = ({ lesson }: { lesson: Lesson }) => {
@@ -34,9 +28,11 @@ const AssignmentComponent = ({ lesson }: { lesson: Lesson }) => {
   useEffect(() => {
     // Use assignment from lesson.assignment
     if (lesson && lesson.assignment) {
-      setAssignment(lesson.assignment);
-      if (lesson.assignment.grade) setGrade(lesson.assignment.grade);
-      if (lesson.assignment.feedback) setFeedback(lesson.assignment.feedback);
+      if (lesson.assignment) {
+        setAssignment(lesson.assignment);
+        if (lesson.assignment.grade) setGrade(lesson.assignment.grade);
+        if (lesson.assignment.feedback) setFeedback(lesson.assignment.feedback);
+      }
     } else {
       setAssignment(null);
     }

@@ -3,13 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 
-interface Mentee {
-  id: string;
-  name: string;
-  email: string;
-  progress: number;
-  lastMeeting: string;
-}
+
 
 interface Meeting {
   id: string;
@@ -31,13 +25,11 @@ interface Booking {
 const Mentordashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [mentees, setMentees] = useState<Mentee[]>([]);
   const [upcomingMeetings, setUpcomingMeetings] = useState<Meeting[]>([]);
   const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const bookingInfo = location.state?.bookingInfo;
     const message = location.state?.message;
 
     if (message) {
@@ -47,12 +39,10 @@ const Mentordashboard = () => {
 
     const fetchMentorData = async () => {
       try {
-        const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
-          api.get<Mentee[]>('/mentors/mentees'),
+        const [meetingsRes, bookingsRes] = await Promise.all([
           api.get<Meeting[]>('/mentors/meetings'),
           api.get<Booking[]>('/mentors/bookings')
         ]);
-        setMentees(menteesRes.data);
         setUpcomingMeetings(meetingsRes.data);
         setPendingBookings(bookingsRes.data);
       } catch (error) {
@@ -66,13 +56,7 @@ const Mentordashboard = () => {
     fetchMentorData();
   }, [location]);
 
-  const handleScheduleMeeting = (menteeId: string) => {
-    navigate(`/mentor/schedule/${menteeId}`);
-  };
 
-  const handleViewProgress = (menteeId: string) => {
-    navigate(`/mentor/mentee/${menteeId}`);
-  };
 
   const handleViewMeetingDetails = (meetingId: string) => {
     navigate(`/mentor/meeting/${meetingId}`);
@@ -82,12 +66,10 @@ const Mentordashboard = () => {
     try {
       await api.put(`/mentors/bookings/${bookingId}/accept`);
       toast.success('Booking accepted successfully');
-      const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
-        api.get<Mentee[]>('/mentors/mentees'),
+      const [meetingsRes, bookingsRes] = await Promise.all([
         api.get<Meeting[]>('/mentors/meetings'),
         api.get<Booking[]>('/mentors/bookings')
       ]);
-      setMentees(menteesRes.data);
       setUpcomingMeetings(meetingsRes.data);
       setPendingBookings(bookingsRes.data);
     } catch (error: any) {
@@ -106,12 +88,10 @@ const Mentordashboard = () => {
     try {
       await api.put(`/mentors/bookings/${bookingId}/reject`);
       toast.success('Booking rejected successfully');
-      const [menteesRes, meetingsRes, bookingsRes] = await Promise.all([
-        api.get<Mentee[]>('/mentors/mentees'),
+      const [meetingsRes, bookingsRes] = await Promise.all([
         api.get<Meeting[]>('/mentors/meetings'),
         api.get<Booking[]>('/mentors/bookings')
       ]);
-      setMentees(menteesRes.data);
       setUpcomingMeetings(meetingsRes.data);
       setPendingBookings(bookingsRes.data);
     } catch (error) {

@@ -8,6 +8,11 @@ import { getCache, setCache, CACHE_EXPIRY } from '../api/cacheUtil';
 import localforage from 'localforage';
 import { useAuth } from '../context/AuthContext';
 import { generateCertificate, canGenerateCertificate } from '../api/certificateService';
+import type { Lesson as GlobalLesson } from '../types';
+
+interface Lesson extends GlobalLesson {
+  resources?: Array<any>;
+}
 
 // Utility to cache a file by URL
 async function cacheResourceFile(url: string) {
@@ -41,12 +46,7 @@ interface Module {
   lessons: Lesson[];
 }
 
-interface Lesson {
-  _id: string;
-  title: string;
-  content?: string;
-  resources?: Array<any>;
-}
+
 
 interface Course {
   _id: string;

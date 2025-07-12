@@ -107,7 +107,8 @@ const Signup = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -131,7 +132,7 @@ const Signup = () => {
         setTimeout(() => navigate("/dashboard"), 2000);
       } else {
         // Handle online signup
-        const response = await api.post("/users/register", formData);
+        await api.post("/users/register", formData);
         toast.success(t('auth.signup.success'));
         setRegistrationSuccess(true);
         setTimeout(() => navigate("/login"), 2000);

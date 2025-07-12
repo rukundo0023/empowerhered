@@ -5,7 +5,7 @@ import api from "../api/axios";
 import QuizBuilder, { QuizQuestion } from '../components/QuizBuilder';
 import AssignmentFields, { AssignmentFieldsData } from '../components/AssignmentFields';
 import Modal from '../components/Modal'; // Assume a simple Modal component exists or use a div for modal
-import { FaPlus, FaEdit, FaTrash, FaChevronDown, FaChevronUp, FaQuestionCircle, FaClipboardList } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaClipboardList } from 'react-icons/fa';
 import TiptapEditor from '../components/TiptapEditor';
 
 interface Course {
@@ -111,24 +111,14 @@ const InstructorDashboard = () => {
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const [newLesson, setNewLesson] = useState({ title: '', content: '' });
 
-  const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
-  const [editLesson, setEditLesson] = useState({ title: '', content: '' });
   const [moduleLoading, setModuleLoading] = useState(false);
   const [moduleError, setModuleError] = useState('');
-  const [lessonLoading, setLessonLoading] = useState(false);
-  const [lessonError, setLessonError] = useState('');
 
   // Lesson content pagination state
   const [lessonContentPages, setLessonContentPages] = useState<{ [lessonId: string]: number }>({});
   const contentPerPage = 1000; // Characters per page for lesson content
-
-  const [editingQuizIdx, setEditingQuizIdx] = useState<{ lessonId: string, idx: number } | null>(null);
-  const [editingAssignmentLessonId, setEditingAssignmentLessonId] = useState<string | null>(null);
-  const [quizEditBuffer, setQuizEditBuffer] = useState<QuizQuestion | null>(null);
-  const [assignmentEditBuffer, setAssignmentEditBuffer] = useState<AssignmentFieldsData | null>(null);
   
   // Add missing state variables for quiz and assignment forms
-  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
   const [assignmentFields, setAssignmentFields] = useState<AssignmentFieldsData>({
     instructions: '',
     dueDate: '',
@@ -139,7 +129,7 @@ const InstructorDashboard = () => {
   const [expandedProgress, setExpandedProgress] = useState<string | null>(null);
   const [detailedProgress, setDetailedProgress] = useState<any>({});
 
-  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleApiError = (error: unknown, fallback = 'Something went wrong') => {
     if (error && typeof error === 'object' && 'response' in error) {
@@ -398,8 +388,8 @@ const InstructorDashboard = () => {
   const handleAddLesson = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCourseForModules || !selectedModule) return;
-    setLessonLoading(true);
-    setLessonError('');
+    setModuleLoading(true);
+    setModuleError('');
     try {
       const lessonPayload = {
         ...newLesson
@@ -410,7 +400,7 @@ const InstructorDashboard = () => {
     } catch (error) {
       handleApiError(error, 'Error adding lesson');
     } finally {
-      setLessonLoading(false);
+      setModuleLoading(false);
     }
   };
 
@@ -425,30 +415,11 @@ const InstructorDashboard = () => {
     }
   };
 
-  const handleEditLesson = (lesson: Lesson) => {
-    setEditingLessonId(lesson._id);
-    setEditLesson({ title: lesson.title, content: lesson.content || '' });
-  };
 
-  const handleSaveLesson = async (lesson: Lesson) => {
-    if (!selectedCourseForModules || !selectedModule) return;
-    setLessonLoading(true);
-    setLessonError('');
-    try {
-      await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, editLesson);
-      await fetchModules(selectedCourseForModules._id);
-      setEditingLessonId(null);
-    } catch (error) {
-      handleApiError(error, 'Error saving lesson');
-    } finally {
-      setLessonLoading(false);
-    }
-  };
 
   const handleCloseModuleModal = () => {
     setShowModuleModal(false);
     setSelectedModule(null);
-    setEditingLessonId(null);
     setLessonContentPages({}); // Reset lesson content pagination
   };
 
@@ -494,44 +465,7 @@ const InstructorDashboard = () => {
   };
 
   // Add handler to delete a quiz from a lesson
-  const handleDeleteQuiz = async (lessonId: string, quizIdx: number) => {
-    if (!selectedCourseForModules || !selectedModule) return;
-    if (!window.confirm('Delete this quiz?')) return;
-    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
-    if (!lesson) return;
-    const updatedQuizzes = (lesson.quizzes || []).filter((_, idx) => idx !== quizIdx);
-    await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: updatedQuizzes });
-    await fetchModules(selectedCourseForModules._id);
-    toast.success('Quiz deleted');
-  };
 
-  // Add handler to edit a quiz from a lesson
-  const handleEditQuiz = (lessonId: string, quizIdx: number) => {
-    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
-    if (!lesson) return;
-    setShowQuizModal(lessonId);
-    setQuizModalBuffer(lesson.quizzes ? [ ...(lesson.quizzes[quizIdx] ? [lesson.quizzes[quizIdx]] : []) ] : []);
-    setEditingQuizIdx({ lessonId, idx: quizIdx });
-  };
-
-  // Add handler to delete an assignment from a lesson
-  const handleDeleteAssignment = async (lessonId: string) => {
-    if (!selectedCourseForModules || !selectedModule) return;
-    if (!window.confirm('Delete this assignment?')) return;
-    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
-    if (!lesson) return;
-    await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, assignment: null });
-    await fetchModules(selectedCourseForModules._id);
-    toast.success('Assignment deleted');
-  };
-
-  // Add handler to edit an assignment from a lesson
-  const handleEditAssignment = (lessonId: string) => {
-    const lesson = modules.flatMap(m => m.lessons).find(l => l._id === lessonId);
-    if (!lesson) return;
-    setShowAssignmentModal(lessonId);
-    setAssignmentModalBuffer(lesson.assignment || { instructions: '', dueDate: '', fileType: '', fileUrl: '' });
-  };
 
   const fetchLessonProgress = async (userId: string, courseId: string) => {
     try {
@@ -1033,7 +967,7 @@ const InstructorDashboard = () => {
                 {['Quiz', 'Assignment'].includes(newResource.type) && (
                   <div className="mb-4">
                     {newResource.type === 'Quiz' ? (
-                      <QuizBuilder />
+                      <QuizBuilder questions={[]} onChange={() => {}} />
                     ) : (
                       <>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Due Date</label>
@@ -1181,7 +1115,6 @@ const InstructorDashboard = () => {
                                 <span className="font-bold text-blue-900">{lesson.title}</span>
                               </div>
                               <div className="flex gap-2">
-                                <button className="text-blue-500 hover:text-blue-700" title="Edit Lesson" onClick={() => handleEditLesson(lesson)}><FaEdit /></button>
                                 <button className="text-red-500 hover:text-red-700" title="Delete Lesson" onClick={() => handleDeleteLesson(lesson._id)}><FaTrash /></button>
                                 <button className="text-green-600 hover:text-green-800" title="Add Quiz" onClick={() => openQuizModal(lesson, mod)}><FaPlus /> Quiz</button>
                                 <button className="text-orange-600 hover:text-orange-800" title="Add Assignment" onClick={() => openAssignmentModal(lesson, mod)}><FaPlus /> Assignment</button>
@@ -1287,12 +1220,9 @@ const InstructorDashboard = () => {
                           required
                         />
                         <TiptapEditor
-                          content={newLesson.content}
+                          value={newLesson.content}
                           onChange={(content) => setNewLesson({ ...newLesson, content: content })}
-                          placeholder="Lesson Content (HTML)"
-                          className="border rounded p-2"
                         />
-                        <QuizBuilder questions={quizQuestions} onChange={setQuizQuestions} />
                         <AssignmentFields value={assignmentFields} onChange={setAssignmentFields} />
                         <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded mt-2">Add Lesson</button>
                       </form>

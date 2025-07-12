@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Profile from './Profile';
-import { FaGraduationCap, FaBook, FaChartLine, FaTrophy, FaClipboardList, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { FaBook, FaTrophy, FaClipboardList } from 'react-icons/fa';
 import api from '../api/axios';
 
 const Dashboard: React.FC = () => {
@@ -90,22 +90,7 @@ const Dashboard: React.FC = () => {
     return course.modules?.reduce((sum: number, module: any) => sum + module.lessons.length, 0) || 0;
   };
 
-  const getQuizScore = (quizId: string) => {
-    const result = quizResults.find((qr: any) => qr.quizId === quizId);
-    return result ? `${result.score}/${result.total}` : 'Not completed';
-  };
 
-  const getAssignmentStatus = (assignmentId: string) => {
-    const submission = assignmentSubmissions.find((sub: any) => sub.assignmentId === assignmentId);
-    if (!submission) return { status: 'Not submitted', color: 'text-red-600' };
-    if (submission.grade !== undefined) {
-      return { 
-        status: `Graded: ${submission.grade}%`, 
-        color: submission.grade >= 70 ? 'text-green-600' : 'text-yellow-600' 
-      };
-    }
-    return { status: 'Submitted', color: 'text-blue-600' };
-  };
 
   if (loading) {
     return (

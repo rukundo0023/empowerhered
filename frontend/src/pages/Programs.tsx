@@ -96,7 +96,7 @@ const firstPart = words.join(' '); // joins remaining words
                 <h3 className="text-xl font-semibold mb-2 text-neutral-800">{program.title}</h3>
                 <p className="text-neutral-600 mb-4">{program.description}</p>
                 <ul className="space-y-2 mb-6">
-                  {program.features.map((feature, featureIndex) => (
+                  {Array.isArray(program.features) && program.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center text-neutral-600">
                       <span className="text-primary-500 mr-2">✓</span>
                       {feature}

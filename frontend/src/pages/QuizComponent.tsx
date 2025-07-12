@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
-import { setCache, getCache } from '../api/cacheUtil';
+import { setCache } from '../api/cacheUtil';
+import type { Lesson } from '../types';
 
 interface Question {
   _id: string;
@@ -16,13 +17,6 @@ interface Quiz {
   _id: string;
   title: string;
   questions: Question[];
-}
-
-interface Lesson {
-  _id: string;
-  title: string;
-  content?: string;
-  quizzes?: Quiz[];
 }
 
 const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgressUpdate?: () => void }) => {
@@ -43,7 +37,13 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
   useEffect(() => {
     // Use the first quiz in lesson.quizzes, or null if none
     if (lesson && lesson.quizzes && lesson.quizzes.length > 0) {
-      setQuiz(lesson.quizzes[0]);
+      // Create a Quiz object from the first quiz question
+      const firstQuiz = lesson.quizzes[0];
+      setQuiz({
+        _id: firstQuiz._id || 'quiz_' + Date.now(),
+        title: 'Lesson Quiz',
+        questions: [firstQuiz]
+      });
     } else {
       setQuiz(null);
     }
@@ -70,7 +70,7 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
 
       // Submit quiz to backend
       const response = await api.post(`/quizzes/${quiz._id}/submit`, { 
-        answers: quiz.questions.map((q, index) => ({
+        answers: quiz.questions.map((q) => ({
           questionId: q._id,
           answer: answers[q._id]
         }))
