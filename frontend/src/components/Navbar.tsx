@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import VoiceSearchButton from "./voiceSearchButton";
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import { FaChartLine } from 'react-icons/fa';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -101,6 +102,12 @@ const Navbar = () => {
       const searchContainer = document.getElementById("search-container");
       if (searchContainer && !searchContainer.contains(event.target as Node)) {
         setIsSearchFocused(false);
+      }
+      
+      // Close profile dropdown when clicking outside
+      const profileDropdown = document.getElementById("profile-dropdown");
+      if (profileDropdown && !profileDropdown.contains(event.target as Node)) {
+        setIsProfileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -312,7 +319,7 @@ const Navbar = () => {
             <LanguageSwitcher />
 
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="relative" id="profile-dropdown">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 focus:outline-none"
@@ -332,6 +339,16 @@ const Navbar = () => {
                     >
                       {t('nav.profile')}
                     </Link>
+                    {user?.role === 'student' && (
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        <FaChartLine className="mr-2 text-blue-600" />
+                        Progress Dashboard
+                      </Link>
+                    )}
                     {user?.role === 'admin' && (
                       <Link
                         to="/admin"
@@ -562,6 +579,16 @@ const Navbar = () => {
                   >
                     {t('nav.profile')}
                   </Link>
+                  {user?.role === 'student' && (
+                    <Link
+                      to="/dashboard"
+                      className="block py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <FaChartLine className="mr-2 text-blue-600" />
+                      Progress Dashboard
+                    </Link>
+                  )}
                   {user?.role === 'admin' && (
                     <Link
                       to="/admin"

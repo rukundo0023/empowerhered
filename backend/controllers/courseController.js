@@ -446,6 +446,38 @@ const visitLesson = async (req, res) => {
     }
     console.log('User before update:', JSON.stringify(user, null, 2));
 
+    // Get course and lesson details
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    const module = course.modules[moduleIndex];
+    if (!module) {
+      return res.status(404).json({ message: 'Module not found' });
+    }
+
+    const lesson = module.lessons[lessonIndex];
+    if (!lesson) {
+      return res.status(404).json({ message: 'Lesson not found' });
+    }
+
+    // Check if lesson has a quiz and if user has completed it
+    if (lesson.quizzes && lesson.quizzes.length > 0) {
+      const quiz = lesson.quizzes[0]; // Get the first quiz
+      const quizCompleted = user.quizResults?.some(qr => 
+        qr.quizId.toString() === quiz._id.toString()
+      );
+      
+      if (!quizCompleted) {
+        return res.status(400).json({ 
+          message: 'Please complete the quiz before marking this lesson as completed',
+          requiresQuiz: true,
+          quizId: quiz._id
+        });
+      }
+    }
+
     // Step 1: Find or create lessonProgress entry
     let progressEntry = user.lessonProgress.find(lp =>
       lp.courseId.toString() === courseId && lp.moduleIndex === Number(moduleIndex)
@@ -470,8 +502,7 @@ const visitLesson = async (req, res) => {
       user.markModified('lessonProgress');
     }
 
-    // Step 3: Get course and count total lessons
-    const course = await Course.findById(courseId);
+    // Step 3: Count total lessons
     let totalLessons = 0;
     if (course && course.modules) {
       totalLessons = course.modules.reduce((sum, mod) => sum + (mod.lessons ? mod.lessons.length : 0), 0);

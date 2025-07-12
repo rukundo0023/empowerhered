@@ -7,6 +7,8 @@ interface Question {
   type: 'MCQ' | 'ShortAnswer';
   text: string;
   options?: string[];
+  correctAnswer?: string;
+  points?: number;
 }
 
 interface Quiz {
@@ -27,6 +29,8 @@ const QuizComponent = ({ lesson }: { lesson: Lesson }) => {
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [score, setScore] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Use the first quiz in lesson.quizzes, or null if none
@@ -43,46 +47,122 @@ const QuizComponent = ({ lesson }: { lesson: Lesson }) => {
 
   const handleSubmit = async () => {
     if (!quiz) return;
-    // You can implement local scoring or submission logic here if needed
-    setSubmitted(true);
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Check if all questions are answered
+      const unansweredQuestions = quiz.questions.filter(q => !answers[q._id]);
+      if (unansweredQuestions.length > 0) {
+        setError(`Please answer all questions. You have ${unansweredQuestions.length} unanswered question(s).`);
+        setLoading(false);
+        return;
+      }
+
+      // Submit quiz to backend
+      const response = await api.post(`/quizzes/${quiz._id}/submit`, { 
+        answers: quiz.questions.map((q, index) => ({
+          questionId: q._id,
+          answer: answers[q._id]
+        }))
+      });
+      
+      setScore(response.data.score);
+      setSubmitted(true);
+      
+      // Cache the result for offline access
+      setCache(`quiz_result_${quiz._id}`, {
+        score: response.data.score,
+        total: response.data.total,
+        submittedAt: new Date().toISOString()
+      });
+      
+    } catch (error: any) {
+      console.error('Quiz submission failed:', error);
+      setError(error.response?.data?.message || 'Failed to submit quiz. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!quiz) return <div>No quiz for this lesson.</div>;
-  if (submitted)
-    return <div>Your score: {score !== null ? score : 'N/A'}</div>;
+  if (!quiz) return <div className="text-gray-500 italic">No quiz for this lesson.</div>;
+  
+  if (submitted) {
+    return (
+      <div className="quiz-result bg-green-50 border border-green-200 rounded-lg p-4">
+        <h4 className="font-bold text-green-800 mb-2">Quiz Completed!</h4>
+        <div className="text-lg">
+          <span className="font-semibold">Your Score: </span>
+          <span className="text-green-600">{score !== null ? score : 'N/A'}</span>
+          {quiz.questions && (
+            <span className="text-gray-600"> / {quiz.questions.reduce((sum, q) => sum + (q.points || 1), 0)}</span>
+          )}
+        </div>
+        <div className="mt-2 text-sm text-gray-600">
+          Submitted on: {new Date().toLocaleDateString()}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="quiz-component">
-      <h4 className="font-bold mb-2">{quiz.title}</h4>
+    <div className="quiz-component bg-white border border-gray-200 rounded-lg p-6">
+      <h4 className="font-bold text-xl mb-4 text-blue-800">{quiz.title}</h4>
+      
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700">
+          {error}
+        </div>
+      )}
+      
       <form onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
         {quiz.questions.map((q, idx) => (
-          <div key={q._id} className="mb-4">
-            <div className="mb-1">{idx + 1}. {q.text}</div>
+          <div key={q._id} className="mb-6 p-4 border border-gray-100 rounded-lg">
+            <div className="mb-3 font-medium text-gray-800">
+              <span className="text-blue-600 font-bold">Q{idx + 1}:</span> {q.text}
+              {q.points && <span className="ml-2 text-sm text-gray-500">({q.points} point{q.points > 1 ? 's' : ''})</span>}
+            </div>
+            
             {q.type === 'MCQ' ? (
-              <div>
+              <div className="space-y-2">
                 {q.options?.map(opt => (
-                  <label key={opt} className="block">
+                  <label key={opt} className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
                     <input
                       type="radio"
                       name={q._id}
                       value={opt}
                       checked={answers[q._id] === opt}
                       onChange={e => handleChange(q._id, e.target.value)}
-                    /> {opt}
+                      className="mr-3 text-blue-600"
+                    />
+                    <span className="text-gray-700">{opt}</span>
                   </label>
                 ))}
               </div>
             ) : (
               <input
                 type="text"
-                className="border rounded px-2 py-1"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={answers[q._id] || ''}
                 onChange={e => handleChange(q._id, e.target.value)}
+                placeholder="Enter your answer..."
               />
             )}
           </div>
         ))}
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Submit Quiz</button>
+        
+        <button 
+          type="submit" 
+          disabled={loading}
+          className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+            loading 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-green-600 hover:bg-green-700 text-white'
+          }`}
+        >
+          {loading ? 'Submitting...' : 'Submit Quiz'}
+        </button>
       </form>
     </div>
   );

@@ -1,0 +1,90 @@
+{
+  "title": "Personal Development Action Plan",
+  "description": "Create a comprehensive personal development action plan that demonstrates your understanding of the concepts covered in this lesson. This assignment will help you apply the theoretical knowledge to your personal growth journey.",
+  "dueDate": "2024-02-15T23:59:59Z",
+  "fileType": "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "fileUrl": "",
+  "totalPoints": 100,
+  "requirements": {
+    "part1": {
+      "title": "Self-Assessment (20 points)",
+      "description": "Conduct a thorough self-assessment of your current confidence level, identify your strengths and areas for improvement, analyze your current mindset (fixed vs. growth), assess your communication skills, and rate your goal-setting abilities.",
+      "points": 20
+    },
+    "part2": {
+      "title": "Goal Setting (30 points)",
+      "description": "Create 3 SMART goals related to personal development, break down each goal into specific action steps, set realistic timelines and milestones, identify potential obstacles and strategies to overcome them, and explain how these goals align with your values and long-term objectives.",
+      "points": 30
+    },
+    "part3": {
+      "title": "Action Plan (30 points)",
+      "description": "Develop a 30-day action plan to improve one specific area, include daily/weekly activities and exercises, incorporate strategies from the lesson (active listening, positive self-talk, etc.), create a progress tracking system, and plan for setbacks and how to handle them.",
+      "points": 30
+    },
+    "part4": {
+      "title": "Reflection and Growth (20 points)",
+      "description": "Reflect on what you've learned about yourself through this process, identify key insights about your personal development journey, discuss how you plan to maintain momentum after the 30-day period, and share how you will apply these concepts in your daily life.",
+      "points": 20
+    }
+  },
+  "submissionFormat": {
+    "length": "3-5 pages (double-spaced, 12pt font)",
+    "format": "PDF or Word document",
+    "structure": "Use clear headings and subheadings",
+    "language": "Professional, clear, and reflective"
+  },
+  "gradingCriteria": {
+    "contentQuality": {
+      "weight": 40,
+      "description": "Depth of analysis and application of concepts"
+    },
+    "organization": {
+      "weight": 25,
+      "description": "Clear structure and logical flow"
+    },
+    "practicalApplication": {
+      "weight": 25,
+      "description": "Realistic and actionable plans"
+    },
+    "reflection": {
+      "weight": 10,
+      "description": "Insightful self-reflection and learning"
+    }
+  },
+  "learningObjectives": [
+    "Apply theoretical concepts to real-life situations",
+    "Develop practical personal development skills",
+    "Create actionable plans for continuous growth",
+    "Practice self-reflection and self-awareness",
+    "Build confidence through structured goal achievement"
+  ],
+  "additionalResources": [
+    "Self-assessment tools and templates",
+    "Goal-setting worksheets",
+    "Progress tracking templates",
+    "Recommended reading materials",
+    "Optional: One-on-one consultation session"
+  ],
+  "rubric": {
+    "excellent": {
+      "score": "90-100",
+      "criteria": "Exceptional depth of analysis, clear organization, highly practical and actionable plans, insightful reflection"
+    },
+    "good": {
+      "score": "80-89",
+      "criteria": "Good analysis, well-organized, practical plans, thoughtful reflection"
+    },
+    "satisfactory": {
+      "score": "70-79",
+      "criteria": "Adequate analysis, organized, somewhat practical plans, basic reflection"
+    },
+    "needsImprovement": {
+      "score": "60-69",
+      "criteria": "Limited analysis, poor organization, impractical plans, minimal reflection"
+    },
+    "unsatisfactory": {
+      "score": "Below 60",
+      "criteria": "Insufficient analysis, disorganized, unrealistic plans, no reflection"
+    }
+  }
+} 

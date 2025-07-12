@@ -1,0 +1,108 @@
+{
+  "title": "Personal Development: Building Self-Confidence and Growth Mindset",
+  "questions": [
+    {
+      "_id": "pd_quiz_001",
+      "type": "MCQ",
+      "text": "What is the first step in the confidence cycle?",
+      "options": [
+        "Self-Belief",
+        "Self-Awareness",
+        "Action",
+        "Achievement"
+      ],
+      "correctAnswer": "Self-Awareness",
+      "points": 2
+    },
+    {
+      "_id": "pd_quiz_002",
+      "type": "MCQ",
+      "text": "Which mindset believes abilities are static and unchangeable?",
+      "options": [
+        "Growth Mindset",
+        "Fixed Mindset",
+        "Balanced Mindset",
+        "Dynamic Mindset"
+      ],
+      "correctAnswer": "Fixed Mindset",
+      "points": 2
+    },
+    {
+      "_id": "pd_quiz_003",
+      "type": "MCQ",
+      "text": "What does the 'M' in SMART goals stand for?",
+      "options": [
+        "Meaningful",
+        "Measurable",
+        "Manageable",
+        "Motivating"
+      ],
+      "correctAnswer": "Measurable",
+      "points": 2
+    },
+    {
+      "_id": "pd_quiz_004",
+      "type": "MCQ",
+      "text": "Which communication skill involves fully focusing on the speaker?",
+      "options": [
+        "Assertive Communication",
+        "Active Listening",
+        "Public Speaking",
+        "Written Communication"
+      ],
+      "correctAnswer": "Active Listening",
+      "points": 2
+    },
+    {
+      "_id": "pd_quiz_005",
+      "type": "MCQ",
+      "text": "What is a key strategy for overcoming perfectionism?",
+      "options": [
+        "Setting higher standards",
+        "Avoiding challenges",
+        "Reframing failure as learning",
+        "Comparing yourself to others"
+      ],
+      "correctAnswer": "Reframing failure as learning",
+      "points": 2
+    },
+    {
+      "_id": "pd_quiz_006",
+      "type": "ShortAnswer",
+      "text": "Explain the difference between self-confidence and arrogance.",
+      "correctAnswer": "Self-confidence is quiet, secure, and doesn't require validation from others, while arrogance is loud, insecure, and seeks constant validation and attention.",
+      "points": 5
+    },
+    {
+      "_id": "pd_quiz_007",
+      "type": "ShortAnswer",
+      "text": "Describe one practical way to cultivate a growth mindset.",
+      "correctAnswer": "Embrace challenges by viewing difficulties as opportunities to grow and learn, rather than avoiding them out of fear of failure.",
+      "points": 5
+    },
+    {
+      "_id": "pd_quiz_008",
+      "type": "ShortAnswer",
+      "text": "What are the five components of the SMART goals framework?",
+      "correctAnswer": "Specific, Measurable, Achievable, Relevant, Time-bound",
+      "points": 5
+    },
+    {
+      "_id": "pd_quiz_009",
+      "type": "ShortAnswer",
+      "text": "How can you practice active listening effectively?",
+      "correctAnswer": "Pay full attention to the speaker, show interest through nonverbal cues, provide feedback by paraphrasing, defer judgment, and respond appropriately.",
+      "points": 5
+    },
+    {
+      "_id": "pd_quiz_010",
+      "type": "ShortAnswer",
+      "text": "Name three common confidence killers and one strategy to overcome each.",
+      "correctAnswer": "Perfectionism (reframe failure as learning), Comparison (focus on your own progress), Fear of Failure (view setbacks as opportunities), Negative Self-Talk (practice self-compassion), Past Experiences (focus on growth and improvement)",
+      "points": 5
+    }
+  ],
+  "totalPoints": 35,
+  "timeLimit": 30,
+  "passingScore": 70
+} 

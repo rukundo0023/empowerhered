@@ -109,6 +109,56 @@ const userSchema = mongoose.Schema(
         },
       },
     ],
+    
+    // --- NEW: Quiz results tracking ---
+    quizResults: [
+      {
+        quizId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Quiz',
+        },
+        score: {
+          type: Number,
+          required: true,
+        },
+        total: {
+          type: Number,
+          required: true,
+        },
+        submittedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    
+    // --- NEW: Assignment submissions tracking ---
+    assignmentSubmissions: [
+      {
+        assignmentId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Assignment',
+        },
+        fileUrl: {
+          type: String,
+        },
+        text: {
+          type: String,
+        },
+        submittedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        grade: {
+          type: Number,
+          min: 0,
+          max: 100,
+        },
+        feedback: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
