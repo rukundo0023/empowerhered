@@ -37,10 +37,11 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
 
   useEffect(() => {
     if (lesson && lesson.quizzes && lesson.quizzes.length > 0) {
+      const quizObj = lesson.quizzes[0];
       setQuiz({
-        _id: lesson._id || 'quiz_' + Date.now(),
-        title: lesson.title || 'Lesson Quiz',
-        questions: lesson.quizzes
+        _id: quizObj._id || lesson._id || 'quiz_' + Date.now(),
+        title: quizObj.title || lesson.title || 'Lesson Quiz',
+        questions: quizObj.questions || []
       });
     } else {
       setQuiz(null);
@@ -223,21 +224,19 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
           ×
         </button>
       </div>
-      
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700">
           {error}
         </div>
       )}
-      
-      <form onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
+      {/* Make the form scrollable if there are many questions */}
+      <form onSubmit={e => { e.preventDefault(); handleSubmit(); }} className="max-h-[60vh] overflow-y-auto pr-2">
         {quiz.questions.map((q, idx) => (
           <div key={q._id} className="mb-6 p-4 border border-gray-100 rounded-lg">
             <div className="mb-3 font-medium text-gray-800">
               <span className="text-blue-600 font-bold">Q{idx + 1}:</span> {q.text}
               {q.points && <span className="ml-2 text-sm text-gray-500">({q.points} point{q.points > 1 ? 's' : ''})</span>}
             </div>
-            
             {q.type === 'MCQ' ? (
               <div className="space-y-2">
                 {q.options?.map(opt => (
@@ -265,7 +264,6 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
             )}
           </div>
         ))}
-        
         <button 
           type="submit" 
           disabled={loading}
