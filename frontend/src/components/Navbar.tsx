@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import VoiceSearchButton from "./voiceSearchButton";
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
-import { FaChartLine } from 'react-icons/fa';
+import { FaChartLine, FaTrophy } from 'react-icons/fa';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -340,14 +340,24 @@ const Navbar = () => {
                       {t('nav.profile')}
                     </Link>
                     {user?.role === 'student' && (
-                      <Link
-                        to="/dashboard"
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                        onClick={() => setIsProfileOpen(false)}
-                      >
-                        <FaChartLine className="mr-2 text-blue-600" />
-                        Progress Dashboard
-                      </Link>
+                      <>
+                        <Link
+                          to="/dashboard"
+                          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                          onClick={() => setIsProfileOpen(false)}
+                        >
+                          <FaChartLine className="mr-2 text-blue-600" />
+                          Progress Dashboard
+                        </Link>
+                        <Link
+                          to="/certificates"
+                          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                          onClick={() => setIsProfileOpen(false)}
+                        >
+                          <FaTrophy className="mr-2 text-yellow-600" />
+                          My Certificates
+                        </Link>
+                      </>
                     )}
                     {user?.role === 'admin' && (
                       <Link
@@ -580,14 +590,24 @@ const Navbar = () => {
                     {t('nav.profile')}
                   </Link>
                   {user?.role === 'student' && (
-                    <Link
-                      to="/dashboard"
-                      className="py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <FaChartLine className="mr-2 text-blue-600" />
-                      Progress Dashboard
-                    </Link>
+                    <>
+                      <Link
+                        to="/dashboard"
+                        className="py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <FaChartLine className="mr-2 text-blue-600" />
+                        Progress Dashboard
+                      </Link>
+                      <Link
+                        to="/certificates"
+                        className="py-2 px-3 rounded-md hover:bg-gray-50 flex items-center"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <FaTrophy className="mr-2 text-yellow-600" />
+                        My Certificates
+                      </Link>
+                    </>
                   )}
                   {user?.role === 'admin' && (
                     <Link

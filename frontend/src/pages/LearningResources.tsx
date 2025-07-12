@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import api from '../api/axios';
 import QuizComponent from './QuizComponent';
 import AssignmentComponent from './AssignmentComponent';
-import { FaBook, FaCheckCircle, FaRegCircle, FaFileAlt, FaVideo, FaLink, FaQuestionCircle, FaClipboardList, FaArrowLeft } from 'react-icons/fa';
+import { FaBook, FaCheckCircle, FaRegCircle, FaFileAlt, FaVideo, FaLink, FaQuestionCircle, FaClipboardList, FaArrowLeft, FaTrophy } from 'react-icons/fa';
 import { getCache, setCache, CACHE_EXPIRY } from '../api/cacheUtil';
 import localforage from 'localforage';
 import { useAuth } from '../context/AuthContext';
+import { generateCertificate, canGenerateCertificate } from '../api/certificateService';
 
 // Utility to cache a file by URL
 async function cacheResourceFile(url: string) {
@@ -76,6 +78,8 @@ const LearningResources = () => {
     (searchTerm === '' || course.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
+  const [canGenerateCert, setCanGenerateCert] = useState(false);
+  const [generatingCert, setGeneratingCert] = useState(false);
   const { user } = useAuth();
   
   // Pagination state for lessons (module-specific)
@@ -152,8 +156,17 @@ const LearningResources = () => {
     try {
       const res = await api.get(`/courses/${course._id}/progress`);
       setCourseProgress(res.data.progress ?? 0);
+      
+      // Check if user can generate certificate
+      if (res.data.progress === 100) {
+        const certCheck = await canGenerateCertificate(course._id);
+        setCanGenerateCert(certCheck.canGenerate);
+      } else {
+        setCanGenerateCert(false);
+      }
     } catch {
       setCourseProgress(null);
+      setCanGenerateCert(false);
     }
   };
 
@@ -291,6 +304,42 @@ const LearningResources = () => {
     }));
   };
 
+  const handleGenerateCertificate = async () => {
+    if (!selectedCourse) return;
+    
+    try {
+      setGeneratingCert(true);
+      await generateCertificate(selectedCourse._id);
+      toast.success('Certificate generated successfully! You can view it in your Certificates page.');
+      setCanGenerateCert(false);
+    } catch (error: any) {
+      console.error('Error generating certificate:', error);
+      toast.error(error.response?.data?.message || 'Failed to generate certificate');
+    } finally {
+      setGeneratingCert(false);
+    }
+  };
+
+  const handleProgressUpdate = async () => {
+    if (!selectedCourse) return;
+    
+    try {
+      // Refresh course progress
+      const res = await api.get(`/courses/${selectedCourse._id}/progress`);
+      setCourseProgress(res.data.progress ?? 0);
+      
+      // Check if user can generate certificate
+      if (res.data.progress === 100) {
+        const certCheck = await canGenerateCertificate(selectedCourse._id);
+        setCanGenerateCert(certCheck.canGenerate);
+      } else {
+        setCanGenerateCert(false);
+      }
+    } catch (error) {
+      console.error('Error refreshing progress:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <div className="flex-1 flex flex-col">
@@ -318,6 +367,32 @@ const LearningResources = () => {
                     style={{ width: `${courseProgress}%` }}
                   ></div>
                 </div>
+                
+                {/* Certificate Generation Button */}
+                {courseProgress === 100 && canGenerateCert && (
+                  <div className="mt-4 flex items-center gap-3">
+                    <button
+                      onClick={handleGenerateCertificate}
+                      disabled={generatingCert}
+                      className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50"
+                    >
+                      <FaTrophy className="text-sm" />
+                      {generatingCert ? 'Generating...' : 'Generate Certificate'}
+                    </button>
+                    <span className="text-sm text-blue-800">
+                      🎉 Congratulations! You've completed this course!
+                    </span>
+                  </div>
+                )}
+                
+                {courseProgress === 100 && !canGenerateCert && (
+                  <div className="mt-4 flex items-center gap-2">
+                    <FaTrophy className="text-yellow-500" />
+                    <span className="text-sm text-blue-800">
+                      Certificate already generated! View it in your Certificates page.
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -563,7 +638,7 @@ const LearningResources = () => {
                   )}
                   {/* Quiz */}
                   <div className="mb-6">
-                    <QuizComponent lesson={selectedLesson} />
+                                            <QuizComponent lesson={selectedLesson} onProgressUpdate={handleProgressUpdate} />
                   </div>
                   {/* Assignment */}
                   <div className="mb-6">

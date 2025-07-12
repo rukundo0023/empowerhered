@@ -163,6 +163,22 @@ const submitQuiz = async (req, res) => {
       });
     }
 
+    // Update course progress to 100% when quiz is completed
+    if (quiz.course) {
+      let courseProgress = user.courseProgress.find(cp => cp.courseId.toString() === quiz.course.toString());
+      if (!courseProgress) {
+        courseProgress = {
+          courseId: quiz.course,
+          progress: 100,
+          lastAccessed: new Date(),
+        };
+        user.courseProgress.push(courseProgress);
+      } else {
+        courseProgress.progress = 100;
+        courseProgress.lastAccessed = new Date();
+      }
+    }
+
     await user.save();
 
     res.json({ 
@@ -171,7 +187,8 @@ const submitQuiz = async (req, res) => {
       percentage,
       passed,
       gradedAnswers,
-      message: passed ? 'Quiz passed!' : 'Quiz completed. Review your answers.'
+      courseProgressUpdated: true,
+      message: passed ? 'Quiz passed! Course progress set to 100%.' : 'Quiz completed. Course progress set to 100%.'
     });
   } catch (error) {
     console.error('Quiz submission error:', error);

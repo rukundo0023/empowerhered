@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { setCache, getCache } from '../api/cacheUtil';
 
@@ -24,7 +25,7 @@ interface Lesson {
   quizzes?: Quiz[];
 }
 
-const QuizComponent = ({ lesson }: { lesson: Lesson }) => {
+const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgressUpdate?: () => void }) => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [score, setScore] = useState<number | null>(null);
@@ -71,6 +72,15 @@ const QuizComponent = ({ lesson }: { lesson: Lesson }) => {
       setScore(response.data.score);
       setSubmitted(true);
       
+      // Show success message
+      toast.success(response.data.message);
+      
+      // If course progress was updated, notify parent component and show special notification
+      if (response.data.courseProgressUpdated && onProgressUpdate) {
+        onProgressUpdate();
+        toast.success('🎉 Congratulations! You have completed this course! You can now generate your certificate.');
+      }
+      
       // Cache the result for offline access
       setCache(`quiz_result_${quiz._id}`, {
         score: response.data.score,
@@ -101,6 +111,15 @@ const QuizComponent = ({ lesson }: { lesson: Lesson }) => {
         </div>
         <div className="mt-2 text-sm text-gray-600">
           Submitted on: {new Date().toLocaleDateString()}
+        </div>
+        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+          <div className="flex items-center gap-2">
+            <span className="text-blue-600">🎉</span>
+            <span className="text-blue-800 font-medium">Course Progress: 100%</span>
+          </div>
+          <p className="text-blue-700 text-sm mt-1">
+            You have completed this course! You can now generate your certificate.
+          </p>
         </div>
       </div>
     );

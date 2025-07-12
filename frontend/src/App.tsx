@@ -36,6 +36,7 @@ import MentorDashboard from "./pages/Mentordashboard";
 import MentorMeetingDetails from './pages/MentorMeetingDetails';
 import InstructorRoute from "./components/InstructorRoute";
 import InstructorDashboard from './pages/InstructorDashboard';
+import Certificates from './pages/Certificates';
 import OfflineIndicator from './components/OfflineIndicator';
 import OfflineStatus from './components/OfflineStatus';
 
@@ -74,6 +75,7 @@ function App() {
                   <Route path="/mentorDashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
                   <Route path="/mentor/meeting/:meetingId" element={<MentorRoute><MentorMeetingDetails /></MentorRoute>} />
                   <Route path="/instructor-dashboard" element={<InstructorRoute><InstructorDashboard /></InstructorRoute>} />
+                  <Route path="/certificates" element={<ProtectedRoute><Certificates /></ProtectedRoute>} />
                   <Route path="/terms" element={<TermsAndConditions />} />
                   <Route path="/test-connection" element={<TestConnection />} />
                 </Routes>

@@ -17,6 +17,7 @@ import mentorRoutes from "./routes/mentorRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
+import certificateRoutes from "./routes/certificateRoutes.js";
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
 import { getProgressByInstructor } from './controllers/courseController.js';
 import { protect } from './middlewares/authMiddlewares.js';
@@ -130,6 +131,7 @@ app.use("/api/mentors", mentorRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/quizzes", quizRoutes);
+app.use("/api/certificates", certificateRoutes);
 app.get('/api/progress', protect, getProgressByInstructor);
 
 // Test route
