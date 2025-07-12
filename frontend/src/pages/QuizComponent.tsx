@@ -26,6 +26,7 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [attemptInfo, setAttemptInfo] = useState<{
     attemptNumber: number;
     attemptsRemaining: number;
@@ -37,12 +38,11 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
   useEffect(() => {
     // Use the first quiz in lesson.quizzes, or null if none
     if (lesson && lesson.quizzes && lesson.quizzes.length > 0) {
-      // Create a Quiz object from the first quiz question
       const firstQuiz = lesson.quizzes[0];
       setQuiz({
         _id: firstQuiz._id || 'quiz_' + Date.now(),
-        title: 'Lesson Quiz',
-        questions: [firstQuiz]
+        title: firstQuiz.title || 'Lesson Quiz',
+        questions: firstQuiz.questions || []
       });
     } else {
       setQuiz(null);
@@ -188,9 +188,43 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
     );
   }
 
+  if (!isQuizOpen) {
+    return (
+      <div className="quiz-component bg-white border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="font-bold text-lg text-blue-800">Lesson Quiz</h4>
+            <p className="text-gray-600 text-sm">
+              {quiz.questions.length} question{quiz.questions.length !== 1 ? 's' : ''} • 
+              {quiz.questions.reduce((sum, q) => sum + (q.points || 1), 0)} total points
+            </p>
+          </div>
+          <button
+            onClick={() => setIsQuizOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            Start Quiz
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="quiz-component bg-white border border-gray-200 rounded-lg p-6">
-      <h4 className="font-bold text-xl mb-4 text-blue-800">{quiz.title}</h4>
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="font-bold text-xl text-blue-800">{quiz.title}</h4>
+        <button
+          onClick={() => {
+            setIsQuizOpen(false);
+            setAnswers({});
+            setError(null);
+          }}
+          className="text-gray-500 hover:text-red-500 text-lg"
+        >
+          ×
+        </button>
+      </div>
       
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700">

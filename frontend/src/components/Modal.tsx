@@ -16,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" onClick={onClose}>
-      <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-lg w-full relative" onClick={e => e.stopPropagation()}>
+      <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] max-w-lg w-full relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <button className="absolute top-2 right-2 text-gray-500 hover:text-red-500" onClick={onClose}>&times;</button>
         {children}
       </div>
