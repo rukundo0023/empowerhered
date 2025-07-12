@@ -265,7 +265,20 @@ const getUserQuizResults = async (req, res) => {
     const user = await User.findById(req.user._id).populate('quizResults.quizId');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    res.json({ quizResults: user.quizResults || [] });
+    // Map quizResults to always include title, score, total, and submittedAt
+    const quizResults = (user.quizResults || []).map(qr => {
+      // Use best attempt or last attempt for display
+      const lastAttempt = qr.attempts && qr.attempts.length > 0 ? qr.attempts[qr.attempts.length - 1] : null;
+      return {
+        _id: qr._id,
+        quizId: qr.quizId ? { _id: qr.quizId._id, title: qr.quizId.title } : undefined,
+        score: lastAttempt ? lastAttempt.score : qr.bestScore || 0,
+        total: lastAttempt ? lastAttempt.total : qr.bestTotal || 0,
+        submittedAt: lastAttempt ? lastAttempt.submittedAt : qr.lastSubmittedAt || null,
+      };
+    });
+
+    res.json({ quizResults });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
