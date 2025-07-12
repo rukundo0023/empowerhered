@@ -156,21 +156,36 @@ const LearningResources = () => {
 
   const handleSelectLesson = async (lesson: Lesson, moduleIndex: number, lessonIndex: number) => {
     setSelectedLesson(lesson);
-    // Mark as visited in backend
+    
+    // Fetch quizzes and assignments for this lesson
     if (selectedCourse && moduleIndex !== undefined && lessonIndex !== undefined) {
       try {
+        // Fetch quizzes
+        const quizRes = await api.get(`/quizzes/lesson/${selectedCourse._id}/${modules[moduleIndex]._id}/${lesson._id}`);
+        const lessonWithQuizzes = { ...lesson, quizzes: quizRes.data };
+        
+        // Fetch assignments
+        const assignmentRes = await api.get(`/assignments/lesson/${selectedCourse._id}/${modules[moduleIndex]._id}/${lesson._id}`);
+        const lessonWithAssessments = { ...lessonWithQuizzes, assignment: assignmentRes.data[0] || null };
+        
+        setSelectedLesson(lessonWithAssessments);
+        
+        // Mark as visited in backend
         await api.post(`/courses/${selectedCourse._id}/modules/${moduleIndex}/lessons/${lessonIndex}/visit`);
       } catch (e) {
+        console.error('Error fetching lesson assessments:', e);
         // Optionally handle error
       }
     }
+    
     // Simulate marking as complete in local state
     if (!completedLessons.includes(lesson._id)) {
       setCompletedLessons([...completedLessons, lesson._id]);
     }
-    // Simulate caching quiz/assignment data for offline (if present)
-    if (lesson.quiz) {
-      setCache(`quiz_${lesson._id}`, lesson.quiz, CACHE_EXPIRY.DEFAULT);
+    
+    // Cache quiz/assignment data for offline (if present)
+    if (lesson.quizzes && lesson.quizzes.length > 0) {
+      setCache(`quiz_${lesson._id}`, lesson.quizzes[0], CACHE_EXPIRY.DEFAULT);
     }
     if (lesson.assignment) {
       setCache(`assignment_${lesson._id}`, lesson.assignment, CACHE_EXPIRY.DEFAULT);

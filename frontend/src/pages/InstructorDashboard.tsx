@@ -118,18 +118,10 @@ const InstructorDashboard = () => {
   const [lessonLoading, setLessonLoading] = useState(false);
   const [lessonError, setLessonError] = useState('');
 
-  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
-  const [assignmentFields, setAssignmentFields] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
-
   const [editingQuizIdx, setEditingQuizIdx] = useState<{ lessonId: string, idx: number } | null>(null);
   const [editingAssignmentLessonId, setEditingAssignmentLessonId] = useState<string | null>(null);
   const [quizEditBuffer, setQuizEditBuffer] = useState<QuizQuestion | null>(null);
   const [assignmentEditBuffer, setAssignmentEditBuffer] = useState<AssignmentFieldsData | null>(null);
-
-  const [showQuizModal, setShowQuizModal] = useState<string | null>(null); // lessonId or null
-  const [showAssignmentModal, setShowAssignmentModal] = useState<string | null>(null); // lessonId or null
-  const [quizModalBuffer, setQuizModalBuffer] = useState<QuizQuestion[]>([]);
-  const [assignmentModalBuffer, setAssignmentModalBuffer] = useState<AssignmentFieldsData>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
 
   const [expandedProgress, setExpandedProgress] = useState<string | null>(null);
   const [detailedProgress, setDetailedProgress] = useState<any>({});
@@ -359,6 +351,37 @@ const InstructorDashboard = () => {
     }
   };
 
+  // Add state for quizzes and assignments per lesson
+  const [lessonQuizzes, setLessonQuizzes] = useState<{ [lessonId: string]: any[] }>({});
+  const [lessonAssignments, setLessonAssignments] = useState<{ [lessonId: string]: any[] }>({});
+
+  // Fetch quizzes and assignments for a lesson
+  const fetchLessonAssessments = async (courseId: string, moduleId: string, lessonId: string) => {
+    try {
+      const [quizRes, assignmentRes] = await Promise.all([
+        api.get(`/quizzes/lesson/${courseId}/${moduleId}/${lessonId}`),
+        api.get(`/assignments/lesson/${courseId}/${moduleId}/${lessonId}`)
+      ]);
+      setLessonQuizzes(prev => ({ ...prev, [lessonId]: quizRes.data }));
+      setLessonAssignments(prev => ({ ...prev, [lessonId]: assignmentRes.data }));
+    } catch (e) {
+      setLessonQuizzes(prev => ({ ...prev, [lessonId]: [] }));
+      setLessonAssignments(prev => ({ ...prev, [lessonId]: [] }));
+    }
+  };
+
+  // When modules are loaded, fetch quizzes/assignments for each lesson
+  useEffect(() => {
+    if (!modules || !selectedCourseForModules) return;
+    modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        fetchLessonAssessments(selectedCourseForModules._id, mod._id, lesson._id);
+      });
+    });
+    // eslint-disable-next-line
+  }, [modules, selectedCourseForModules]);
+
+  // Remove embedded quiz/assignment from lesson creation
   const handleAddLesson = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCourseForModules || !selectedModule) return;
@@ -366,9 +389,7 @@ const InstructorDashboard = () => {
     setLessonError('');
     try {
       const lessonPayload = {
-        ...newLesson,
-        quizzes: quizQuestions,
-        assignment: assignmentFields,
+        ...newLesson
       };
       await api.post(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons`, lessonPayload);
       await fetchModules(selectedCourseForModules._id);
@@ -472,6 +493,73 @@ const InstructorDashboard = () => {
       setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: progressRes.data.lessonProgress }));
     } catch (e) {
       setDetailedProgress((prev: any) => ({ ...prev, [`${userId}-${courseId}`]: [] }));
+    }
+  };
+
+  // Add state for quiz/assignment modal buffers
+  const [quizModalBuffer, setQuizModalBuffer] = useState<any[]>([]);
+  const [assignmentModalBuffer, setAssignmentModalBuffer] = useState<any>({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
+  const [showQuizModal, setShowQuizModal] = useState(false);
+  const [showAssignmentModal, setShowAssignmentModal] = useState(false);
+
+  // Handlers for opening modals
+  const [quizModalLesson, setQuizModalLesson] = useState<Lesson | null>(null);
+  const [quizModalModule, setQuizModalModule] = useState<Module | null>(null);
+  const [assignmentModalLesson, setAssignmentModalLesson] = useState<Lesson | null>(null);
+  const [assignmentModalModule, setAssignmentModalModule] = useState<Module | null>(null);
+
+  function openQuizModal(lesson: Lesson, mod: Module) {
+    setQuizModalLesson(lesson);
+    setQuizModalModule(mod);
+    setQuizModalBuffer([]);
+    setShowQuizModal(true);
+  }
+  function openAssignmentModal(lesson: Lesson, mod: Module) {
+    setAssignmentModalLesson(lesson);
+    setAssignmentModalModule(mod);
+    setAssignmentModalBuffer({ instructions: '', dueDate: '', fileType: '', fileUrl: '' });
+    setShowAssignmentModal(true);
+  }
+
+  // Add edit/delete functions for quizzes and assignments
+  const editQuiz = (quiz: any) => {
+    setQuizModalLesson(quizModalLesson);
+    setQuizModalModule(quizModalModule);
+    setQuizModalBuffer(quiz.questions || []);
+    setShowQuizModal(true);
+  };
+
+  const deleteQuiz = async (quizId: string) => {
+    if (!quizModalLesson || !quizModalModule || !selectedCourseForModules) return;
+    try {
+      await api.delete(`/quizzes/${quizId}`);
+      await fetchLessonAssessments(selectedCourseForModules._id, quizModalModule._id, quizModalLesson._id);
+      toast.success('Quiz deleted');
+    } catch (error) {
+      handleApiError(error, 'Error deleting quiz');
+    }
+  };
+
+  const editAssignment = (assignment: any) => {
+    setAssignmentModalLesson(assignmentModalLesson);
+    setAssignmentModalModule(assignmentModalModule);
+    setAssignmentModalBuffer({
+      instructions: assignment.instructions || '',
+      dueDate: assignment.dueDate || '',
+      fileType: assignment.fileType || '',
+      fileUrl: assignment.fileUrl || ''
+    });
+    setShowAssignmentModal(true);
+  };
+
+  const deleteAssignment = async (assignmentId: string) => {
+    if (!assignmentModalLesson || !assignmentModalModule || !selectedCourseForModules) return;
+    try {
+      await api.delete(`/assignments/${assignmentId}`);
+      await fetchLessonAssessments(selectedCourseForModules._id, assignmentModalModule._id, assignmentModalLesson._id);
+      toast.success('Assignment deleted');
+    } catch (error) {
+      handleApiError(error, 'Error deleting assignment');
     }
   };
 
@@ -1042,55 +1130,56 @@ const InstructorDashboard = () => {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <span className="font-bold text-blue-900">{lesson.title}</span>
-                                {lesson.quizzes && lesson.quizzes.length > 0 && <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs ml-2 flex items-center gap-1"><FaQuestionCircle /> Quiz</span>}
-                                {lesson.assignment && lesson.assignment.instructions && <span className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs ml-2 flex items-center gap-1"><FaClipboardList /> Assignment</span>}
                               </div>
                               <div className="flex gap-2">
                                 <button className="text-blue-500 hover:text-blue-700" title="Edit Lesson" onClick={() => handleEditLesson(lesson)}><FaEdit /></button>
                                 <button className="text-red-500 hover:text-red-700" title="Delete Lesson" onClick={() => handleDeleteLesson(lesson._id)}><FaTrash /></button>
-                                <button className="text-green-600 hover:text-green-800" title="Add Quiz" onClick={() => { setShowQuizModal(lesson._id); setQuizModalBuffer(lesson.quizzes || []); }}><FaPlus /> Quiz</button>
-                                <button className="text-orange-600 hover:text-orange-800" title="Add Assignment" onClick={() => { setShowAssignmentModal(lesson._id); setAssignmentModalBuffer(lesson.assignment || { instructions: '', dueDate: '', fileType: '', fileUrl: '' }); }}><FaPlus /> Assignment</button>
+                                <button className="text-green-600 hover:text-green-800" title="Add Quiz" onClick={() => openQuizModal(lesson, mod)}><FaPlus /> Quiz</button>
+                                <button className="text-orange-600 hover:text-orange-800" title="Add Assignment" onClick={() => openAssignmentModal(lesson, mod)}><FaPlus /> Assignment</button>
                               </div>
                             </div>
-                            {/* Collapsible Quiz Details */}
-                            {lesson.quizzes && lesson.quizzes.length > 0 && (
-                              <details className="mt-2">
-                                <summary className="cursor-pointer text-blue-700 flex items-center gap-1"><FaChevronDown /> Quiz Details</summary>
-                                <ul className="ml-6 mt-2 space-y-2">
-                                  {lesson.quizzes.map((q, i) => (
-                                    <li key={i} className="bg-blue-50 rounded p-2 border border-blue-100">
-                                      <div className="font-semibold">Q{i + 1}: {q.text} <span className="ml-2 text-xs">({q.type}, {q.points} pts)</span></div>
-                                      {q.type === 'MCQ' && q.options && (
-                                        <div className="ml-4">Options: {q.options.map((opt, oi) => <span key={oi} className={q.correctAnswer === opt ? 'text-green-700 font-bold' : ''}>{opt}{oi < q.options.length-1 ? ', ' : ''}</span>)} <span className="ml-2">Correct: <b>{q.correctAnswer}</b></span></div>
-                                      )}
-                                      {q.type === 'ShortAnswer' && (
-                                        <div className="ml-4">Correct: <b>{q.correctAnswer}</b></div>
-                                      )}
-                                      <div className="flex gap-2 mt-2">
-                                        <button className="text-blue-500 hover:text-blue-700" title="Edit Quiz" onClick={() => handleEditQuiz(lesson._id, i)}><FaEdit /></button>
-                                        <button className="text-red-500 hover:text-red-700" title="Delete Quiz" onClick={() => handleDeleteQuiz(lesson._id, i)}><FaTrash /></button>
+                            
+                            {/* List quizzes for this lesson */}
+                            {lessonQuizzes[lesson._id] && lessonQuizzes[lesson._id].length > 0 && (
+                              <div className="mt-2">
+                                <h5 className="font-semibold text-blue-700">Quizzes</h5>
+                                <ul className="ml-4">
+                                  {lessonQuizzes[lesson._id].map((quiz, i) => (
+                                    <li key={quiz._id || i} className="bg-blue-50 rounded p-2 border border-blue-100 mb-2">
+                                      <div className="flex items-center justify-between">
+                                        <div className="font-semibold">{quiz.title} <span className="ml-2 text-xs">({quiz.questions?.length || 0} questions, Passing: {quiz.passingScore}%)</span></div>
+                                        <div className="flex gap-2">
+                                          <button className="text-blue-500 hover:text-blue-700" title="Edit Quiz" onClick={() => editQuiz(quiz)}><FaEdit /></button>
+                                          <button className="text-red-500 hover:text-red-700" title="Delete Quiz" onClick={() => deleteQuiz(quiz._id)}><FaTrash /></button>
+                                        </div>
                                       </div>
                                     </li>
                                   ))}
                                 </ul>
-                              </details>
+                              </div>
                             )}
-                            {/* Collapsible Assignment Details */}
-                            {lesson.assignment && lesson.assignment.instructions && (
-                              <details className="mt-2">
-                                <summary className="cursor-pointer text-orange-700 flex items-center gap-1"><FaChevronDown /> Assignment Details</summary>
-                                <div className="ml-6 mt-2 bg-orange-50 rounded p-2 border border-orange-100">
-                                  <div><b>Instructions:</b> {lesson.assignment.instructions}</div>
-                                  <div><b>Due Date:</b> {lesson.assignment.dueDate}</div>
-                                  <div><b>File Type:</b> {lesson.assignment.fileType}</div>
-                                  {lesson.assignment.fileUrl && <div><b>File URL:</b> <a href={lesson.assignment.fileUrl} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">{lesson.assignment.fileUrl}</a></div>}
-                                  <div className="flex gap-2 mt-2">
-                                    <button className="text-blue-500 hover:text-blue-700" title="Edit Assignment" onClick={() => handleEditAssignment(lesson._id)}><FaEdit /></button>
-                                    <button className="text-red-500 hover:text-red-700" title="Delete Assignment" onClick={() => handleDeleteAssignment(lesson._id)}><FaTrash /></button>
-                                  </div>
-                                </div>
-                              </details>
+                            
+                            {/* List assignments for this lesson */}
+                            {lessonAssignments[lesson._id] && lessonAssignments[lesson._id].length > 0 && (
+                              <div className="mt-2">
+                                <h5 className="font-semibold text-orange-700">Assignments</h5>
+                                <ul className="ml-4">
+                                  {lessonAssignments[lesson._id].map((assignment, i) => (
+                                    <li key={assignment._id || i} className="bg-orange-50 rounded p-2 border border-orange-100 mb-2">
+                                      <div className="flex items-center justify-between">
+                                        <div className="font-semibold">{assignment.title} <span className="ml-2 text-xs">(Due: {assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString() : 'N/A'})</span></div>
+                                        <div className="flex gap-2">
+                                          <button className="text-blue-500 hover:text-blue-700" title="Edit Assignment" onClick={() => editAssignment(assignment)}><FaEdit /></button>
+                                          <button className="text-red-500 hover:text-red-700" title="Delete Assignment" onClick={() => deleteAssignment(assignment._id)}><FaTrash /></button>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
                             )}
+                            
+                            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: lesson.content || '' }} />
                           </li>
                         ))}
                       </ul>
@@ -1143,48 +1232,50 @@ const InstructorDashboard = () => {
       )}
 
       {/* Quiz Modal */}
-      {showQuizModal && (
-        <Modal onClose={() => setShowQuizModal(null)}>
-          <h3 className="text-lg font-bold mb-2">Add/Edit Quiz</h3>
+      {showQuizModal && quizModalLesson && quizModalModule && (
+        <Modal onClose={() => setShowQuizModal(false)}>
+          <h3 className="text-lg font-bold mb-2">Add Quiz for {quizModalLesson.title}</h3>
           <QuizBuilder questions={quizModalBuffer} onChange={setQuizModalBuffer} />
           <div className="flex gap-2 mt-4">
             <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={async () => {
-              const lesson = modules.flatMap(m => m.lessons).find(l => l._id === showQuizModal);
-              if (!lesson) return;
-              let updatedQuizzes = lesson.quizzes || [];
-              if (editingQuizIdx && editingQuizIdx.lessonId === showQuizModal && quizModalBuffer.length === 1) {
-                // Edit existing quiz
-                updatedQuizzes = updatedQuizzes.map((q, idx) => idx === editingQuizIdx.idx ? quizModalBuffer[0] : q);
-              } else if (quizModalBuffer.length > 0) {
-                // Add new quiz
-                updatedQuizzes = [...updatedQuizzes, ...quizModalBuffer];
-              }
-              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, quizzes: updatedQuizzes });
-              await fetchModules(selectedCourseForModules._id);
-              setShowQuizModal(null);
-              setEditingQuizIdx(null);
-              toast.success('Quiz saved');
-            }}>
-              Save
-            </button>
-            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowQuizModal(null)}>Cancel</button>
+              if (!quizModalLesson || !quizModalModule || !selectedCourseForModules) return;
+              // POST to /api/quizzes
+              await api.post('/quizzes', {
+                title: 'New Quiz',
+                questions: quizModalBuffer,
+                course: selectedCourseForModules._id,
+                moduleId: quizModalModule._id,
+                lessonId: quizModalLesson._id
+              });
+              await fetchLessonAssessments(selectedCourseForModules._id, quizModalModule._id, quizModalLesson._id);
+              setShowQuizModal(false);
+              toast.success('Quiz created');
+            }}>Save</button>
+            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowQuizModal(false)}>Cancel</button>
           </div>
         </Modal>
       )}
       {/* Assignment Modal */}
-      {showAssignmentModal && (
-        <Modal onClose={() => setShowAssignmentModal(null)}>
-          <h3 className="text-lg font-bold mb-2">Add/Edit Assignment</h3>
+      {showAssignmentModal && assignmentModalLesson && assignmentModalModule && (
+        <Modal onClose={() => setShowAssignmentModal(false)}>
+          <h3 className="text-lg font-bold mb-2">Add Assignment for {assignmentModalLesson.title}</h3>
           <AssignmentFields value={assignmentModalBuffer} onChange={setAssignmentModalBuffer} />
           <div className="flex gap-2 mt-4">
             <button className="bg-orange-600 text-white px-4 py-2 rounded" onClick={async () => {
-              const lesson = modules.flatMap(m => m.lessons).find(l => l._id === showAssignmentModal);
-              if (!lesson) return;
-              await api.put(`/courses/${selectedCourseForModules._id}/modules/${selectedModule._id}/lessons/${lesson._id}`, { ...lesson, assignment: assignmentModalBuffer });
-              await fetchModules(selectedCourseForModules._id);
-              setShowAssignmentModal(null);
+              if (!assignmentModalLesson || !assignmentModalModule || !selectedCourseForModules) return;
+              // POST to /api/assignments
+              await api.post('/assignments', {
+                title: 'New Assignment',
+                ...assignmentModalBuffer,
+                course: selectedCourseForModules._id,
+                moduleId: assignmentModalModule._id,
+                lessonId: assignmentModalLesson._id
+              });
+              await fetchLessonAssessments(selectedCourseForModules._id, assignmentModalModule._id, assignmentModalLesson._id);
+              setShowAssignmentModal(false);
+              toast.success('Assignment created');
             }}>Save</button>
-            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowAssignmentModal(null)}>Cancel</button>
+            <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowAssignmentModal(false)}>Cancel</button>
           </div>
         </Modal>
       )}

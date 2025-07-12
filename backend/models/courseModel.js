@@ -46,14 +46,12 @@ const courseSchema = new mongoose.Schema(
             title: { type: String, required: true },
             content: { type: String },
             resources: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Resource' }],
-            games: [
-              {
-                type: { type: String }, // e.g., 'quiz'
-                config: { type: Object }, // e.g., { questions: [...] }
-              }
-            ]
+            learningObjectives: [{ type: String }],
+            estimatedDuration: { type: Number }, // in minutes
+            order: { type: Number, default: 0 } // for ordering lessons within module
           }
-        ]
+        ],
+        order: { type: Number, default: 0 } // for ordering modules within course
       }
     ],
   },
