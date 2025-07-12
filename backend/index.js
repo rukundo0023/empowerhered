@@ -89,6 +89,28 @@ app.post("/upload", protect, upload.single("file"), (req, res) => {
 // Static uploads
 app.use("/uploads", express.static("uploads"));
 
+// Test route
+console.log('About to register test route...');
+app.get('/', (req, res) => res.send('API is running...'));
+console.log('Successfully registered test route');
+
+// Add a more informative root route for production
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'EmpowerHerEd API is running',
+    version: '1.0.0',
+    endpoints: {
+      courses: '/api/courses',
+      mentors: '/api/mentors',
+      users: '/api/users',
+      resources: '/api/resources',
+      stories: '/api/stories',
+      contact: '/api/contact'
+    },
+    status: 'active'
+  });
+});
+
 // API routes
 app.use("/api/users", userRoutes);
 app.use("/api/programs", programRoutes);
@@ -104,11 +126,42 @@ app.get("/api/progress", protect, getProgressByInstructor);
 
 // Production frontend serving
 if (process.env.NODE_ENV === "production") {
+  console.log('Setting up production static file serving...');
   const frontendPath = join(__dirname, "frontend-dist");
-  app.use(express.static(frontendPath));
-  app.get(/^(?!\/api\/).*/, (req, res) => {
-    res.sendFile(join(frontendPath, "index.html"));
-  });
+  console.log('Frontend path:', frontendPath);
+  
+  // Check if frontend-dist exists
+  if (fs.existsSync(frontendPath)) {
+    // Serve static files
+    app.use(express.static(frontendPath));
+    console.log('Static file serving configured');
+
+    // Serve index.html for all non-API routes using a more specific pattern
+    app.get(/^(?!\/api\/).*/, (req, res) => {
+      console.log('Serving index.html for path:', req.path);
+      res.sendFile(join(frontendPath, "index.html"));
+    });
+    console.log('Catch-all route configured with regex pattern');
+  } else {
+    console.log('Frontend-dist directory not found, serving API info for root path');
+    // Fallback: serve API info for root path
+    app.get(/^(?!\/api\/).*/, (req, res) => {
+      res.json({
+        message: 'EmpowerHerEd API is running',
+        version: '1.0.0',
+        note: 'Frontend not deployed yet. This is the API server.',
+        endpoints: {
+          courses: '/api/courses',
+          mentors: '/api/mentors',
+          users: '/api/users',
+          resources: '/api/resources',
+          stories: '/api/stories',
+          contact: '/api/contact'
+        },
+        status: 'active'
+      });
+    });
+  }
 }
 
 // Error handling
