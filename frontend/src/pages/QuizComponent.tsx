@@ -36,13 +36,11 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
   } | null>(null);
 
   useEffect(() => {
-    // Use the first quiz in lesson.quizzes, or null if none
     if (lesson && lesson.quizzes && lesson.quizzes.length > 0) {
-      const firstQuiz = lesson.quizzes[0];
       setQuiz({
-        _id: firstQuiz._id || 'quiz_' + Date.now(),
-        title: firstQuiz.title || 'Lesson Quiz',
-        questions: firstQuiz.questions || []
+        _id: lesson._id || 'quiz_' + Date.now(),
+        title: lesson.title || 'Lesson Quiz',
+        questions: lesson.quizzes
       });
     } else {
       setQuiz(null);
