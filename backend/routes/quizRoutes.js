@@ -12,6 +12,8 @@ import {
   deleteQuiz 
 } from '../controllers/quizController.js';
 
+console.log('Loading quizRoutes.js...');
+
 const router = express.Router();
 
 // Create, update, delete - Admin/Instructor only

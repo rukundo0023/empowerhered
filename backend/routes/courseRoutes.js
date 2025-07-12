@@ -21,6 +21,8 @@ import {
   getUserLessonProgress
 } from '../controllers/courseController.js';
 
+console.log('Loading courseRoutes.js...');
+
 const router = express.Router();
 
 // Public routes

@@ -28,8 +28,8 @@ interface Booking {
   _id?: string;
   mentor?: string;
   mentee: string;
-  menteeName: string;
-  menteeEmail: string;
+  name: string;
+  email: string;
   date: Date;
   time: string;
   duration: number;

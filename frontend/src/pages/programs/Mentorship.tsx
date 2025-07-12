@@ -78,8 +78,8 @@ const Mentorship = () => {
     try {
       await offlineService.createBooking({
         mentee: user?._id || 'offline_user',
-        menteeName: bookingData.menteeName,
-        menteeEmail: bookingData.menteeEmail,
+        name: bookingData.menteeName,
+        email: bookingData.menteeEmail,
         topic: bookingData.topic || 'General Mentorship',
         time: bookingData.time,
         notes: bookingData.notes,

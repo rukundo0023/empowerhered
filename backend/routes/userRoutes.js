@@ -10,6 +10,8 @@ import {
   googleLogin,
 } from '../controllers/userController.js';
 
+console.log('Loading userRoutes.js...');
+
 const router = express.Router();
 
 // Public routes
