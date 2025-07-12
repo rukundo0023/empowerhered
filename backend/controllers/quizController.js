@@ -111,13 +111,16 @@ const submitQuiz = async (req, res) => {
       const userAnswer = answers.find(a => a.questionId === question._id.toString());
       
       let isCorrect = false;
-      if (userAnswer) {
-        if (question.type === 'MCQ') {
-          if (userAnswer.answer === question.correctAnswer) {
-            score += question.points || 1;
-            isCorrect = true;
-          }
-        } else if (question.type === 'ShortAnswer') {
+              if (userAnswer) {
+          if (question.type === 'MCQ') {
+            // Case-insensitive comparison for MCQ
+            const userAnswerLower = userAnswer.answer?.trim().toLowerCase();
+            const correctAnswerLower = question.correctAnswer?.trim().toLowerCase();
+            if (userAnswerLower === correctAnswerLower) {
+              score += question.points || 1;
+              isCorrect = true;
+            }
+          } else if (question.type === 'ShortAnswer') {
           // Case-insensitive comparison for short answers
           const userAnswerLower = userAnswer.answer?.trim().toLowerCase();
           const correctAnswerLower = question.correctAnswer?.trim().toLowerCase();
@@ -140,26 +143,54 @@ const submitQuiz = async (req, res) => {
     const percentage = totalPoints > 0 ? Math.round((score / totalPoints) * 100) : 0;
     const passed = percentage >= quiz.passingScore;
 
-    // Save result to user profile
+    // Save result to user profile with attempt tracking
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Check if user already submitted this quiz
-    const existingResult = user.quizResults?.find(qr => qr.quizId.toString() === quiz._id.toString());
+    // Check if user already has results for this quiz
+    let existingResult = user.quizResults?.find(qr => qr.quizId.toString() === quiz._id.toString());
     
     if (existingResult) {
-      // Update existing result
-      existingResult.score = score;
-      existingResult.total = totalPoints;
-      existingResult.submittedAt = new Date();
+      // Check if user has reached the maximum attempts (2)
+      if (existingResult.attempts.length >= 2) {
+        return res.status(400).json({ 
+          message: 'Maximum attempts (2) reached for this quiz. Your best score will be recorded.',
+          bestScore: existingResult.bestScore,
+          bestTotal: existingResult.bestTotal,
+          attemptsUsed: existingResult.attempts.length
+        });
+      }
+      
+      // Add new attempt
+      const attemptNumber = existingResult.attempts.length + 1;
+      existingResult.attempts.push({
+        score,
+        total: totalPoints,
+        submittedAt: new Date(),
+        attemptNumber
+      });
+      
+      // Update best score if current attempt is better
+      if (score > existingResult.bestScore) {
+        existingResult.bestScore = score;
+        existingResult.bestTotal = totalPoints;
+      }
+      
+      existingResult.lastSubmittedAt = new Date();
     } else {
-      // Add new result
+      // Create new quiz result
       if (!user.quizResults) user.quizResults = [];
       user.quizResults.push({
         quizId: quiz._id,
-        score,
-        total: totalPoints,
-        submittedAt: new Date()
+        attempts: [{
+          score,
+          total: totalPoints,
+          submittedAt: new Date(),
+          attemptNumber: 1
+        }],
+        bestScore: score,
+        bestTotal: totalPoints,
+        lastSubmittedAt: new Date()
       });
     }
 
@@ -181,6 +212,12 @@ const submitQuiz = async (req, res) => {
 
     await user.save();
 
+    // Get current attempt info
+    const currentResult = user.quizResults.find(qr => qr.quizId.toString() === quiz._id.toString());
+    const currentAttempt = currentResult.attempts.length;
+    const bestScore = currentResult.bestScore;
+    const bestTotal = currentResult.bestTotal;
+
     res.json({ 
       score, 
       total: totalPoints,
@@ -188,7 +225,14 @@ const submitQuiz = async (req, res) => {
       passed,
       gradedAnswers,
       courseProgressUpdated: true,
-      message: passed ? 'Quiz passed! Course progress set to 100%.' : 'Quiz completed. Course progress set to 100%.'
+      attemptNumber: currentAttempt,
+      attemptsRemaining: 2 - currentAttempt,
+      bestScore,
+      bestTotal,
+      bestPercentage: bestTotal > 0 ? Math.round((bestScore / bestTotal) * 100) : 0,
+      message: passed ? 
+        `Quiz passed! Course progress set to 100%. Attempt ${currentAttempt}/2.` : 
+        `Quiz completed. Course progress set to 100%. Attempt ${currentAttempt}/2.`
     });
   } catch (error) {
     console.error('Quiz submission error:', error);

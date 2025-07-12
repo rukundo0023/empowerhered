@@ -7,7 +7,7 @@ import api from '../api/axios';
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const [courses, setCourses] = useState([]);
-  const [progress, setProgress] = useState({});
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [quizResults, setQuizResults] = useState([]);
   const [assignmentSubmissions, setAssignmentSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,18 +19,11 @@ const Dashboard: React.FC = () => {
         const coursesRes = await api.get('/courses');
         setCourses(coursesRes.data);
 
-        // Fetch progress for each course
-        const progressData = {};
-        for (const course of coursesRes.data) {
-          try {
-            const progressRes = await api.get(`/courses/${course._id}/lesson-progress`);
-            progressData[course._id] = progressRes.data.lessonProgress;
-          } catch (error) {
-            console.error(`Error fetching progress for course ${course._id}:`, error);
-            progressData[course._id] = [];
-          }
-        }
-        setProgress(progressData);
+        // Fetch user profile (for courseProgress)
+        const userRes = await api.get('/users/me');
+        setUserProfile(userRes.data);
+        console.log('Fetched user profile:', userRes.data);
+        console.log('Course progress from user profile:', userRes.data.courseProgress);
 
         // Fetch quiz results
         try {
@@ -60,25 +53,50 @@ const Dashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const getCourseProgress = (courseId) => {
-    const courseProgress = progress[courseId];
-    if (!courseProgress || courseProgress.length === 0) return 0;
-    const totalLessons = courseProgress.length;
-    const completedLessons = courseProgress.filter(lesson => lesson.completed).length;
-    return totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
+  // Use courseProgress from userProfile
+  const getCourseProgress = (courseId: string) => {
+    console.log('getCourseProgress called for courseId:', courseId);
+    console.log('userProfile:', userProfile);
+    console.log('userProfile.courseProgress:', userProfile?.courseProgress);
+    
+    if (!userProfile || !userProfile.courseProgress) {
+      console.log('No userProfile or courseProgress, returning 0');
+      return 0;
+    }
+    
+    const cp = userProfile.courseProgress.find((p: any) => {
+      console.log('Checking progress entry:', p);
+      // p.courseId can be an object or string
+      if (typeof p.courseId === 'string') {
+        const match = p.courseId === courseId;
+        console.log('String comparison:', p.courseId, '===', courseId, '=', match);
+        return match;
+      }
+      if (typeof p.courseId === 'object' && p.courseId._id) {
+        const match = p.courseId._id === courseId;
+        console.log('Object comparison:', p.courseId._id, '===', courseId, '=', match);
+        return match;
+      }
+      return false;
+    });
+    
+    console.log('Found course progress:', cp);
+    const result = cp ? cp.progress : 0;
+    console.log('Returning progress:', result);
+    return result;
   };
 
-  const getTotalLessons = (course) => {
-    return course.modules?.reduce((sum, module) => sum + module.lessons.length, 0) || 0;
+  const getTotalLessons = (course: any) => {
+    return course.modules?.reduce((sum: number, module: any) => sum + module.lessons.length, 0) || 0;
   };
 
-  const getQuizScore = (quizId) => {
-    const result = quizResults.find(qr => qr.quizId === quizId);
+  const getQuizScore = (quizId: string) => {
+    const result = quizResults.find((qr: any) => qr.quizId === quizId);
     return result ? `${result.score}/${result.total}` : 'Not completed';
   };
 
-  const getAssignmentStatus = (assignmentId) => {
-    const submission = assignmentSubmissions.find(sub => sub.assignmentId === assignmentId);
+  const getAssignmentStatus = (assignmentId: string) => {
+    const submission = assignmentSubmissions.find((sub: any) => sub.assignmentId === assignmentId);
     if (!submission) return { status: 'Not submitted', color: 'text-red-600' };
     if (submission.grade !== undefined) {
       return { 
@@ -122,29 +140,33 @@ const Dashboard: React.FC = () => {
                 <p className="text-gray-500">No courses enrolled yet.</p>
               ) : (
                 <div className="space-y-4">
-                  {courses.map((course) => (
-                    <div key={course._id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium text-gray-900">{course.title}</h3>
-                        <span className="text-sm text-gray-500">{course.level}</span>
-                      </div>
-                      <div className="mb-2">
-                        <div className="flex justify-between text-sm text-gray-600 mb-1">
-                          <span>Progress</span>
-                          <span>{getCourseProgress(course._id)}%</span>
+                  {courses.map((course: any) => {
+                    const progress = getCourseProgress(course._id);
+                    console.log(`Course: ${course.title} (${course._id}) - Progress: ${progress}%`);
+                    return (
+                      <div key={course._id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-medium text-gray-900">{course.title}</h3>
+                          <span className="text-sm text-gray-500">{course.level}</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${getCourseProgress(course._id)}%` }}
-                          ></div>
+                        <div className="mb-2">
+                          <div className="flex justify-between text-sm text-gray-600 mb-1">
+                            <span>Progress</span>
+                            <span>{progress}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {course.modules?.length || 0} modules • {getTotalLessons(course)} lessons
                         </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {course.modules?.length || 0} modules • {getTotalLessons(course)} lessons
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -159,7 +181,7 @@ const Dashboard: React.FC = () => {
                 <p className="text-gray-500">No quiz results yet.</p>
               ) : (
                 <div className="space-y-3">
-                  {quizResults.slice(0, 5).map((result) => (
+                  {quizResults.slice(0, 5).map((result: any) => (
                     <div key={result._id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                       <div>
                         <div className="font-medium text-gray-900">
@@ -200,26 +222,24 @@ const Dashboard: React.FC = () => {
                 <p className="text-gray-500">No assignment submissions yet.</p>
               ) : (
                 <div className="space-y-3">
-                  {assignmentSubmissions.slice(0, 5).map((submission) => (
-                    <div key={submission._id} className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {submission.assignmentId?.title || 'Assignment'}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            Submitted on {new Date(submission.submittedAt).toLocaleDateString()}
-                          </div>
+                  {assignmentSubmissions.slice(0, 5).map((submission: any) => (
+                    <div key={submission._id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {submission.assignmentId?.title || 'Assignment'}
                         </div>
-                        <div className={`text-sm font-medium ${getAssignmentStatus(submission.assignmentId).color}`}>
-                          {getAssignmentStatus(submission.assignmentId).status}
+                        <div className="text-sm text-gray-500">
+                          Submitted on {new Date(submission.submittedAt).toLocaleDateString()}
                         </div>
                       </div>
-                      {submission.feedback && (
-                        <div className="text-sm text-gray-600 mt-2 p-2 bg-white rounded border">
-                          <span className="font-medium">Feedback:</span> {submission.feedback}
+                      <div className="text-right">
+                        <div className="font-semibold text-blue-600">
+                          {submission.grade !== undefined ? `${submission.grade}%` : 'Ungraded'}
                         </div>
-                      )}
+                        <div className="text-sm text-gray-500">
+                          {submission.feedback || ''}
+                        </div>
+                      </div>
                     </div>
                   ))}
                   {assignmentSubmissions.length > 5 && (
@@ -232,69 +252,12 @@ const Dashboard: React.FC = () => {
                 </div>
               )}
             </div>
+
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Quick Stats */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FaBook className="text-blue-600 mr-2" />
-                    <span className="text-gray-600">Courses</span>
-                  </div>
-                  <span className="font-semibold">{courses.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FaTrophy className="text-green-600 mr-2" />
-                    <span className="text-gray-600">Quizzes Taken</span>
-                  </div>
-                  <span className="font-semibold">{quizResults.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FaClipboardList className="text-orange-600 mr-2" />
-                    <span className="text-gray-600">Assignments</span>
-                  </div>
-                  <span className="font-semibold">{assignmentSubmissions.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FaCheckCircle className="text-green-600 mr-2" />
-                    <span className="text-gray-600">Completed</span>
-                  </div>
-                  <span className="font-semibold">
-                    {assignmentSubmissions.filter(sub => sub.grade !== undefined).length}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-              <div className="space-y-3">
-                {[...quizResults, ...assignmentSubmissions]
-                  .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
-                  .slice(0, 5)
-                  .map((item, index) => (
-                    <div key={index} className="flex items-center text-sm">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-                      <div className="flex-1">
-                        <div className="text-gray-900">
-                          {item.quizId ? 'Completed quiz' : 'Submitted assignment'}
-                        </div>
-                        <div className="text-gray-500">
-                          {new Date(item.submittedAt).toLocaleDateString()}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
+          {/* Profile Sidebar */}
+          <div>
+            <Profile />
           </div>
         </div>
       </div>

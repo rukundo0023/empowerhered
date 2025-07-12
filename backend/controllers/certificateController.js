@@ -69,6 +69,7 @@ const generateCertificate = asyncHandler(async (req, res) => {
         completedLessons: courseProgress.progress,
         quizScores: await getQuizScores(userId, courseId),
         assignmentScores: await getAssignmentScores(userId, courseId),
+        quizAttempts: await getQuizAttempts(userId, courseId),
       },
     });
 
@@ -237,8 +238,8 @@ const getQuizScores = async (userId, courseId) => {
     if (quizResult) {
       quizScores.push({
         quizId: quiz._id,
-        score: quizResult.score,
-        total: quizResult.total,
+        score: quizResult.bestScore, // Use best score instead of current score
+        total: quizResult.bestTotal, // Use best total instead of current total
       });
     }
   }
@@ -271,6 +272,41 @@ const getAssignmentScores = async (userId, courseId) => {
   }
 
   return assignmentScores;
+};
+
+// Helper function to get quiz attempts information
+const getQuizAttempts = async (userId, courseId) => {
+  const user = await User.findById(userId);
+  const course = await Course.findById(courseId);
+
+  const quizAttempts = [];
+  
+  // Get all quizzes for this course
+  const quizzes = await Quiz.find({ course: courseId });
+  
+  for (const quiz of quizzes) {
+    const quizResult = user.quizResults.find(qr => 
+      qr.quizId.toString() === quiz._id.toString()
+    );
+    
+    if (quizResult) {
+      quizAttempts.push({
+        quizId: quiz._id,
+        quizTitle: quiz.title,
+        totalAttempts: quizResult.attempts.length,
+        bestScore: quizResult.bestScore,
+        bestTotal: quizResult.bestTotal,
+        attempts: quizResult.attempts.map(attempt => ({
+          attemptNumber: attempt.attemptNumber,
+          score: attempt.score,
+          total: attempt.total,
+          submittedAt: attempt.submittedAt
+        }))
+      });
+    }
+  }
+
+  return quizAttempts;
 };
 
 // Helper function to generate PDF certificate

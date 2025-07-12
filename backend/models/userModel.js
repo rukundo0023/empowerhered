@@ -110,22 +110,42 @@ const userSchema = mongoose.Schema(
       },
     ],
     
-    // --- NEW: Quiz results tracking ---
+    // --- NEW: Quiz results tracking with multiple attempts ---
     quizResults: [
       {
         quizId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Quiz',
         },
-        score: {
+        attempts: [
+          {
+            score: {
+              type: Number,
+              required: true,
+            },
+            total: {
+              type: Number,
+              required: true,
+            },
+            submittedAt: {
+              type: Date,
+              default: Date.now,
+            },
+            attemptNumber: {
+              type: Number,
+              required: true,
+            },
+          }
+        ],
+        bestScore: {
           type: Number,
-          required: true,
+          default: 0,
         },
-        total: {
+        bestTotal: {
           type: Number,
-          required: true,
+          default: 0,
         },
-        submittedAt: {
+        lastSubmittedAt: {
           type: Date,
           default: Date.now,
         },

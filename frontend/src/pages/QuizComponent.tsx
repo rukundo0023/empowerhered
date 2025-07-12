@@ -32,6 +32,13 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [attemptInfo, setAttemptInfo] = useState<{
+    attemptNumber: number;
+    attemptsRemaining: number;
+    bestScore: number;
+    bestTotal: number;
+    bestPercentage: number;
+  } | null>(null);
 
   useEffect(() => {
     // Use the first quiz in lesson.quizzes, or null if none
@@ -70,6 +77,13 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
       });
       
       setScore(response.data.score);
+      setAttemptInfo({
+        attemptNumber: response.data.attemptNumber,
+        attemptsRemaining: response.data.attemptsRemaining,
+        bestScore: response.data.bestScore,
+        bestTotal: response.data.bestTotal,
+        bestPercentage: response.data.bestPercentage
+      });
       setSubmitted(true);
       
       // Show success message
@@ -85,12 +99,29 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
       setCache(`quiz_result_${quiz._id}`, {
         score: response.data.score,
         total: response.data.total,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
+        attemptInfo: response.data
       });
       
     } catch (error: any) {
       console.error('Quiz submission failed:', error);
-      setError(error.response?.data?.message || 'Failed to submit quiz. Please try again.');
+      
+      // Handle maximum attempts reached
+      if (error.response?.status === 400 && error.response?.data?.message?.includes('Maximum attempts')) {
+        setError(`Maximum attempts reached. Your best score: ${error.response.data.bestScore}/${error.response.data.bestTotal}`);
+        // Show the best score even when max attempts reached
+        setScore(error.response.data.bestScore);
+        setAttemptInfo({
+          attemptNumber: 2,
+          attemptsRemaining: 0,
+          bestScore: error.response.data.bestScore,
+          bestTotal: error.response.data.bestTotal,
+          bestPercentage: error.response.data.bestTotal > 0 ? Math.round((error.response.data.bestScore / error.response.data.bestTotal) * 100) : 0
+        });
+        setSubmitted(true);
+      } else {
+        setError(error.response?.data?.message || 'Failed to submit quiz. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -102,16 +133,48 @@ const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgres
     return (
       <div className="quiz-result bg-green-50 border border-green-200 rounded-lg p-4">
         <h4 className="font-bold text-green-800 mb-2">Quiz Completed!</h4>
-        <div className="text-lg">
-          <span className="font-semibold">Your Score: </span>
+        
+        {/* Attempt Information */}
+        {attemptInfo && (
+          <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            <div className="flex items-center justify-between">
+              <span className="text-yellow-800 font-medium">
+                Attempt {attemptInfo.attemptNumber}/2
+              </span>
+              <span className="text-yellow-700 text-sm">
+                {attemptInfo.attemptsRemaining > 0 ? 
+                  `${attemptInfo.attemptsRemaining} attempt${attemptInfo.attemptsRemaining > 1 ? 's' : ''} remaining` : 
+                  'No attempts remaining'
+                }
+              </span>
+            </div>
+          </div>
+        )}
+        
+        {/* Current Score */}
+        <div className="text-lg mb-2">
+          <span className="font-semibold">Current Score: </span>
           <span className="text-green-600">{score !== null ? score : 'N/A'}</span>
           {quiz.questions && (
             <span className="text-gray-600"> / {quiz.questions.reduce((sum, q) => sum + (q.points || 1), 0)}</span>
           )}
         </div>
+        
+        {/* Best Score */}
+        {attemptInfo && attemptInfo.attemptNumber > 1 && (
+          <div className="text-lg mb-2">
+            <span className="font-semibold">Best Score: </span>
+            <span className="text-blue-600">{attemptInfo.bestScore}</span>
+            <span className="text-gray-600"> / {attemptInfo.bestTotal}</span>
+            <span className="text-gray-500 text-sm ml-2">({attemptInfo.bestPercentage}%)</span>
+          </div>
+        )}
+        
         <div className="mt-2 text-sm text-gray-600">
           Submitted on: {new Date().toLocaleDateString()}
         </div>
+        
+        {/* Course Completion */}
         <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
           <div className="flex items-center gap-2">
             <span className="text-blue-600">🎉</span>

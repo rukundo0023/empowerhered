@@ -157,13 +157,24 @@ const loginUser = asyncHandler(async (req, res) => {
 // @access  Private
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
+  console.log('getCurrentUser - Found user:', {
+    _id: user?._id,
+    name: user?.name,
+    email: user?.email,
+    role: user?.role,
+    courseProgress: user?.courseProgress
+  });
+  
   if (user) {
-    res.json({
+    const response = {
       _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role
-    });
+      role: user.role,
+      courseProgress: user.courseProgress || []
+    };
+    console.log('getCurrentUser - Sending response:', response);
+    res.json(response);
   } else {
     res.status(404);
     throw new Error('User not found');
