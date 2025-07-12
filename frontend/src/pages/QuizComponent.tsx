@@ -2,22 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { setCache } from '../api/cacheUtil';
-import type { Lesson } from '../types';
-
-interface Question {
-  _id: string;
-  type: 'MCQ' | 'ShortAnswer';
-  text: string;
-  options?: string[];
-  correctAnswer?: string;
-  points?: number;
-}
-
-interface Quiz {
-  _id: string;
-  title: string;
-  questions: Question[];
-}
+import type { Lesson, Quiz } from '../types';
 
 const QuizComponent = ({ lesson, onProgressUpdate }: { lesson: Lesson; onProgressUpdate?: () => void }) => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);

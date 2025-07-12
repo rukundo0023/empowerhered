@@ -11,9 +11,15 @@ export type Lesson = {
   _id: string;
   title: string;
   content?: string;
-  quizzes?: QuizQuestion[];
+  quizzes?: Quiz[];
   assignment?: Assignment;
   games?: Game[];
+};
+
+export type Quiz = {
+  _id: string;
+  title: string;
+  questions: QuizQuestion[];
 };
 
 export type Assignment = {
