@@ -77,6 +77,14 @@ const LearningResources = () => {
   );
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
   const { user } = useAuth();
+  
+  // Pagination state for lessons (module-specific)
+  const [lessonPages, setLessonPages] = useState<{ [moduleId: string]: number }>({});
+  const lessonsPerPage = 3; // Show 3 lessons per page to make pagination more visible
+  
+  // Lesson content pagination state
+  const [lessonContentPages, setLessonContentPages] = useState<{ [lessonId: string]: number }>({});
+  const contentPerPage = 1500; // Characters per page for lesson content
 
   useEffect(() => {
     fetchCourses();
@@ -157,6 +165,12 @@ const LearningResources = () => {
   const handleSelectLesson = async (lesson: Lesson, moduleIndex: number, lessonIndex: number) => {
     setSelectedLesson(lesson);
     
+    // Reset content pagination for new lesson
+    setLessonContentPages(prev => ({
+      ...prev,
+      [lesson._id]: 1
+    }));
+    
     // Fetch quizzes and assignments for this lesson
     if (selectedCourse && moduleIndex !== undefined && lessonIndex !== undefined) {
       try {
@@ -217,6 +231,64 @@ const LearningResources = () => {
       case 'Assignment': return <FaClipboardList className="inline mr-1 text-pink-600" />;
       default: return <FaBook className="inline mr-1 text-gray-400" />;
     }
+  };
+
+  // Pagination functions
+  const getCurrentLessons = (lessons: any[], moduleId: string) => {
+    const currentPage = lessonPages[moduleId] || 1;
+    const startIndex = (currentPage - 1) * lessonsPerPage;
+    const endIndex = startIndex + lessonsPerPage;
+    return lessons.slice(startIndex, endIndex);
+  };
+
+  const totalLessonPages = (lessons: any[]) => {
+    return Math.ceil(lessons.length / lessonsPerPage);
+  };
+
+  const handleLessonPageChange = (page: number, moduleId: string) => {
+    setLessonPages(prev => ({
+      ...prev,
+      [moduleId]: page
+    }));
+  };
+
+  const getCurrentPage = (moduleId: string) => {
+    return lessonPages[moduleId] || 1;
+  };
+
+  // Lesson content pagination functions
+  const getCurrentContentPage = (lessonId: string) => {
+    return lessonContentPages[lessonId] || 1;
+  };
+
+  const getTotalContentPages = (content: string) => {
+    if (!content) return 1;
+    const words = content.split(/\s+/);
+    const wordsPerPage = Math.floor(contentPerPage / 6); // Approximate 6 characters per word
+    return Math.ceil(words.length / wordsPerPage);
+  };
+
+  const getContentForPage = (content: string, page: number) => {
+    if (!content) return '';
+    
+    // Split content into words
+    const words = content.split(/\s+/);
+    const wordsPerPage = Math.floor(contentPerPage / 6); // Approximate 6 characters per word
+    const startWordIndex = (page - 1) * wordsPerPage;
+    const endWordIndex = startWordIndex + wordsPerPage;
+    
+    // Get words for this page
+    const pageWords = words.slice(startWordIndex, endWordIndex);
+    
+    // Join words back together, preserving original spacing
+    return pageWords.join(' ');
+  };
+
+  const handleContentPageChange = (lessonId: string, page: number) => {
+    setLessonContentPages(prev => ({
+      ...prev,
+      [lessonId]: page
+    }));
   };
 
   return (
@@ -323,23 +395,68 @@ const LearningResources = () => {
                           <span className="ml-auto">{expandedModuleId === mod._id ? '▲' : '▼'}</span>
                         </button>
                         {expandedModuleId === mod._id && (
-                          <ul className="ml-4 mt-2">
+                          <div>
                             {mod.lessons.length === 0 ? (
-                              <li className="text-gray-400 italic">No lessons yet.</li>
+                              <ul className="ml-4 mt-2">
+                                <li className="text-gray-400 italic">No lessons yet.</li>
+                              </ul>
                             ) : (
-                              mod.lessons.map((lesson, lessonIdx) => (
-                                <li key={lesson._id} className="mb-1">
-                                  <button
-                                    className={`w-full text-left px-2 py-1 rounded transition flex items-center gap-2 ${selectedLesson?._id === lesson._id ? 'bg-blue-200 text-blue-900' : 'hover:bg-blue-100 text-blue-700'}`}
-                                    onClick={() => handleSelectLesson(lesson, moduleIdx, lessonIdx)}
-                                  >
-                                    {completedLessons.includes(lesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
-                                    {lesson.title}
-                                  </button>
-                                </li>
-                              ))
+                              <>
+                                <ul className="ml-4 mt-2">
+                                  {getCurrentLessons(mod.lessons, mod._id).map((lesson, lessonIdx) => {
+                                    const currentPage = getCurrentPage(mod._id);
+                                    const actualIndex = (currentPage - 1) * lessonsPerPage + lessonIdx;
+                                    return (
+                                      <li key={lesson._id} className="mb-1">
+                                        <button
+                                          className={`w-full text-left px-2 py-1 rounded transition flex items-center gap-2 ${selectedLesson?._id === lesson._id ? 'bg-blue-200 text-blue-900' : 'hover:bg-blue-100 text-blue-700'}`}
+                                          onClick={() => handleSelectLesson(lesson, moduleIdx, actualIndex)}
+                                        >
+                                          {completedLessons.includes(lesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
+                                          {lesson.title}
+                                        </button>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                                {/* Pagination Controls */}
+                                <div className="ml-4 mt-3 flex items-center justify-between">
+                                  <div className="text-sm text-gray-600">
+                                    Showing {getCurrentLessons(mod.lessons, mod._id).length} of {mod.lessons.length} lessons
+                                    {totalLessonPages(mod.lessons) > 1 && (
+                                      <span> - Page {getCurrentPage(mod._id)} of {totalLessonPages(mod.lessons)}</span>
+                                    )}
+                                  </div>
+                                  {totalLessonPages(mod.lessons) > 1 && (
+                                    <div className="flex gap-1">
+                                      <button
+                                        onClick={() => handleLessonPageChange(getCurrentPage(mod._id) - 1, mod._id)}
+                                        disabled={getCurrentPage(mod._id) === 1}
+                                        className={`px-2 py-1 text-xs rounded ${
+                                          getCurrentPage(mod._id) === 1
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                                        }`}
+                                      >
+                                        Previous
+                                      </button>
+                                      <button
+                                        onClick={() => handleLessonPageChange(getCurrentPage(mod._id) + 1, mod._id)}
+                                        disabled={getCurrentPage(mod._id) === totalLessonPages(mod.lessons)}
+                                        className={`px-2 py-1 text-xs rounded ${
+                                          getCurrentPage(mod._id) === totalLessonPages(mod.lessons)
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                                        }`}
+                                      >
+                                        Next
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              </>
                             )}
-                          </ul>
+                          </div>
                         )}
                       </li>
                     ))}
@@ -377,7 +494,50 @@ const LearningResources = () => {
                     {completedLessons.includes(selectedLesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
                     {selectedLesson.title}
                   </h2>
-                  <div className="tiptap mb-4 text-gray-800 text-lg" dangerouslySetInnerHTML={{ __html: selectedLesson.content || '<span class="italic text-gray-400">No content for this lesson.</span>' }} />
+                  {/* Lesson Content with Pagination */}
+                  <div className="mb-4">
+                    <div className="tiptap text-gray-800 text-lg" 
+                         dangerouslySetInnerHTML={{ 
+                           __html: getContentForPage(selectedLesson.content || '', getCurrentContentPage(selectedLesson._id)) || 
+                           '<span class="italic text-gray-400">No content for this lesson.</span>' 
+                         }} />
+                    
+                    {/* Content Pagination Controls */}
+                    {selectedLesson.content && getTotalContentPages(selectedLesson.content) > 1 && (
+                      <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg mt-4">
+                        <div className="text-sm text-gray-600">
+                          Page {getCurrentContentPage(selectedLesson._id)} of {getTotalContentPages(selectedLesson.content)}
+                          <span className="ml-2 text-xs">
+                            (~{Math.ceil((selectedLesson.content?.split(/\s+/).length || 0) / 250)} pages total)
+                          </span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleContentPageChange(selectedLesson._id, getCurrentContentPage(selectedLesson._id) - 1)}
+                            disabled={getCurrentContentPage(selectedLesson._id) === 1}
+                            className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
+                              getCurrentContentPage(selectedLesson._id) === 1
+                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                            }`}
+                          >
+                            ← Previous
+                          </button>
+                          <button
+                            onClick={() => handleContentPageChange(selectedLesson._id, getCurrentContentPage(selectedLesson._id) + 1)}
+                            disabled={getCurrentContentPage(selectedLesson._id) === getTotalContentPages(selectedLesson.content)}
+                            className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
+                              getCurrentContentPage(selectedLesson._id) === getTotalContentPages(selectedLesson.content)
+                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                            }`}
+                          >
+                            Next →
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   {/* Resources */}
                   {selectedLesson.resources && selectedLesson.resources.length > 0 && (
                     <div className="mb-4">

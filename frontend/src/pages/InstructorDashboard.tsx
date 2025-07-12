@@ -118,6 +118,10 @@ const InstructorDashboard = () => {
   const [lessonLoading, setLessonLoading] = useState(false);
   const [lessonError, setLessonError] = useState('');
 
+  // Lesson content pagination state
+  const [lessonContentPages, setLessonContentPages] = useState<{ [lessonId: string]: number }>({});
+  const contentPerPage = 1000; // Characters per page for lesson content
+
   const [editingQuizIdx, setEditingQuizIdx] = useState<{ lessonId: string, idx: number } | null>(null);
   const [editingAssignmentLessonId, setEditingAssignmentLessonId] = useState<string | null>(null);
   const [quizEditBuffer, setQuizEditBuffer] = useState<QuizQuestion | null>(null);
@@ -445,6 +449,42 @@ const InstructorDashboard = () => {
     setShowModuleModal(false);
     setSelectedModule(null);
     setEditingLessonId(null);
+    setLessonContentPages({}); // Reset lesson content pagination
+  };
+
+  // Lesson content pagination functions
+  const getCurrentContentPage = (lessonId: string) => {
+    return lessonContentPages[lessonId] || 1;
+  };
+
+  const getTotalContentPages = (content: string) => {
+    if (!content) return 1;
+    const words = content.split(/\s+/);
+    const wordsPerPage = Math.floor(contentPerPage / 6); // Approximate 6 characters per word
+    return Math.ceil(words.length / wordsPerPage);
+  };
+
+  const getContentForPage = (content: string, page: number) => {
+    if (!content) return '';
+    
+    // Split content into words
+    const words = content.split(/\s+/);
+    const wordsPerPage = Math.floor(contentPerPage / 6); // Approximate 6 characters per word
+    const startWordIndex = (page - 1) * wordsPerPage;
+    const endWordIndex = startWordIndex + wordsPerPage;
+    
+    // Get words for this page
+    const pageWords = words.slice(startWordIndex, endWordIndex);
+    
+    // Join words back together, preserving original spacing
+    return pageWords.join(' ');
+  };
+
+  const handleContentPageChange = (lessonId: string, page: number) => {
+    setLessonContentPages(prev => ({
+      ...prev,
+      [lessonId]: page
+    }));
   };
 
   const handleEditModule = (module: Module) => {
@@ -1188,7 +1228,51 @@ const InstructorDashboard = () => {
                               </div>
                             )}
                             
-                            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: lesson.content || '' }} />
+                            {/* Lesson Content with Pagination */}
+                            {lesson.content && (
+                              <div className="mt-4">
+                                <div className="prose max-w-none mb-4" 
+                                     dangerouslySetInnerHTML={{ 
+                                       __html: getContentForPage(lesson.content, getCurrentContentPage(lesson._id)) 
+                                     }} />
+                                
+                                {/* Content Pagination Controls */}
+                                {getTotalContentPages(lesson.content) > 1 && (
+                                  <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                                    <div className="text-sm text-gray-600">
+                                      Page {getCurrentContentPage(lesson._id)} of {getTotalContentPages(lesson.content)}
+                                      <span className="ml-2 text-xs">
+                                        (~{Math.ceil(lesson.content.split(/\s+/).length / 167)} pages total)
+                                      </span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => handleContentPageChange(lesson._id, getCurrentContentPage(lesson._id) - 1)}
+                                        disabled={getCurrentContentPage(lesson._id) === 1}
+                                        className={`px-2 py-1 text-xs rounded ${
+                                          getCurrentContentPage(lesson._id) === 1
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-500 text-white hover:bg-blue-600'
+                                        }`}
+                                      >
+                                        Previous
+                                      </button>
+                                      <button
+                                        onClick={() => handleContentPageChange(lesson._id, getCurrentContentPage(lesson._id) + 1)}
+                                        disabled={getCurrentContentPage(lesson._id) === getTotalContentPages(lesson.content)}
+                                        className={`px-2 py-1 text-xs rounded ${
+                                          getCurrentContentPage(lesson._id) === getTotalContentPages(lesson.content)
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-500 text-white hover:bg-blue-600'
+                                        }`}
+                                      >
+                                        Next
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </li>
                         ))}
                       </ul>
