@@ -122,6 +122,15 @@ const InstructorDashboard = () => {
   const [editingAssignmentLessonId, setEditingAssignmentLessonId] = useState<string | null>(null);
   const [quizEditBuffer, setQuizEditBuffer] = useState<QuizQuestion | null>(null);
   const [assignmentEditBuffer, setAssignmentEditBuffer] = useState<AssignmentFieldsData | null>(null);
+  
+  // Add missing state variables for quiz and assignment forms
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [assignmentFields, setAssignmentFields] = useState<AssignmentFieldsData>({
+    instructions: '',
+    dueDate: '',
+    fileType: '',
+    fileUrl: ''
+  });
 
   const [expandedProgress, setExpandedProgress] = useState<string | null>(null);
   const [detailedProgress, setDetailedProgress] = useState<any>({});
@@ -1281,6 +1290,6 @@ const InstructorDashboard = () => {
       )}
     </div>
   );
-};
-
-export default InstructorDashboard; 
+  };
+  
+  export default InstructorDashboard; 
