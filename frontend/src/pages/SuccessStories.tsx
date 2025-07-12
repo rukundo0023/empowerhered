@@ -148,7 +148,7 @@ const firstPart = words.join(' '); // Get all words except the last
             </p>
             <div className="mt-8">
               <a
-                href="/programs"
+                href="/resources/learning"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800"
               >
                 {t('successStories.cta.button')}

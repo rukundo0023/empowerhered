@@ -122,19 +122,16 @@ const Community = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
                 <div className="space-y-2 mb-4">
                   <p className="text-gray-600">
-                    <span className="font-semibold">Itariki:</span> {event.date}
+                    <span className="font-semibold">{t('common.date')}:</span> {event.date}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-semibold">Igihe:</span> {event.time}
+                    <span className="font-semibold">{t('common.time')}:</span> {event.time}
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-semibold">Ahantu:</span> {event.location}
+                    <span className="font-semibold">{t('common.location')}:</span> {event.location}
                   </p>
                 </div>
                 <p className="text-gray-600 mb-4">{event.description}</p>
-                <button className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
-                  {t('community.join.button')}
-                </button>
               </motion.div>
             ))}
           </div>
@@ -154,9 +151,6 @@ const Community = () => {
             <p className="text-gray-100 mb-8 max-w-2xl mx-auto">
               {t('community.join.description')}
             </p>
-            <button className="bg-white text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              {t('community.join.button')}
-            </button>
           </motion.div>
         </div>
       </section>

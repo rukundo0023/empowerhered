@@ -266,7 +266,7 @@ const Home = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
             <Link
-              to="/signup"
+              to="/resources/learning"
               className="w-full sm:w-auto px-8 py-4 bg-gray-700 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-center"
             >
               {t('home.cta.primaryButton')}
