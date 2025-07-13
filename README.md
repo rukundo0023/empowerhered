@@ -5,12 +5,12 @@ A web application built with **React**, **TypeScript**, and **Tailwind CSS** to 
 ---
 
 ## 🌐 Live App  
-🔗 [Visit the Live App](https://empowerhered.vercel.app)
+🔗 [Visit the Live App](https://empowerhered-1ixh.vercel.app)
 
 ---
 
 ## 🎥 Demo Video  
-🎬 [Watch Demo on Loom](https://www.loom.com/share/43e89ae53a0941589a95dec33d18aa8e?sid=cacc879f-0a25-4d2c-b8b6-7bed7e4796aa)
+🎬 [Watch Demo on Loom](https://www.loom.com/share/bfa4e0ac01984e28981aae41cf82077f?sid=694935d5-e73d-4d6e-be99-a91452efbf3d)
 
 ---
 
