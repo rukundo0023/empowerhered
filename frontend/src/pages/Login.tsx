@@ -97,11 +97,9 @@ const Login = () => {
         console.log("Login component - Attempting online login to:", api.defaults.baseURL + "/users/login");
         
         try {
-          // Force full URL for production debugging
-          const loginUrl = window.location.hostname === 'empowerhered.vercel.app' 
-            ? 'https://empowerhered.onrender.com/api/users/login'  // Backend is on Render
-            : "/users/login";
-          const response = await api.post(loginUrl, { email, password })
+          // Use the configured axios instance (should point to correct backend)
+          console.log('Using axios with baseURL:', api.defaults.baseURL);
+          const response = await api.post("/users/login", { email, password });
           console.log("Login component - Login response:", { 
             success: !!response.data.token,
             role: response.data.role
