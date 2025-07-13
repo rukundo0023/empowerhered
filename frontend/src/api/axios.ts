@@ -2,13 +2,20 @@ import axios from 'axios';
 
 // Determine API URL based on environment
 let API_URL;
-if (window.location.hostname === 'empowerhered.onrender.com' || 
-    window.location.hostname === 'empowerhered.vercel.app' ||
-    import.meta.env.MODE === 'production') {
-  // Use absolute URL for production to avoid any baseURL issues
+if (window.location.hostname === 'empowerhered.vercel.app') {
+  // Frontend on Vercel, backend on Render
+  API_URL = 'https://empowerhered.onrender.com/api';
+  console.log('Vercel frontend detected, connecting to Render backend:', API_URL);
+} else if (window.location.hostname === 'empowerhered.onrender.com') {
+  // Both frontend and backend on Render
   API_URL = window.location.origin + '/api';
-  console.log('Production environment detected, using absolute URL:', API_URL);
+  console.log('Render deployment detected, using local API:', API_URL);
+} else if (import.meta.env.MODE === 'production') {
+  // Other production environments
+  API_URL = window.location.origin + '/api';
+  console.log('Other production environment detected, using:', API_URL);
 } else {
+  // Development
   API_URL = import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_API_PORT || 5000}/api`;
   console.log('Development environment detected, using:', API_URL);
 }

@@ -98,8 +98,8 @@ const Login = () => {
         
         try {
           // Force full URL for production debugging
-          const loginUrl = window.location.hostname === 'empowerhered.onrender.com' 
-            ? 'https://empowerhered.onrender.com/api/users/login'
+          const loginUrl = window.location.hostname === 'empowerhered.vercel.app' 
+            ? 'https://empowerhered.onrender.com/api/users/login'  // Backend is on Render
             : "/users/login";
           const response = await api.post(loginUrl, { email, password })
           console.log("Login component - Login response:", { 
