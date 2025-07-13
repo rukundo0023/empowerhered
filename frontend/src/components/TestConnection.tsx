@@ -23,6 +23,21 @@ const TestConnection: React.FC = () => {
           error: null
         });
         console.log('Backend Response:', response.data);
+        
+        // Also test the login endpoint specifically
+        try {
+          console.log('Testing login endpoint...');
+          const loginTest = await api.post('/users/login', { 
+            email: 'test@test.com', 
+            password: 'test' 
+          });
+          console.log('Login endpoint accessible:', loginTest.status);
+        } catch (loginErr: any) {
+          console.log('Login endpoint test result:', {
+            status: loginErr.response?.status,
+            message: loginErr.response?.data?.message || loginErr.message
+          });
+        }
       } catch (err: any) {
         console.error('Connection Error Details:', {
           message: err.message,

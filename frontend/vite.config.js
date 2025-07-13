@@ -56,21 +56,21 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,webp,woff,woff2,ttf,eot}'],
+        // Force cache busting
+        additionalManifestEntries: [
+          { url: '/api/users/login', revision: Date.now().toString() }
+        ],
         runtimeCaching: [
-          // API calls - Network first with cache fallback
+          // API calls - Network only (no caching to avoid issues)
           {
             urlPattern: /\/api\//,
-            handler: 'NetworkFirst',
+            handler: 'NetworkOnly',
             options: {
               cacheName: 'api-cache',
               expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24, // 1 day
+                maxEntries: 0,
+                maxAgeSeconds: 0,
               },
-              networkTimeoutSeconds: 30,
-              cacheableResponse: {
-                statuses: [0, 200, 201, 204]
-              }
             },
           },
           // Images - Cache first with network fallback

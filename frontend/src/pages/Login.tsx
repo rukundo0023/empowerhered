@@ -97,7 +97,11 @@ const Login = () => {
         console.log("Login component - Attempting online login to:", api.defaults.baseURL + "/users/login");
         
         try {
-          const response = await api.post("/users/login", { email, password })
+          // Force full URL for production debugging
+          const loginUrl = window.location.hostname === 'empowerhered.onrender.com' 
+            ? 'https://empowerhered.onrender.com/api/users/login'
+            : "/users/login";
+          const response = await api.post(loginUrl, { email, password })
           console.log("Login component - Login response:", { 
             success: !!response.data.token,
             role: response.data.role
