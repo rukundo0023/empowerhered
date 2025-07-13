@@ -5,8 +5,9 @@ let API_URL;
 if (window.location.hostname === 'empowerhered.onrender.com' || 
     window.location.hostname === 'empowerhered.vercel.app' ||
     import.meta.env.MODE === 'production') {
-  API_URL = '/api';
-  console.log('Production environment detected, using /api');
+  // Use absolute URL for production to avoid any baseURL issues
+  API_URL = window.location.origin + '/api';
+  console.log('Production environment detected, using absolute URL:', API_URL);
 } else {
   API_URL = import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_API_PORT || 5000}/api`;
   console.log('Development environment detected, using:', API_URL);
@@ -24,6 +25,20 @@ const api = axios.create({
   timeout: 30000, // Increased to 30 seconds
   withCredentials: true,
 });
+
+// Debug: Log the axios instance configuration
+console.log('Axios instance created with:', {
+  baseURL: api.defaults.baseURL,
+  timeout: api.defaults.timeout,
+  withCredentials: api.defaults.withCredentials
+});
+
+// Test the axios configuration
+setTimeout(() => {
+  console.log('Testing axios configuration...');
+  console.log('Current baseURL:', api.defaults.baseURL);
+  console.log('Test URL construction:', api.defaults.baseURL + '/test');
+}, 1000);
 
 // Request interceptor
 api.interceptors.request.use(
