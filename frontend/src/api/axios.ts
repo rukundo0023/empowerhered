@@ -29,7 +29,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log('Making request to:', config.url);
-    console.log('Full request URL:', config.baseURL + config.url);
+    console.log('Full request URL:', (config.baseURL || '') + (config.url || ''));
     console.log('Request config:', {
       baseURL: config.baseURL,
       url: config.url,
