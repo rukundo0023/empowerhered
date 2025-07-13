@@ -76,7 +76,7 @@ function App() {
                   <Route path="/mentor/meeting/:meetingId" element={<MentorRoute><MentorMeetingDetails /></MentorRoute>} />
                   <Route path="/instructor-dashboard" element={<InstructorRoute><InstructorDashboard /></InstructorRoute>} />
                   <Route path="/certificates" element={<ProtectedRoute><Certificates /></ProtectedRoute>} />
-                  <Route path="/terms" element={<TermsAndConditions />} />
+                  <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
                   <Route path="/test-connection" element={<TestConnection />} />
                 </Routes>
               </main>
