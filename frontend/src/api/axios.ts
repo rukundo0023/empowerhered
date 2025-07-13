@@ -31,7 +31,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 60000, // Increased to 30 seconds
+  timeout: 90000, // Increased to 90 seconds for cold starts
   withCredentials: true,
 });
 
@@ -48,6 +48,20 @@ setTimeout(() => {
   console.log('Current baseURL:', api.defaults.baseURL);
   console.log('Test URL construction:', api.defaults.baseURL + '/test');
 }, 1000);
+
+// Retry logic for cold starts
+const retryRequest = async (config: any, retries = 2, delay = 2000) => {
+  try {
+    return await api.request(config);
+  } catch (error: any) {
+    if (retries > 0 && (error.code === 'ECONNABORTED' || error.message?.includes('timeout'))) {
+      console.log(`Request timed out, retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return retryRequest(config, retries - 1, delay * 1.5);
+    }
+    throw error;
+  }
+};
 
 // Request interceptor
 api.interceptors.request.use(
@@ -88,11 +102,11 @@ api.interceptors.response.use(
     console.error('Response error:', error.response || error);
 
     if (error.code === 'ECONNABORTED') {
-      return Promise.reject(new Error('Request timeout. Please try again.'));
+      return Promise.reject(new Error('Request timeout. The server might be starting up. Please try again in a few seconds.'));
     }
 
     if (!error.response) {
-      return Promise.reject(new Error('Network error. Please check your connection.'));
+      return Promise.reject(new Error('Network error. Please check your connection and try again.'));
     }
 
     const status = error.response.status;
@@ -114,4 +128,6 @@ api.interceptors.response.use(
   }
 );
 
+// Export both the regular api and the retry version
+export { retryRequest };
 export default api;
