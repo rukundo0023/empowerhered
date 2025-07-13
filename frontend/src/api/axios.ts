@@ -23,6 +23,8 @@ if (window.location.hostname === 'empowerhered.vercel.app') {
 console.log('Environment:', import.meta.env.MODE);
 console.log('Hostname:', window.location.hostname);
 console.log('Final API URL configured as:', API_URL);
+console.log('Build timestamp:', new Date().toISOString());
+console.log('Build time constant:', (globalThis as any).__BUILD_TIME__);
 
 const api = axios.create({
   baseURL: API_URL,

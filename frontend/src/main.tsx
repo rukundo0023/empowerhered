@@ -13,6 +13,15 @@ if (import.meta.env.MODE === 'production') {
       }
     });
   }
+  
+  // Force cache clear
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      for (let name of names) {
+        caches.delete(name);
+      }
+    });
+  }
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
