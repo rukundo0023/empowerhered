@@ -88,7 +88,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/TermsAndConditions" className="text-sm text-gray-600 hover:text-purple-600">
+                <Link to="/terms-and-conditions" className="text-sm text-gray-600 hover:text-purple-600">
                   {t('footer.legal.terms')}
                 </Link>
               </li>

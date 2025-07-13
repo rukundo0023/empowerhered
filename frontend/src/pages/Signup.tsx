@@ -322,7 +322,7 @@ const Signup = () => {
               />
               <label htmlFor="terms" className="ml-2 text-sm text-gray-900">
                 {t('auth.signup.terms.agree')}{" "}
-                <Link to="/TermsAndConditions" className="text-indigo-600 hover:text-indigo-500">
+                <Link to="/terms-and-conditions" className="text-indigo-600 hover:text-indigo-500">
                   {t('auth.signup.terms.link')}
                 </Link>
               </label>

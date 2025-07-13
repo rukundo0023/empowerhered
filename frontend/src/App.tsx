@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleProvider } from "./providers/GoogleOAuthProvider";
 import { ToastContainer } from "react-toastify";
@@ -76,7 +76,8 @@ function App() {
                   <Route path="/mentor/meeting/:meetingId" element={<MentorRoute><MentorMeetingDetails /></MentorRoute>} />
                   <Route path="/instructor-dashboard" element={<InstructorRoute><InstructorDashboard /></InstructorRoute>} />
                   <Route path="/certificates" element={<ProtectedRoute><Certificates /></ProtectedRoute>} />
-                  <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
+                  <Route path="/TermsAndConditions" element={<Navigate to="/terms-and-conditions" replace />} />
+                  <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                   <Route path="/test-connection" element={<TestConnection />} />
                 </Routes>
               </main>
