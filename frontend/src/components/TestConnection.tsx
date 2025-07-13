@@ -15,6 +15,7 @@ const TestConnection: React.FC = () => {
   useEffect(() => {
     const testConnection = async () => {
       try {
+        console.log('Testing connection to:', api.defaults.baseURL);
         // Test the base API endpoint
         const response = await api.get('/');
         setConnectionStatus({
@@ -23,11 +24,20 @@ const TestConnection: React.FC = () => {
         });
         console.log('Backend Response:', response.data);
       } catch (err: any) {
+        console.error('Connection Error Details:', {
+          message: err.message,
+          status: err.response?.status,
+          statusText: err.response?.statusText,
+          data: err.response?.data,
+          config: {
+            baseURL: api.defaults.baseURL,
+            timeout: api.defaults.timeout
+          }
+        });
         setConnectionStatus({
           status: 'Connection Failed',
-          error: err.message || 'Unknown error occurred'
+          error: `${err.message} (Status: ${err.response?.status || 'No response'})`
         });
-        console.error('Connection Error:', err);
       }
     };
 

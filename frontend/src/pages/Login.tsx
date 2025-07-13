@@ -94,21 +94,38 @@ const Login = () => {
         toast.success('Logged in offline. Your session will sync when you reconnect.');
       } else {
         // Handle online login
-        const response = await api.post("/users/login", { email, password })
-        console.log("Login component - Login response:", { 
-          success: !!response.data.token,
-          role: response.data.role
-        })
+        console.log("Login component - Attempting online login to:", api.defaults.baseURL + "/users/login");
+        
+        try {
+          const response = await api.post("/users/login", { email, password })
+          console.log("Login component - Login response:", { 
+            success: !!response.data.token,
+            role: response.data.role
+          })
 
-        if (response.data.token) {
-          // Cache credentials for offline login if remember me is checked
-          if (rememberMe) {
-            await offlineAuthService.cacheCredentials(email, password);
+          if (response.data.token) {
+            // Cache credentials for offline login if remember me is checked
+            if (rememberMe) {
+              await offlineAuthService.cacheCredentials(email, password);
+            }
+            
+            // Call context login to update user state
+            login(response.data)
+            toast.success(t('auth.login.success'))
           }
-          
-          // Call context login to update user state
-          login(response.data)
-          toast.success(t('auth.login.success'))
+        } catch (apiError: any) {
+          console.error("Login component - API error details:", {
+            message: apiError.message,
+            status: apiError.response?.status,
+            statusText: apiError.response?.statusText,
+            data: apiError.response?.data,
+            config: {
+              url: apiError.config?.url,
+              method: apiError.config?.method,
+              baseURL: apiError.config?.baseURL
+            }
+          });
+          throw apiError;
         }
       }
       // Let useEffect handle navigation
