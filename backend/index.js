@@ -153,8 +153,12 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static(frontendPath));
     console.log('Static file serving configured');
 
-    // Serve index.html for all non-API routes using a more specific pattern
-    app.get(/^(?!\/api\/).*/, (req, res) => {
+    // Serve index.html for all non-API routes
+    app.get('*', (req, res) => {
+      // Skip API routes
+      if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ message: 'API endpoint not found' });
+      }
       console.log('Serving index.html for path:', req.path);
       res.sendFile(join(frontendPath, "index.html"));
     });
@@ -162,7 +166,11 @@ if (process.env.NODE_ENV === "production") {
   } else {
     console.log('Frontend-dist directory not found, serving API info for root path');
     // Fallback: serve API info for root path
-    app.get(/^(?!\/api\/).*/, (req, res) => {
+    app.get('*', (req, res) => {
+      // Skip API routes
+      if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ message: 'API endpoint not found' });
+      }
       res.json({
         message: 'EmpowerHerEd API is running',
         version: '1.0.0',
