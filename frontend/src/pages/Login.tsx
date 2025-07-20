@@ -8,7 +8,6 @@ import { jwtDecode } from "jwt-decode"
 import { useTranslation } from "react-i18next"
 import offlineAuthService from "../services/offlineAuthService"
 import OfflineLoginInfo from "../components/OfflineLoginInfo"
-import TestConnection from "../components/TestConnection"
 
 interface DecodedToken {
   role?: string
@@ -237,8 +236,6 @@ const Login = () => {
         </div>
 
         <OfflineLoginInfo />
-        
-        <TestConnection />
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
