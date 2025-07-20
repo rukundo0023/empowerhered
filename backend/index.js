@@ -49,7 +49,11 @@ console.log('CORS Origins configured:', corsOrigins);
 console.log('NODE_ENV:', process.env.NODE_ENV);
 
 app.use(cors({
-  origin: corsOrigins,
+  origin: [
+    "https://empowerhered.vercel.app",
+    "https://empowerhered-1ixh.vercel.app",
+    "https://empowerhered.onrender.com"
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
