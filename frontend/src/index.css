@@ -57,3 +57,121 @@
   color: #007bff;
   text-decoration: underline;
 }
+
+/* Responsive video styles */
+.tiptap iframe,
+.tiptap video,
+.tiptap .ProseMirror-selectednode iframe {
+  max-width: 100% !important;
+  height: auto !important;
+  width: 100% !important;
+}
+
+/* Make existing YouTube iframes responsive */
+.tiptap iframe[src*="youtube.com"],
+.tiptap iframe[src*="youtu.be"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16/9;
+}
+
+/* YouTube video responsive container */
+.tiptap .youtube-video {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 1rem 0;
+}
+
+.tiptap .youtube-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Responsive wrapper for existing YouTube videos */
+.tiptap .youtube-video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 1rem 0;
+}
+
+.tiptap .youtube-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* General responsive media */
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure all video elements are responsive */
+.tiptap video {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+}
+
+/* Additional responsive iframe styles */
+.tiptap iframe:not([src*="youtube.com"]):not([src*="youtu.be"]) {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+}
+
+/* Responsive video wrapper for non-YouTube videos */
+.tiptap .video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 1rem 0;
+}
+
+.tiptap .video-wrapper video,
+.tiptap .video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .tiptap {
+    font-size: 14px;
+    padding: 0.5rem;
+  }
+  
+  .tiptap .youtube-video,
+  .tiptap .youtube-video-container {
+    margin: 0.5rem 0;
+  }
+  
+  /* Ensure lesson content is readable on mobile */
+  .tiptap h1 { font-size: 1.5rem; }
+  .tiptap h2 { font-size: 1.3rem; }
+  .tiptap h3 { font-size: 1.1rem; }
+  
+  /* Improve spacing on mobile */
+  .tiptap p {
+    margin-bottom: 0.75em;
+  }
+  
+  .tiptap ul, .tiptap ol {
+    padding-left: 15px;
+  }
+}

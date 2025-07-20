@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import Youtube from '@tiptap/extension-youtube';
 import Image from '@tiptap/extension-image';
+import { ResponsiveYoutube } from './ResponsiveYoutube';
 
 interface TiptapEditorProps {
   value: string;
@@ -15,7 +15,13 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ value, onChange }) => {
     extensions: [
       StarterKit,
       Link.configure({ openOnClick: true }),
-      Youtube.configure({ controls: true, width: 480, height: 280 }),
+      ResponsiveYoutube.configure({
+        inline: false,
+        allowFullscreen: true,
+        HTMLAttributes: {
+          class: 'w-full h-auto max-w-full',
+        },
+      }),
       Image.configure({ inline: false, allowBase64: true }),
     ],
     content: value,

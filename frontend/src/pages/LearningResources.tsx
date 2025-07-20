@@ -397,9 +397,9 @@ const LearningResources = () => {
             )}
           </div>
         </div>
-        <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-8 px-4 pb-12">
+        <div className="max-w-6xl mx-auto w-full flex flex-col lg:flex-row gap-4 lg:gap-8 px-2 sm:px-4 pb-12">
           {/* Sidebar: Course & Modules */}
-          <aside className="w-full md:w-1/3 bg-white rounded-xl shadow-lg p-4 mb-8 md:mb-0">
+          <aside className="w-full lg:w-1/3 bg-white rounded-xl shadow-lg p-3 sm:p-4 mb-6 lg:mb-0">
             <h2 className="text-xl font-semibold mb-4 text-blue-800 flex items-center"><FaBook className="mr-2" />Courses</h2>
             {/* Filter UI */}
             <div className="mb-4 flex flex-col gap-2">
@@ -541,7 +541,7 @@ const LearningResources = () => {
             )}
           </aside>
           {/* Main Content Area */}
-          <main className="flex-1 bg-white rounded-xl shadow-lg p-6 min-h-[400px]">
+          <main className="flex-1 bg-white rounded-xl shadow-lg p-3 sm:p-6 min-h-[400px]">
             {/* Breadcrumbs */}
             <nav className="mb-6 text-sm text-blue-700 flex flex-wrap gap-2 items-center">
               {getBreadcrumbs().map((crumb, idx, arr) => (
@@ -564,14 +564,14 @@ const LearningResources = () => {
               <div className="text-gray-600 text-lg">Select a lesson to view details.</div>
             ) : (
               <div className="animate-fade-in">
-                <div className="bg-blue-50 rounded-lg p-6 shadow mb-6">
-                  <h2 className="text-2xl font-bold text-blue-900 mb-2 flex items-center gap-2">
+                <div className="bg-blue-50 rounded-lg p-3 sm:p-6 shadow mb-4 sm:mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-2 flex items-center gap-2">
                     {completedLessons.includes(selectedLesson._id) ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle className="text-gray-400" />}
                     {selectedLesson.title}
                   </h2>
                   {/* Lesson Content with Pagination */}
                   <div className="mb-4">
-                    <div className="tiptap text-gray-800 text-lg" 
+                    <div className="tiptap text-gray-800 text-base sm:text-lg" 
                          dangerouslySetInnerHTML={{ 
                            __html: getContentForPage(selectedLesson.content || '', getCurrentContentPage(selectedLesson._id)) || 
                            '<span class="italic text-gray-400">No content for this lesson.</span>' 
