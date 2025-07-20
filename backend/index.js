@@ -41,14 +41,22 @@ if (missingEnvVars.length > 0) {
 const app = express();
 
 // Middlewares
+const corsOrigins = process.env.NODE_ENV === "production" 
+  ? ["https://empowerhered.vercel.app", "https://empowerhered.onrender.com"] 
+  : ["http://localhost:3000", "http://localhost:4173", "http://127.0.0.1:5173"];
+
+console.log('CORS Origins configured:', corsOrigins);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
 app.use(cors({
-  origin: process.env.NODE_ENV === "production" 
-    ? ["https://empowerhered-1ixh.vercel.app", "https://empowerhered-1ixh.vercel.app", "https://empowerhered.onrender.com"] 
-    : ["http://localhost:3000", "http://localhost:4173", "http://127.0.0.1:5173"],
+  origin: corsOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
