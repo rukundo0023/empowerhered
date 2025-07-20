@@ -185,6 +185,7 @@ const Login = () => {
       toast.error(t('auth.login.error'));
     }
   };
+  // Handle Google login error
 
   const handleGoogleLoginError = () => {
     console.error("Google login failed");
