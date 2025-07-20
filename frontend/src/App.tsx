@@ -29,7 +29,6 @@ import Blog from "./pages/Blog";
 import Community from "./pages/Community";
 import LearningResources from "./pages/LearningResources";
 import Communication from "./pages/programs/Communication";
-import TestConnection from "./components/TestConnection.tsx";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import MentorDashboard from "./pages/Mentordashboard";
@@ -78,7 +77,6 @@ function App() {
                   <Route path="/certificates" element={<ProtectedRoute><Certificates /></ProtectedRoute>} />
                   <Route path="/TermsAndConditions" element={<Navigate to="/terms-and-conditions" replace />} />
                   <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-                  <Route path="/test-connection" element={<TestConnection />} />
                 </Routes>
               </main>
               <Footer />
